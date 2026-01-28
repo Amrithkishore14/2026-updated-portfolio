@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Amrith Kishore | Cloud & Full-Stack Engineer</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+      crossorigin="anonymous"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/script.js" defer></script>
+  </head>
+  <body>
+    <div class="bg-aurora">
+      <span class="blob one" data-float="8"></span>
+      <span class="blob two" data-float="12"></span>
+      <span class="blob three" data-float="10"></span>
+      <span class="grid"></span>
+    </div>
+
+    <nav class="navbar navbar-expand-lg navbar-dark glassy mt-3">
+      <div class="container-xl">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="#home">
+          <span class="brand-mark">AK</span>
+          <div class="d-flex flex-column lh-sm">
+            <span class="fw-semibold">Amrith Kishore</span>
+            <small class="text-muted">Cloud · Full-Stack · UI/UX</small>
+          </div>
+        </a>
+        <button
+          class="navbar-toggler shadow-none"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#mainNav"
+          aria-controls="mainNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="mainNav">
+          <div class="navbar-nav align-items-lg-center gap-lg-2">
+            <a class="nav-link" href="#home">Home</a>
+            <a class="nav-link" href="#services">Services</a>
+            <a class="nav-link" href="#work">Work</a>
+            <a class="nav-link" href="#experience">Experience</a>
+            <a class="nav-link" href="#skills">Skills</a>
+            <a class="nav-link" href="#contact">Contact</a>
+          </div>
+          <a class="btn btn-accent ms-lg-3 mt-3 mt-lg-0" href="mailto:amrithKishore6@gmail.com">Email me</a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container-xl py-5" id="home">
+      <section class="row align-items-center g-4 hero">
+        <div class="col-lg-7" data-animate>
+          <div class="pill ghost">Nottingham · Cloud Computing Enthusiast</div>
+          <h1 class="hero-title mt-3">
+            I craft <span class="word-rotate" data-words="cloud-ready,reliable,performant,delightful">cloud-ready</span> products from<br />
+            strategy to ship.
+          </h1>
+          <p class="lede mt-3 col-xl-11">
+            MSc Cloud & Enterprise Computing @ Nottingham Trent University. 1x AWS Certified. I blend UI polish with resilient Node/Java backends,
+            CI/CD, and observability so teams ship faster and safer.
+          </p>
+          <div class="d-flex flex-wrap gap-2 mt-3 badge-row">
+            <span class="chip">AWS · CI/CD</span>
+            <span class="chip">Node.js · Java</span>
+            <span class="chip">Bootstrap · UI/UX</span>
+            <span class="chip">Open to roles · Nottingham, UK</span>
+          </div>
+          <div class="d-flex flex-wrap gap-3 mt-4">
+            <a class="btn btn-accent" href="#work">View work</a>
+            <a class="btn btn-outline-accent" href="#contact">Let’s talk</a>
+          </div>
+        </div>
+        <div class="col-lg-5" data-animate>
+          <div class="glass-panel hero-card">
+            <p class="eyebrow mb-2">Recent impact</p>
+            <ul class="spotlight-list">
+              <li>+40% engagement for Tamil Society events (planned 5+ in 1 month, 200+ attendees).</li>
+              <li>+40% digital reach and -30% wait times at Malar Dental via better ops and content.</li>
+              <li>Debugged 15+ Java issues; sped data processing by 25% in internship projects.</li>
+            </ul>
+          </div>
+          <div class="glass-panel stat-row mt-3">
+            <div>
+              <p class="stat-value">1x</p>
+              <p class="stat-label">AWS Certified (CLF-C02)</p>
+            </div>
+            <div>
+              <p class="stat-value">5+</p>
+              <p class="stat-label">Major events shipped</p>
+            </div>
+            <div>
+              <p class="stat-value">25%</p>
+              <p class="stat-label">Faster data flows</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="marquee" aria-label="tech marquee">
+        <div class="marquee-track">
+          <span>Cloud</span><span>Full-Stack</span><span>UI/UX</span><span>AWS</span><span>Bootstrap</span><span>Node.js</span><span>Java</span><span>CI/CD</span><span>Security</span><span>Community</span>
+          <span>Cloud</span><span>Full-Stack</span><span>UI/UX</span><span>AWS</span><span>Bootstrap</span><span>Node.js</span><span>Java</span><span>CI/CD</span><span>Security</span><span>Community</span>
+        </div>
+      </section>
+
+      <section class="section" id="services">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <p class="eyebrow mb-1">Services</p>
+            <h2 class="h4 mb-0">From discovery to deploy</h2>
+          </div>
+          <span class="pill ghost">Design · Build · Operate</span>
+        </div>
+        <div class="row g-4 mt-3">
+          <div class="col-lg-4" data-animate>
+            <div class="glass-panel service-card h-100">
+              <h3 class="h5">Cloud & DevOps</h3>
+              <p class="text-muted">AWS, CI/CD, observability, and performance hardening so releases stay safe and quick.</p>
+              <div class="stack-row"><span class="chip">AWS</span><span class="chip">CI/CD</span><span class="chip">Monitoring</span></div>
+            </div>
+          </div>
+          <div class="col-lg-4" data-animate>
+            <div class="glass-panel service-card h-100">
+              <h3 class="h5">Full-Stack Product</h3>
+              <p class="text-muted">Node/Java APIs, data modeling, security, and front-end craft that feels premium and fast.</p>
+              <div class="stack-row"><span class="chip">Node.js</span><span class="chip">Java</span><span class="chip">Security</span></div>
+            </div>
+          </div>
+          <div class="col-lg-4" data-animate>
+            <div class="glass-panel service-card h-100">
+              <h3 class="h5">Experience & Content</h3>
+              <p class="text-muted">UI/UX, Bootstrap systems, and storytelling that lift engagement across web and community.</p>
+              <div class="stack-row"><span class="chip">UI/UX</span><span class="chip">Bootstrap</span><span class="chip">Content</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="work">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <p class="eyebrow mb-1">Work</p>
+            <h2 class="h4 mb-0">Selected projects</h2>
+          </div>
+          <span class="pill ghost">Cloud · Web · Mobile</span>
+        </div>
+        <div class="row g-4 mt-3">
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel project-card h-100">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <div>
+                  <h3 class="h5 mb-1">Cloud Load Balancer System</h3>
+                  <p class="small text-muted mb-0">Oct 2025 – Jan 2026</p>
+                </div>
+                <span class="pill ghost">Java · MySQL · Docker</span>
+              </div>
+              <p class="text-muted mb-3">Load balancer with Round Robin, Weighted, and Dynamic algorithms; containerized with Docker and monitored.</p>
+              <div class="d-flex flex-wrap gap-2"><span class="chip">Resilience</span><span class="chip">Monitoring</span><span class="chip">Scalability</span></div>
+            </div>
+          </div>
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel project-card h-100">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <div>
+                  <h3 class="h5 mb-1">Travel Abroad Assistance Platform</h3>
+                  <p class="small text-muted mb-0">Jun 2025 – Aug 2025</p>
+                </div>
+                <span class="pill ghost">HTML · CSS · JS · AWS</span>
+              </div>
+              <p class="text-muted mb-3">Responsive travel support app hosted on S3/EC2 with pre-rendered flows and fault-tolerant deployments.</p>
+              <div class="d-flex flex-wrap gap-2"><span class="chip">Performance</span><span class="chip">High availability</span><span class="chip">UX</span></div>
+            </div>
+          </div>
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel project-card h-100">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <div>
+                  <h3 class="h5 mb-1">Smart Agriculture Monitoring App</h3>
+                  <p class="small text-muted mb-0">Dec 2024 – May 2025</p>
+                </div>
+                <span class="pill ghost">Flutter · Firebase</span>
+              </div>
+              <p class="text-muted mb-3">Realtime farm telemetry with Firebase auth and rules-based security; low-latency data and offline-friendly.</p>
+              <div class="d-flex flex-wrap gap-2"><span class="chip">Realtime data</span><span class="chip">Secure auth</span><span class="chip">Offline-ready</span></div>
+            </div>
+          </div>
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel project-card h-100">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                <div>
+                  <h3 class="h5 mb-1">Python Encryption &amp; Decryption CLI</h3>
+                  <p class="small text-muted mb-0">Feb 2023 – Aug 2023</p>
+                </div>
+                <span class="pill ghost">Python · SQL</span>
+              </div>
+              <p class="text-muted mb-3">Secure text/file encryption with hashing, key generation, and auditable logs to safeguard confidentiality.</p>
+              <div class="d-flex flex-wrap gap-2"><span class="chip">Security</span><span class="chip">CLI tooling</span><span class="chip">Data safety</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="experience">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <p class="eyebrow mb-1">Experience</p>
+            <h2 class="h4 mb-0">Roles where I led outcomes</h2>
+          </div>
+          <span class="pill ghost">Cloud · Frontend · Ops</span>
+        </div>
+        <div class="timeline mt-4">
+          <div class="timeline-item glass-panel" data-animate>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h3 class="h5 mb-1">Ambassador · Amber</h3>
+                <p class="small text-muted mb-0">Jan 2026 – Present · Nottingham, UK</p>
+              </div>
+              <span class="chip ghost">Brand &amp; Outreach</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Represented Amber across campus and digital channels, boosting student awareness.</li>
+              <li>Partnered on campaigns that increased engagement and visibility.</li>
+            </ul>
+          </div>
+          <div class="timeline-item glass-panel" data-animate>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h3 class="h5 mb-1">Event Coordinator · NTU Tamil Society</h3>
+                <p class="small text-muted mb-0">Dec 2025 – Present · Nottingham, UK</p>
+              </div>
+              <span class="chip ghost">Community</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Planned 5+ cultural events in one month, drawing 200+ participants and lifting engagement 40%.</li>
+              <li>Coordinated stakeholders and budgets to keep every event on track.</li>
+            </ul>
+          </div>
+          <div class="timeline-item glass-panel" data-animate>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h3 class="h5 mb-1">Digital Media &amp; Front Office Assistant · Malar Dental Care</h3>
+                <p class="small text-muted mb-0">Jun 2024 – Jul 2025 · Chennai, India</p>
+              </div>
+              <span class="chip ghost">Digital Ops</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Raised online engagement by 40% via web updates and social content; grew followers 50%.</li>
+              <li>Reduced patient wait times by 30% through smoother coordination and scheduling.</li>
+            </ul>
+          </div>
+          <div class="timeline-item glass-panel" data-animate>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h3 class="h5 mb-1">Java Programming Intern · InternPe</h3>
+                <p class="small text-muted mb-0">Jul 2023 – Aug 2023 · Chennai, India</p>
+              </div>
+              <span class="chip ghost">Backend</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Debugged 15+ critical issues and improved data processing speed by 25%.</li>
+              <li>Hardened algorithms for scalable, production-ready Java services.</li>
+            </ul>
+          </div>
+          <div class="timeline-item glass-panel" data-animate>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h3 class="h5 mb-1">Embedded Systems with AI &amp; IoT · NSICLTD</h3>
+                <p class="small text-muted mb-0">Jun 2023 – Jun 2023 · Chennai, India</p>
+              </div>
+              <span class="chip ghost">IoT &amp; AI</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Built hands-on prototypes combining AI algorithms with IoT devices to improve automation.</li>
+              <li>Learned to solve embedded constraints with industry mentors.</li>
+            </ul>
+          </div>
+          <div class="timeline-item glass-panel" data-animate>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+              <div>
+                <h3 class="h5 mb-1">Frontend Developer · DayLight Innovation</h3>
+                <p class="small text-muted mb-0">Jan 2023 – Jan 2023 · Chennai, India</p>
+              </div>
+              <span class="chip ghost">UI Engineering</span>
+            </div>
+            <ul class="bullet-list">
+              <li>Crafted responsive web pages with HTML5/CSS3, improving reliability and conversion.</li>
+              <li>Fixed critical UI defects to keep experiences consistent across devices.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="skills">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <p class="eyebrow mb-1">Skills &amp; Tools</p>
+            <h2 class="h4 mb-0">What I ship with</h2>
+          </div>
+          <span class="pill ghost">Builder mindset</span>
+        </div>
+        <div class="row g-4 mt-3 stack-grid">
+          <div class="col-lg-4" data-animate>
+            <div class="glass-panel stack-tile h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="h6 mb-0">Backend &amp; APIs</h3>
+                <span class="dot live"></span>
+              </div>
+              <div class="stack-row">
+                <span class="chip">Node.js</span>
+                <span class="chip">Java</span>
+                <span class="chip">REST</span>
+                <span class="chip">OOP</span>
+                <span class="chip">Authentication</span>
+                <span class="chip">API Design</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4" data-animate>
+            <div class="glass-panel stack-tile h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="h6 mb-0">Frontend &amp; Experience</h3>
+                <span class="dot amber"></span>
+              </div>
+              <div class="stack-row">
+                <span class="chip">HTML</span>
+                <span class="chip">CSS</span>
+                <span class="chip">Bootstrap</span>
+                <span class="chip">Java Applets</span>
+                <span class="chip">UI/UX</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4" data-animate>
+            <div class="glass-panel stack-tile h-100">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <h3 class="h6 mb-0">Cloud, Data &amp; DevOps</h3>
+                <span class="dot cyan"></span>
+              </div>
+              <div class="stack-row">
+                <span class="chip">AWS</span>
+                <span class="chip">CI/CD</span>
+                <span class="chip">Docker</span>
+                <span class="chip">Monitoring</span>
+                <span class="chip">Security</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="glass-panel p-4 mt-3" data-animate>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="chip">Top Skills</span>
+            <span class="chip">Object-Oriented Programming (OOP)</span>
+            <span class="chip">Java Applets</span>
+            <span class="chip">Bootstrap (Framework)</span>
+          </div>
+        </div>
+        <div class="glass-panel p-4 mt-3" data-animate>
+          <h3 class="h6 mb-3">Certifications</h3>
+          <div class="stack-row">
+            <span class="chip">AWS Certified Cloud Practitioner (CLF-C02)</span>
+            <span class="chip">Build and Secure Networks in Google Cloud</span>
+            <span class="chip">NCVTE Advance Diploma in Java Programming</span>
+            <span class="chip">Introduction To Internet Of Things</span>
+            <span class="chip">IT Academy: Cloud and Virtualization Concepts</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="education">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <p class="eyebrow mb-1">Education</p>
+            <h2 class="h4 mb-0">Learning journey</h2>
+          </div>
+          <span class="pill ghost">Always iterating</span>
+        </div>
+        <div class="row g-4 mt-3">
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel p-4 h-100">
+              <h3 class="h5 mb-1">Nottingham Trent University</h3>
+              <p class="small text-muted mb-2">MSc Cloud and Enterprise Computing · Sep 2025 – Sep 2027</p>
+              <p class="text-muted mb-0">Cloud applications, security, and research-driven projects.</p>
+            </div>
+          </div>
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel p-4 h-100">
+              <h3 class="h5 mb-1">R.M.D. Engineering College</h3>
+              <p class="small text-muted mb-2">B.E. Computer Science Engineering · Nov 2021 – Apr 2025</p>
+              <p class="text-muted mb-0">CS fundamentals, algorithms, DBMS, networks, cloud foundations.</p>
+            </div>
+          </div>
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel p-4 h-100">
+              <h3 class="h6 mb-1">Velammal Vidyashram (Surapet)</h3>
+              <p class="small text-muted mb-0">Higher Secondary · Jun 2019 – Mar 2021</p>
+            </div>
+          </div>
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel p-4 h-100">
+              <h3 class="h6 mb-1">Narayana e-Techno School (Kolathur)</h3>
+              <p class="small text-muted mb-0">High School · Aug 2016 – Mar 2019</p>
+            </div>
+          </div>
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel p-4 h-100">
+              <h3 class="h6 mb-1">Smt Durgadevi Choudhary Vivekananda Vidyalaya</h3>
+              <p class="small text-muted mb-0">Middle School · Jun 2007 – Apr 2016</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="testimonials">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+          <div>
+            <p class="eyebrow mb-1">Testimonials</p>
+            <h2 class="h4 mb-0">People I've worked with</h2>
+          </div>
+          <span class="pill ghost">Trust & delivery</span>
+        </div>
+        <div class="row g-4 mt-3">
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel p-4 h-100">
+              <p class="quote">“Amrith brings clarity and momentum. Our events ran smoother and attendance jumped immediately.”</p>
+              <p class="small text-muted mb-0">— Committee, NTU Tamil Society</p>
+            </div>
+          </div>
+          <div class="col-lg-6" data-animate>
+            <div class="glass-panel p-4 h-100">
+              <p class="quote">“He pairs technical rigor with thoughtful UX. Shipping with him felt fast and safe.”</p>
+              <p class="small text-muted mb-0">— Team lead, freelance projects</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contact">
+        <div class="glass-panel p-4 contact-card" data-animate>
+          <div class="row g-3 align-items-center">
+            <div class="col-lg-8">
+              <p class="eyebrow mb-2">Contact</p>
+              <h2 class="h4 mb-2">Let’s collaborate on cloud, web, or community builds.</h2>
+              <p class="text-muted mb-3">Reach out for roles, collaborations, or freelance work.</p>
+              <div class="d-flex flex-wrap gap-2 mb-3">
+                <span class="pill ghost">9840479607</span>
+                <span class="pill ghost">amrithKishore6@gmail.com</span>
+                <span class="pill ghost">Nottingham, United Kingdom</span>
+                <a class="pill" href="https://www.linkedin.com/in/amrith-kishore-1519b9269" target="_blank" rel="noreferrer">LinkedIn</a>
+                <a class="pill" href="https://newyearhunt.neocities.org/portfolio/" target="_blank" rel="noreferrer">Portfolio</a>
+              </div>
+              <div class="d-flex gap-3 flex-wrap">
+                <a class="btn btn-accent" href="mailto:amrithKishore6@gmail.com">Email me</a>
+                <a class="btn btn-outline-accent" href="https://linkedin.com/in/amrith-kishore-1519b9269" target="_blank" rel="noreferrer">LinkedIn</a>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <div class="glass-panel mini-card" data-animate>
+                <p class="eyebrow mb-1">Availability</p>
+                <ul class="bullet-list mb-0">
+                  <li>Open to cloud/full-stack roles and internships.</li>
+                  <li>Freelance-friendly for web/app builds.</li>
+                  <li>Happy to mentor or pair on UI/UX polish.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="py-4 text-center text-muted small">
+      <p class="mb-0">© 2026 Amrith Kishore · Crafted with HTML, CSS, JS, and Bootstrap.</p>
+    </footer>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+      crossorigin="anonymous"
+      defer
+    ></script>
+  </body>
+</html>
