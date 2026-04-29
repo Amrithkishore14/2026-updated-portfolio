@@ -4,51 +4,151 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Amrith Kishore | Cloud Consultant & Solutions Advisor</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-      crossorigin="anonymous"
-    />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="style.css" />
     <script src="script.js" defer></script>
   </head>
   <body>
-    <div class="bg-aurora">
-      <span class="blob one" data-float="8"></span>
-      <span class="blob two" data-float="12"></span>
-      <span class="blob three" data-float="10"></span>
-      <span class="grid"></span>
+
+    <!-- Scroll progress bar -->
+    <div id="scroll-progress"></div>
+
+    <!-- ─── Background: cloud network topology SVG ─── -->
+    <div class="bg-scene" aria-hidden="true">
+      <svg class="bg-svg" viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="lgLine" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#38bdf8" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#818cf8" stop-opacity="0.2"/>
+          </linearGradient>
+          <!-- Dot grid pattern -->
+          <pattern id="dotGrid" x="0" y="0" width="72" height="72" patternUnits="userSpaceOnUse">
+            <circle cx="36" cy="36" r="0.9" fill="#38bdf8" fill-opacity="0.18"/>
+          </pattern>
+        </defs>
+
+        <!-- Dot grid -->
+        <rect width="100%" height="100%" fill="url(#dotGrid)" opacity="0.7"/>
+
+        <!-- Cloud silhouettes (large, very subtle) -->
+        <g fill="#38bdf8" fill-opacity="0.045">
+          <!-- Top-right cloud -->
+          <path transform="translate(1020,18) scale(2.6)"
+                d="M-55,28 a 20,20 0 0,1 20,-20 a 28,28 0 0,1 56,-6 a 20,20 0 0,1 38,4 a 16,16 0 0,1 0,22 H-55Z"/>
+          <!-- Left-middle cloud -->
+          <path transform="translate(40,420) scale(2.0)"
+                d="M-55,28 a 20,20 0 0,1 20,-20 a 28,28 0 0,1 56,-6 a 20,20 0 0,1 38,4 a 16,16 0 0,1 0,22 H-55Z"/>
+          <!-- Bottom-right cloud -->
+          <path transform="translate(1220,740) scale(1.8)"
+                d="M-55,28 a 20,20 0 0,1 20,-20 a 28,28 0 0,1 56,-6 a 20,20 0 0,1 38,4 a 16,16 0 0,1 0,22 H-55Z"/>
+        </g>
+
+        <!-- Network connection lines -->
+        <g stroke="url(#lgLine)" fill="none">
+          <!-- Row 1 horizontal -->
+          <line x1="120" y1="95"  x2="360" y2="75"  stroke-width="0.9" class="flow-l"/>
+          <line x1="360" y1="75"  x2="620" y2="135" stroke-width="0.9" class="flow-l2"/>
+          <line x1="620" y1="135" x2="870" y2="65"  stroke-width="0.9" class="flow-l"/>
+          <line x1="870" y1="65"  x2="1120" y2="100" stroke-width="0.9" class="flow-l3"/>
+          <line x1="1120" y1="100" x2="1380" y2="70" stroke-width="0.9" class="flow-l2"/>
+          <!-- Row 1 to 2 verticals -->
+          <line x1="120"  y1="95"  x2="190" y2="330" stroke-width="0.9" class="flow-l3"/>
+          <line x1="360"  y1="75"  x2="450" y2="280" stroke-width="0.9" class="flow-l"/>
+          <line x1="620"  y1="135" x2="720" y2="370" stroke-width="0.9" class="flow-l2"/>
+          <line x1="870"  y1="65"  x2="980" y2="310" stroke-width="0.9" class="flow-l4"/>
+          <line x1="1120" y1="100" x2="1230" y2="350" stroke-width="0.9" class="flow-l"/>
+          <line x1="1380" y1="70"  x2="1400" y2="340" stroke-width="0.9" class="flow-l3"/>
+          <!-- Row 2 horizontal -->
+          <line x1="190"  y1="330" x2="450" y2="280" stroke-width="0.9" class="flow-l2"/>
+          <line x1="450"  y1="280" x2="720" y2="370" stroke-width="0.9" class="flow-l"/>
+          <line x1="720"  y1="370" x2="980" y2="310" stroke-width="0.9" class="flow-l4"/>
+          <line x1="980"  y1="310" x2="1230" y2="350" stroke-width="0.9" class="flow-l2"/>
+          <line x1="1230" y1="350" x2="1400" y2="340" stroke-width="0.9" class="flow-l"/>
+          <!-- Row 2 to 3 verticals -->
+          <line x1="190"  y1="330" x2="270" y2="570" stroke-width="0.9" class="flow-l3"/>
+          <line x1="450"  y1="280" x2="540" y2="540" stroke-width="0.9" class="flow-l"/>
+          <line x1="720"  y1="370" x2="800" y2="620" stroke-width="0.9" class="flow-l2"/>
+          <line x1="980"  y1="310" x2="1050" y2="560" stroke-width="0.9" class="flow-l4"/>
+          <line x1="1230" y1="350" x2="1310" y2="590" stroke-width="0.9" class="flow-l"/>
+          <!-- Row 3 horizontal -->
+          <line x1="270"  y1="570" x2="540" y2="540" stroke-width="0.9" class="flow-l2"/>
+          <line x1="540"  y1="540" x2="800" y2="620" stroke-width="0.9" class="flow-l"/>
+          <line x1="800"  y1="620" x2="1050" y2="560" stroke-width="0.9" class="flow-l3"/>
+          <line x1="1050" y1="560" x2="1310" y2="590" stroke-width="0.9" class="flow-l2"/>
+          <!-- Row 3 to 4 -->
+          <line x1="270"  y1="570" x2="150" y2="820" stroke-width="0.9" class="flow-l4"/>
+          <line x1="540"  y1="540" x2="460" y2="800" stroke-width="0.9" class="flow-l"/>
+          <line x1="800"  y1="620" x2="780" y2="840" stroke-width="0.9" class="flow-l2"/>
+          <line x1="1050" y1="560" x2="1080" y2="800" stroke-width="0.9" class="flow-l3"/>
+          <line x1="1310" y1="590" x2="1360" y2="830" stroke-width="0.9" class="flow-l"/>
+          <!-- Row 4 -->
+          <line x1="150"  y1="820" x2="460" y2="800" stroke-width="0.9" class="flow-l2"/>
+          <line x1="460"  y1="800" x2="780" y2="840" stroke-width="0.9" class="flow-l"/>
+          <line x1="780"  y1="840" x2="1080" y2="800" stroke-width="0.9" class="flow-l4"/>
+          <line x1="1080" y1="800" x2="1360" y2="830" stroke-width="0.9" class="flow-l3"/>
+        </g>
+
+        <!-- Network nodes -->
+        <g fill="#38bdf8">
+          <!-- Row 1 -->
+          <circle cx="120"  cy="95"  r="3.5" class="bg-node"/>
+          <circle cx="360"  cy="75"  r="2.8" class="bg-node"/>
+          <circle cx="620"  cy="135" r="3.2" class="bg-node"/>
+          <circle cx="870"  cy="65"  r="3.5" class="bg-node"/>
+          <circle cx="1120" cy="100" r="2.8" class="bg-node"/>
+          <circle cx="1380" cy="70"  r="3.2" class="bg-node"/>
+          <!-- Row 2 -->
+          <circle cx="190"  cy="330" r="3.0" class="bg-node"/>
+          <circle cx="450"  cy="280" r="3.5" class="bg-node"/>
+          <circle cx="720"  cy="370" r="2.8" class="bg-node"/>
+          <circle cx="980"  cy="310" r="3.2" class="bg-node"/>
+          <circle cx="1230" cy="350" r="3.0" class="bg-node"/>
+          <circle cx="1400" cy="340" r="2.6" class="bg-node"/>
+          <!-- Row 3 -->
+          <circle cx="270"  cy="570" r="3.5" class="bg-node"/>
+          <circle cx="540"  cy="540" r="3.0" class="bg-node"/>
+          <circle cx="800"  cy="620" r="3.2" class="bg-node"/>
+          <circle cx="1050" cy="560" r="2.8" class="bg-node"/>
+          <circle cx="1310" cy="590" r="3.0" class="bg-node"/>
+          <!-- Row 4 -->
+          <circle cx="150"  cy="820" r="2.6" class="bg-node"/>
+          <circle cx="460"  cy="800" r="3.0" class="bg-node"/>
+          <circle cx="780"  cy="840" r="2.8" class="bg-node"/>
+          <circle cx="1080" cy="800" r="3.2" class="bg-node"/>
+          <circle cx="1360" cy="830" r="2.6" class="bg-node"/>
+        </g>
+
+        <!-- Accent larger glow nodes -->
+        <g fill="#818cf8" fill-opacity="0.6">
+          <circle cx="450"  cy="280" r="5.5" class="bg-node"/>
+          <circle cx="980"  cy="310" r="5.0" class="bg-node"/>
+          <circle cx="540"  cy="540" r="5.5" class="bg-node"/>
+        </g>
+        <g fill="#34d399" fill-opacity="0.5">
+          <circle cx="800"  cy="620" r="5.0" class="bg-node"/>
+          <circle cx="1120" cy="100" r="4.5" class="bg-node"/>
+        </g>
+      </svg>
     </div>
 
+    <!-- ─── Navbar ─── -->
     <nav class="navbar navbar-expand-lg navbar-dark glassy mt-3">
       <div class="container-xl">
         <a class="navbar-brand d-flex align-items-center gap-2" href="#home">
           <span class="brand-mark">AK</span>
           <div class="d-flex flex-column lh-sm">
             <span class="fw-semibold">Amrith Kishore</span>
-            <small class="text-muted">Cloud · Advisory · DevOps</small>
+            <small class="text-muted" style="font-size:0.75rem">Cloud · Advisory · DevOps</small>
           </div>
         </a>
-        <button
-          class="navbar-toggler shadow-none"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#mainNav"
-          aria-controls="mainNav"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
+        <button class="navbar-toggler shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="mainNav">
-          <div class="navbar-nav align-items-lg-center gap-lg-2">
+          <div class="navbar-nav align-items-lg-center gap-lg-1">
             <a class="nav-link" href="#home">Home</a>
             <a class="nav-link" href="#services">Services</a>
             <a class="nav-link" href="#work">Work</a>
@@ -62,256 +162,419 @@
     </nav>
 
     <main class="container-xl py-5" id="home">
-      <section class="row align-items-center g-4 hero">
-        <div class="col-lg-7" data-animate>
-          <div class="pill ghost">Nottingham · AWS Certified Cloud Consultant</div>
-          <h1 class="hero-title mt-3">
-            I turn cloud strategy into <span class="word-rotate" data-words="real outcomes,cost savings,faster releases,scalable systems">real outcomes</span> —<br />
-            from advisory to deploy.
-          </h1>
-          <p class="lede mt-3 col-xl-11">
-            AWS Certified Cloud Professional with hands-on experience advising clients on cloud strategy, infrastructure design, and digital transformation. MSc Cloud &amp; Enterprise Computing @ Nottingham Trent University. Seeking cloud advisory, solutions consulting, or cloud project management roles.
-          </p>
-          <div class="d-flex flex-wrap gap-2 mt-3 badge-row">
-            <span class="chip">2x AWS Certified</span>
-            <span class="chip">Cloud Strategy · Architecture</span>
-            <span class="chip">DevOps · CI/CD · Docker</span>
-            <span class="chip">Open to roles · Nottingham, UK</span>
+
+      <!-- ─── Hero ─── -->
+      <section class="hero row align-items-center g-5">
+
+        <!-- Left: text -->
+        <div class="col-lg-6" data-animate>
+          <div class="pill ghost mb-3">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="#38bdf8" stroke-width="1.5"/><circle cx="6" cy="6" r="2" fill="#38bdf8"/></svg>
+            Nottingham · AWS Certified Cloud Consultant
           </div>
-          <div class="d-flex flex-wrap gap-3 mt-4">
+          <h1 class="hero-title">
+            Turning cloud<br/>strategy into
+            <span class="word-rotate" data-words="real outcomes,cost savings,faster releases,scalable systems">real outcomes</span>
+          </h1>
+          <p class="lede mt-2 mb-4">
+            AWS Certified Cloud Professional advising clients on cloud architecture, digital transformation, and cost optimisation. MSc Cloud &amp; Enterprise Computing @ NTU. Open to cloud advisory, solutions consulting, and cloud PM roles.
+          </p>
+          <div class="d-flex flex-wrap gap-2 mb-4 badge-row">
+            <span class="chip">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              2× AWS Certified
+            </span>
+            <span class="chip">Cloud Strategy · Architecture</span>
+            <span class="chip">Docker · CI/CD · Terraform</span>
+            <span class="chip ghost">Open to roles · Nottingham, UK</span>
+          </div>
+          <div class="d-flex flex-wrap gap-3">
             <a class="btn btn-accent" href="#work">View work</a>
             <a class="btn btn-outline-accent" href="#contact">Let's talk</a>
           </div>
         </div>
-        <div class="col-lg-5" data-animate>
-          <div class="glass-panel hero-card">
-            <p class="eyebrow mb-2">Recent impact</p>
-            <ul class="spotlight-list">
-              <li>-40% release error rates via automated Docker + CI/CD pipelines for freelance clients.</li>
-              <li>4.7/5 satisfaction across 300+ responses as Amber Student Brand Ambassador.</li>
-              <li>Managed 20+ live university events as Digital Media Operator at NTU.</li>
-            </ul>
-          </div>
-          <div class="glass-panel stat-row mt-3">
-            <div>
-              <p class="stat-value">2x</p>
+
+        <!-- Right: cloud architecture diagram -->
+        <div class="col-lg-6" data-animate>
+          <!-- Cloud Architecture SVG -->
+          <svg class="cloud-diagram" viewBox="0 0 500 430" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="hgSky" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%"   stop-color="#38bdf8" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#818cf8" stop-opacity="0.9"/>
+              </linearGradient>
+              <linearGradient id="hgGreen" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%"   stop-color="#34d399" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0.9"/>
+              </linearGradient>
+              <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%"   stop-color="#38bdf8" stop-opacity="0.18"/>
+                <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+              </radialGradient>
+              <filter id="glow">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur"/>
+                <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+            </defs>
+
+            <!-- Outer rings -->
+            <circle cx="250" cy="215" r="168" fill="none" stroke="#38bdf8" stroke-opacity="0.07" stroke-width="1.5"/>
+            <circle cx="250" cy="215" r="118" fill="none" stroke="#38bdf8" stroke-opacity="0.1"  stroke-width="1" stroke-dasharray="4 7"/>
+            <!-- Center glow -->
+            <circle cx="250" cy="215" r="80" fill="url(#centerGlow)"/>
+
+            <!-- Connection lines: center (250,215) to each service node -->
+            <!-- EC2  top  (250, 58) -->
+            <line x1="250" y1="193" x2="250" y2="82"  stroke="#38bdf8" stroke-opacity="0.45" stroke-width="1.5" class="cd-line"/>
+            <!-- S3  top-right  (393, 120) -->
+            <line x1="265" y1="198" x2="379" y2="136" stroke="#38bdf8" stroke-opacity="0.45" stroke-width="1.5" class="cd-line"/>
+            <!-- Lambda  bottom-right  (393, 310) -->
+            <line x1="265" y1="232" x2="379" y2="294" stroke="#818cf8" stroke-opacity="0.45" stroke-width="1.5" class="cd-line"/>
+            <!-- CloudFront  bottom  (250, 372) -->
+            <line x1="250" y1="237" x2="250" y2="348" stroke="#34d399" stroke-opacity="0.45" stroke-width="1.5" class="cd-line"/>
+            <!-- IAM  bottom-left  (107, 310) -->
+            <line x1="235" y1="232" x2="121" y2="294" stroke="#818cf8" stroke-opacity="0.45" stroke-width="1.5" class="cd-line"/>
+            <!-- VPC  top-left  (107, 120) -->
+            <line x1="235" y1="198" x2="121" y2="136" stroke="#38bdf8" stroke-opacity="0.45" stroke-width="1.5" class="cd-line"/>
+
+            <!-- ── Central AWS Cloud shape ── -->
+            <g transform="translate(250,215)" filter="url(#glow)" class="cd-node">
+              <!-- Cloud path, centred at 0,0 -->
+              <path d="M-58,22 a 22,22 0 0,1 22,-22 a 32,32 0 0,1 64,-8 a 22,22 0 0,1 44,4 a 18,18 0 0,1 0,26 H-58Z"
+                    fill="rgba(56,189,248,0.1)" stroke="url(#hgSky)" stroke-width="1.8"/>
+              <text y="-4"  text-anchor="middle" fill="#38bdf8" font-size="9"  font-weight="800" font-family="Space Grotesk,sans-serif" letter-spacing="2">AWS</text>
+              <text y="10" text-anchor="middle" fill="#6a8aaa" font-size="7.5" font-family="Space Grotesk,sans-serif">Cloud</text>
+            </g>
+
+            <!-- ── EC2 node: (250, 62) ── -->
+            <g transform="translate(250,62)" filter="url(#glow)" class="cd-node">
+              <circle r="26" fill="rgba(56,189,248,0.09)" stroke="#38bdf8" stroke-width="1.6" stroke-opacity="0.75"/>
+              <!-- server icon -->
+              <rect x="-9" y="-12" width="18" height="10" rx="2" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+              <rect x="-9" y="1"   width="18" height="9"  rx="2" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+              <circle cx="5" cy="-7"  r="1.5" fill="#38bdf8"/>
+              <circle cx="5" cy="5.5" r="1.5" fill="#38bdf8"/>
+              <text y="38" text-anchor="middle" fill="#6a8aaa" font-size="9" font-weight="600" font-family="Space Grotesk,sans-serif">EC2</text>
+            </g>
+
+            <!-- ── S3 node: (393, 120) ── -->
+            <g transform="translate(393,120)" filter="url(#glow)" class="cd-node">
+              <circle r="26" fill="rgba(56,189,248,0.09)" stroke="#38bdf8" stroke-width="1.6" stroke-opacity="0.75"/>
+              <!-- bucket icon -->
+              <ellipse cx="0" cy="-8" rx="10" ry="4" fill="none" stroke="#38bdf8" stroke-width="1.5"/>
+              <path d="M-10,-8 L-10,8 Q0,15 10,8 L10,-8" fill="rgba(56,189,248,0.08)" stroke="#38bdf8" stroke-width="1.5"/>
+              <text y="38" text-anchor="middle" fill="#6a8aaa" font-size="9" font-weight="600" font-family="Space Grotesk,sans-serif">S3</text>
+            </g>
+
+            <!-- ── Lambda node: (393, 310) ── -->
+            <g transform="translate(393,310)" filter="url(#glow)" class="cd-node">
+              <circle r="26" fill="rgba(129,140,248,0.09)" stroke="#818cf8" stroke-width="1.6" stroke-opacity="0.75"/>
+              <!-- λ symbol -->
+              <text y="7" text-anchor="middle" fill="#818cf8" font-size="22" font-style="italic" font-family="Georgia,serif">λ</text>
+              <text y="38" text-anchor="middle" fill="#6a8aaa" font-size="9" font-weight="600" font-family="Space Grotesk,sans-serif">Lambda</text>
+            </g>
+
+            <!-- ── CloudFront node: (250, 372) ── -->
+            <g transform="translate(250,372)" filter="url(#glow)" class="cd-node">
+              <circle r="26" fill="rgba(52,211,153,0.09)" stroke="#34d399" stroke-width="1.6" stroke-opacity="0.75"/>
+              <!-- globe icon -->
+              <circle r="12" fill="none" stroke="#34d399" stroke-width="1.4"/>
+              <ellipse rx="6" ry="12" fill="none" stroke="#34d399" stroke-width="1"/>
+              <line x1="-12" y1="0" x2="12" y2="0" stroke="#34d399" stroke-width="1"/>
+              <text y="38" text-anchor="middle" fill="#6a8aaa" font-size="8.5" font-weight="600" font-family="Space Grotesk,sans-serif">CloudFront</text>
+            </g>
+
+            <!-- ── IAM node: (107, 310) ── -->
+            <g transform="translate(107,310)" filter="url(#glow)" class="cd-node">
+              <circle r="26" fill="rgba(129,140,248,0.09)" stroke="#818cf8" stroke-width="1.6" stroke-opacity="0.75"/>
+              <!-- shield icon -->
+              <path d="M0,-12 L10,-7 L10,3 Q10,12 0,16 Q-10,12 -10,3 L-10,-7Z" fill="rgba(129,140,248,0.12)" stroke="#818cf8" stroke-width="1.5"/>
+              <text y="38" text-anchor="middle" fill="#6a8aaa" font-size="9" font-weight="600" font-family="Space Grotesk,sans-serif">IAM</text>
+            </g>
+
+            <!-- ── VPC node: (107, 120) ── -->
+            <g transform="translate(107,120)" filter="url(#glow)" class="cd-node">
+              <circle r="26" fill="rgba(56,189,248,0.09)" stroke="#38bdf8" stroke-width="1.6" stroke-opacity="0.75"/>
+              <!-- hexagon network icon -->
+              <polygon points="0,-12 10.4,-6 10.4,6 0,12 -10.4,6 -10.4,-6" fill="none" stroke="#38bdf8" stroke-width="1.4"/>
+              <circle r="3" fill="#38bdf8"/>
+              <text y="38" text-anchor="middle" fill="#6a8aaa" font-size="9" font-weight="600" font-family="Space Grotesk,sans-serif">VPC</text>
+            </g>
+          </svg>
+
+          <!-- Stats below diagram -->
+          <div class="stat-row">
+            <div class="stat-cell">
+              <p class="stat-value" data-count="2" data-suffix="×">0×</p>
               <p class="stat-label">AWS Certified</p>
             </div>
-            <div>
-              <p class="stat-value">40%</p>
+            <div class="stat-cell">
+              <p class="stat-value" data-count="40" data-suffix="%">0%</p>
               <p class="stat-label">Fewer release errors</p>
             </div>
-            <div>
-              <p class="stat-value">5+</p>
+            <div class="stat-cell">
+              <p class="stat-value" data-count="5" data-suffix="+">0+</p>
               <p class="stat-label">Cloud projects shipped</p>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- ─── Marquee ─── -->
       <section class="marquee" aria-label="tech marquee">
         <div class="marquee-track">
-          <span>Cloud Advisory</span><span>AWS</span><span>Solutions Architecture</span><span>CI/CD</span><span>Docker</span><span>Terraform</span><span>Kubernetes</span><span>DevOps</span><span>Cloud Security</span><span>Digital Transformation</span>
-          <span>Cloud Advisory</span><span>AWS</span><span>Solutions Architecture</span><span>CI/CD</span><span>Docker</span><span>Terraform</span><span>Kubernetes</span><span>DevOps</span><span>Cloud Security</span><span>Digital Transformation</span>
+          <span>Cloud Advisory</span><span>AWS</span><span>Solutions Architecture</span><span>Terraform</span><span>Docker</span><span>CI/CD</span><span>Kubernetes</span><span>Cloud Security</span><span>Digital Transformation</span><span>IAM · VPC · Lambda</span>
+          <span>Cloud Advisory</span><span>AWS</span><span>Solutions Architecture</span><span>Terraform</span><span>Docker</span><span>CI/CD</span><span>Kubernetes</span><span>Cloud Security</span><span>Digital Transformation</span><span>IAM · VPC · Lambda</span>
         </div>
       </section>
 
+      <!-- ─── Services ─── -->
       <section class="section" id="services">
-        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
           <div>
             <p class="eyebrow mb-1">Services</p>
-            <h2 class="h4 mb-0">From discovery to deploy</h2>
+            <h2 class="mb-0">From discovery to deploy</h2>
           </div>
           <span class="pill ghost">Advisory · Architecture · Operate</span>
         </div>
-        <div class="row g-4 mt-3">
+        <div class="row g-4">
           <div class="col-lg-4" data-animate>
             <div class="glass-panel service-card h-100">
-              <h3 class="h5">Cloud Strategy & Advisory</h3>
-              <p class="text-muted">Cloud adoption roadmaps, cost-optimisation analysis, and translating complex AWS solutions into clear business recommendations.</p>
+              <div class="service-icon">
+                <!-- Cloud + lightbulb: strategy icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M9 18h6M10 22h4M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6H8.3A7.004 7.004 0 0 1 5 9a7 7 0 0 1 7-7z"/>
+                </svg>
+              </div>
+              <h3>Cloud Strategy &amp; Advisory</h3>
+              <p>Cloud adoption roadmaps, cost-optimisation analysis, and translating complex AWS solutions into clear, actionable business recommendations.</p>
               <div class="stack-row"><span class="chip">AWS</span><span class="chip">Cost Optimisation</span><span class="chip">Governance</span></div>
             </div>
           </div>
           <div class="col-lg-4" data-animate>
             <div class="glass-panel service-card h-100">
-              <h3 class="h5">Cloud Infrastructure Design</h3>
-              <p class="text-muted">Architecture design using EC2, S3, Lambda, API Gateway, VPC, IAM — with security compliance and observability built in from day one.</p>
+              <div class="service-icon" style="background:rgba(129,140,248,0.08);border-color:rgba(129,140,248,0.2);color:var(--indigo)">
+                <!-- Server/nodes: architecture icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="3" width="20" height="6" rx="2"/>
+                  <rect x="2" y="12" width="20" height="6" rx="2"/>
+                  <circle cx="6" cy="6" r="1" fill="currentColor"/>
+                  <circle cx="6" cy="15" r="1" fill="currentColor"/>
+                  <line x1="16" y1="6" x2="18" y2="6"/>
+                  <line x1="16" y1="15" x2="18" y2="15"/>
+                </svg>
+              </div>
+              <h3>Cloud Infrastructure Design</h3>
+              <p>Architecture using EC2, S3, Lambda, API Gateway, VPC, IAM — with security compliance, observability, and scalability built in from day one.</p>
               <div class="stack-row"><span class="chip">EC2 · S3 · Lambda</span><span class="chip">IAM · VPC</span><span class="chip">Security</span></div>
             </div>
           </div>
           <div class="col-lg-4" data-animate>
             <div class="glass-panel service-card h-100">
-              <h3 class="h5">DevOps & Automation</h3>
-              <p class="text-muted">CI/CD pipelines, Docker containerisation, and infrastructure-as-code that cut release errors and accelerate delivery cycles.</p>
+              <div class="service-icon" style="background:rgba(52,211,153,0.08);border-color:rgba(52,211,153,0.2);color:var(--emerald)">
+                <!-- Pipeline: DevOps icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="5" cy="12" r="3"/>
+                  <circle cx="19" cy="5" r="3"/>
+                  <circle cx="19" cy="19" r="3"/>
+                  <path d="M8 12h4l4-7M8 12h4l4 7"/>
+                </svg>
+              </div>
+              <h3>DevOps &amp; Automation</h3>
+              <p>CI/CD pipelines, Docker containerisation, Terraform IaC, and GitHub Actions workflows that cut release errors and speed up delivery cycles.</p>
               <div class="stack-row"><span class="chip">Docker</span><span class="chip">CI/CD</span><span class="chip">Terraform</span></div>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- ─── Work ─── -->
       <section class="section" id="work">
-        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
           <div>
             <p class="eyebrow mb-1">Work</p>
-            <h2 class="h4 mb-0">Selected projects</h2>
+            <h2 class="mb-0">Selected projects</h2>
           </div>
           <span class="pill ghost">Cloud · DevOps · Web</span>
         </div>
-        <div class="row g-4 mt-3">
+        <div class="row g-4">
           <div class="col-lg-6" data-animate>
             <div class="glass-panel project-card h-100">
-              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
                 <div>
-                  <h3 class="h5 mb-1">Travel Abroad Assistance Platform</h3>
-                  <p class="small text-muted mb-0">Jun 2024 – Present</p>
+                  <h3 class="mb-1">Travel Abroad Assistance Platform</h3>
+                  <p class="small mb-0" style="color:var(--muted)">Jun 2024 – Present</p>
                 </div>
-                <span class="pill ghost">AWS · S3 · EC2 · CloudFront</span>
+                <span class="chip tag">S3 · EC2 · CloudFront</span>
               </div>
-              <p class="text-muted mb-3">End-to-end delivery of a travel support platform on AWS. Coordinated requirements, architecture, deployment, and stakeholder sign-off independently.</p>
-              <div class="d-flex flex-wrap gap-2"><span class="chip">High Availability</span><span class="chip">CloudFront CDN</span><span class="chip">Client Delivery</span></div>
+              <p style="color:var(--muted);font-size:.93rem;line-height:1.65" class="mb-3">
+                End-to-end delivery of a travel support platform on AWS. Coordinated requirements, architecture, deployment, and stakeholder sign-off independently. Fault-tolerant, CDN-accelerated setup.
+              </p>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="chip attr">High Availability</span>
+                <span class="chip attr">CloudFront CDN</span>
+                <span class="chip attr">Client Delivery</span>
+              </div>
             </div>
           </div>
           <div class="col-lg-6" data-animate>
             <div class="glass-panel project-card h-100">
-              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
                 <div>
-                  <h3 class="h5 mb-1">Serverless NLP Pipeline</h3>
-                  <p class="small text-muted mb-0">Freelance Project</p>
+                  <h3 class="mb-1">Serverless NLP Pipeline</h3>
+                  <p class="small mb-0" style="color:var(--muted)">Freelance Project</p>
                 </div>
-                <span class="pill ghost">Lambda · Comprehend · S3 · IAM</span>
+                <span class="chip tag">Lambda · Comprehend · S3</span>
               </div>
-              <p class="text-muted mb-3">Serverless NLP processing pipeline using AWS Lambda, Comprehend, S3, and IAM with least-privilege security policies.</p>
-              <div class="d-flex flex-wrap gap-2"><span class="chip">Serverless</span><span class="chip">NLP</span><span class="chip">Security</span></div>
+              <p style="color:var(--muted);font-size:.93rem;line-height:1.65" class="mb-3">
+                Serverless NLP processing pipeline using AWS Lambda, Comprehend, S3, and IAM least-privilege security policies. Zero-ops, event-driven architecture.
+              </p>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="chip attr">Serverless</span>
+                <span class="chip attr">NLP</span>
+                <span class="chip attr">IAM Security</span>
+              </div>
             </div>
           </div>
           <div class="col-lg-6" data-animate>
             <div class="glass-panel project-card h-100">
-              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
                 <div>
-                  <h3 class="h5 mb-1">Cloud Load Balancer System</h3>
-                  <p class="small text-muted mb-0">Oct 2025 – Jan 2026</p>
+                  <h3 class="mb-1">Cloud Load Balancer System</h3>
+                  <p class="small mb-0" style="color:var(--muted)">Oct 2025 – Jan 2026</p>
                 </div>
-                <span class="pill ghost">Java · MySQL · Docker</span>
+                <span class="chip tag">Java · MySQL · Docker</span>
               </div>
-              <p class="text-muted mb-3">Load balancer with Round Robin, Weighted, and Dynamic algorithms; containerized with Docker and monitored for resilience.</p>
-              <div class="d-flex flex-wrap gap-2"><span class="chip">Resilience</span><span class="chip">Monitoring</span><span class="chip">Scalability</span></div>
+              <p style="color:var(--muted);font-size:.93rem;line-height:1.65" class="mb-3">
+                Load balancer with Round Robin, Weighted, and Dynamic algorithms. Containerized with Docker, with live monitoring and traffic distribution metrics.
+              </p>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="chip attr">Resilience</span>
+                <span class="chip attr">Monitoring</span>
+                <span class="chip attr">Scalability</span>
+              </div>
             </div>
           </div>
           <div class="col-lg-6" data-animate>
             <div class="glass-panel project-card h-100">
-              <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+              <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
                 <div>
-                  <h3 class="h5 mb-1">Smart Agriculture Monitoring App</h3>
-                  <p class="small text-muted mb-0">Dec 2024 – May 2025</p>
+                  <h3 class="mb-1">Smart Agriculture Monitoring App</h3>
+                  <p class="small mb-0" style="color:var(--muted)">Dec 2024 – May 2025</p>
                 </div>
-                <span class="pill ghost">Flutter · Firebase</span>
+                <span class="chip tag">Flutter · Firebase</span>
               </div>
-              <p class="text-muted mb-3">Realtime farm telemetry with Firebase auth and rules-based security; low-latency data and offline-friendly.</p>
-              <div class="d-flex flex-wrap gap-2"><span class="chip">Realtime data</span><span class="chip">Secure auth</span><span class="chip">Offline-ready</span></div>
+              <p style="color:var(--muted);font-size:.93rem;line-height:1.65" class="mb-3">
+                Realtime farm telemetry with Firebase auth and rules-based security; low-latency data streams, offline-ready architecture, and sensor dashboard.
+              </p>
+              <div class="d-flex flex-wrap gap-2">
+                <span class="chip attr">Realtime data</span>
+                <span class="chip attr">Secure auth</span>
+                <span class="chip attr">Offline-ready</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- ─── Experience ─── -->
       <section class="section" id="experience">
-        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
           <div>
             <p class="eyebrow mb-1">Experience</p>
-            <h2 class="h4 mb-0">Roles where I led outcomes</h2>
+            <h2 class="mb-0">Roles where I led outcomes</h2>
           </div>
           <span class="pill ghost">Cloud · Advisory · Ops</span>
         </div>
-        <div class="timeline mt-4">
+        <div class="timeline">
+
           <div class="timeline-item glass-panel" data-animate>
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-              <div>
-                <h3 class="h5 mb-1">Cloud Consultant &amp; Solutions Advisor · Self-Employed</h3>
-                <p class="small text-muted mb-0">Jun 2024 – Present · Freelance</p>
-              </div>
-              <span class="chip ghost">Cloud · Advisory</span>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
+              <h3>Cloud Consultant &amp; Solutions Advisor · Self-Employed</h3>
+              <span class="role-badge">Cloud · Advisory</span>
             </div>
+            <p class="meta">Jun 2024 – Present &nbsp;·&nbsp; Freelance</p>
             <ul class="bullet-list">
               <li>Advised clients on cloud adoption strategies, architecture decisions, and cost-optimisation roadmaps; translated complex AWS solutions into non-technical business recommendations.</li>
               <li>Managed end-to-end delivery of Travel Abroad Assistance Platform on AWS (S3, EC2, CloudFront), coordinating requirements, architecture, deployment, and stakeholder sign-off.</li>
-              <li>Designed and documented cloud infrastructure solutions (EC2, S3, IAM, VPC, Lambda, API Gateway); enforced governance policies and security compliance across all client environments.</li>
-              <li>Automated deployment pipelines using Docker and CI/CD, cutting release error rates by 40%.</li>
+              <li>Designed and documented cloud infrastructure (EC2, S3, IAM, VPC, Lambda, API Gateway); enforced governance policies and security compliance across client environments.</li>
+              <li>Automated deployment pipelines with Docker and CI/CD, cutting release error rates by 40%.</li>
             </ul>
           </div>
+
           <div class="timeline-item glass-panel" data-animate>
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-              <div>
-                <h3 class="h5 mb-1">Student Brand Ambassador · Amber</h3>
-                <p class="small text-muted mb-0">Jan 2026 – Present · Nottingham, UK</p>
-              </div>
-              <span class="chip ghost">Brand &amp; Outreach</span>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
+              <h3>Student Brand Ambassador · Amber</h3>
+              <span class="role-badge">Brand &amp; Outreach</span>
             </div>
+            <p class="meta">Jan 2026 – Present &nbsp;·&nbsp; Nottingham, UK</p>
             <ul class="bullet-list">
               <li>Managed stakeholder engagement across campus networks; implemented a feedback mechanism achieving 4.7/5 satisfaction across 300+ responses.</li>
-              <li>Drove measurable growth in student interest and platform awareness across the university.</li>
+              <li>Drove measurable growth in student interest and platform awareness university-wide.</li>
             </ul>
           </div>
+
           <div class="timeline-item glass-panel" data-animate>
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-              <div>
-                <h3 class="h5 mb-1">Digital Media Operator · Nottingham Trent University</h3>
-                <p class="small text-muted mb-0">Oct 2025 – Present · Nottingham, UK</p>
-              </div>
-              <span class="chip ghost">Technical Ops</span>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
+              <h3>Digital Media Operator · Nottingham Trent University</h3>
+              <span class="role-badge">Technical Ops</span>
             </div>
+            <p class="meta">Oct 2025 – Present &nbsp;·&nbsp; Nottingham, UK</p>
             <ul class="bullet-list">
               <li>Coordinated technical delivery for 20+ live university events; managed AV equipment configuration and troubleshooting.</li>
-              <li>Produced operational documentation to ensure consistent service standards across all events.</li>
+              <li>Produced operational documentation ensuring consistent service standards across all events.</li>
             </ul>
           </div>
+
           <div class="timeline-item glass-panel" data-animate>
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-              <div>
-                <h3 class="h5 mb-1">Founder &amp; Strategy Lead · EquityInvestorClub</h3>
-                <p class="small text-muted mb-0">2023 – Present</p>
-              </div>
-              <span class="chip ghost">Leadership</span>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
+              <h3>Founder &amp; Strategy Lead · EquityInvestorClub</h3>
+              <span class="role-badge">Leadership</span>
             </div>
+            <p class="meta">2023 – Present</p>
             <ul class="bullet-list">
               <li>Founded a student-led financial literacy platform; developed curriculum, community strategy, and growth initiatives.</li>
               <li>Built operational and leadership skills alongside technical expertise through running the platform end-to-end.</li>
             </ul>
           </div>
+
           <div class="timeline-item glass-panel" data-animate>
-            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
-              <div>
-                <h3 class="h5 mb-1">IoT Data Analyst Intern · National Small Industries Corporation (NSIC)</h3>
-                <p class="small text-muted mb-0">Jun 2023 · Chennai, India</p>
-              </div>
-              <span class="chip ghost">IoT &amp; Data</span>
+            <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-1">
+              <h3>IoT Data Analyst Intern · National Small Industries Corporation (NSIC)</h3>
+              <span class="role-badge">IoT &amp; Data</span>
             </div>
+            <p class="meta">Jun 2023 &nbsp;·&nbsp; Chennai, India</p>
             <ul class="bullet-list">
               <li>Analysed real-time sensor data streams; identified three critical misconfigurations, improving accuracy by 7%.</li>
               <li>Presented root-cause findings addressing primary causes of processing delays to senior stakeholders.</li>
             </ul>
           </div>
+
         </div>
       </section>
 
+      <!-- ─── Skills ─── -->
       <section class="section" id="skills">
-        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
           <div>
             <p class="eyebrow mb-1">Skills &amp; Tools</p>
-            <h2 class="h4 mb-0">What I ship with</h2>
+            <h2 class="mb-0">What I ship with</h2>
           </div>
           <span class="pill ghost">Builder mindset</span>
         </div>
-        <div class="row g-4 mt-3 stack-grid">
+
+        <div class="row g-4">
           <div class="col-lg-4" data-animate>
             <div class="glass-panel stack-tile h-100">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h3 class="h6 mb-0">Cloud Platforms</h3>
+              <div class="tile-head">
+                <span class="tile-label">Cloud Platforms</span>
                 <span class="dot cyan"></span>
               </div>
               <div class="stack-row">
                 <span class="chip">AWS</span>
                 <span class="chip">EC2 · S3 · Lambda</span>
                 <span class="chip">IAM · VPC · CloudWatch</span>
-                <span class="chip">SNS · SQS · API Gateway</span>
+                <span class="chip">SNS · SQS · API GW</span>
                 <span class="chip">Azure</span>
                 <span class="chip">Google Cloud</span>
                 <span class="chip">Oracle Cloud</span>
@@ -320,8 +583,8 @@
           </div>
           <div class="col-lg-4" data-animate>
             <div class="glass-panel stack-tile h-100">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h3 class="h6 mb-0">DevOps &amp; Infrastructure</h3>
+              <div class="tile-head">
+                <span class="tile-label">DevOps &amp; Infrastructure</span>
                 <span class="dot live"></span>
               </div>
               <div class="stack-row">
@@ -338,117 +601,164 @@
           </div>
           <div class="col-lg-4" data-animate>
             <div class="glass-panel stack-tile h-100">
-              <div class="d-flex justify-content-between align-items-center mb-2">
-                <h3 class="h6 mb-0">Consulting &amp; Project Management</h3>
+              <div class="tile-head">
+                <span class="tile-label">Consulting &amp; PM</span>
                 <span class="dot amber"></span>
               </div>
               <div class="stack-row">
                 <span class="chip">Cloud Strategy</span>
                 <span class="chip">Cost Optimisation</span>
-                <span class="chip">Stakeholder Communication</span>
+                <span class="chip">Stakeholder Comms</span>
                 <span class="chip">Agile / Scrum</span>
-                <span class="chip">Technical Documentation</span>
+                <span class="chip">Tech Documentation</span>
                 <span class="chip">Risk Management</span>
               </div>
             </div>
           </div>
         </div>
-        <div class="glass-panel p-4 mt-3" data-animate>
-          <h3 class="h6 mb-3">Certifications</h3>
-          <div class="stack-row">
-            <span class="chip">AWS Certified Cloud Practitioner (CLF-C02)</span>
-            <span class="chip">AWS Certified Solutions Architect – Associate (SAA-C03)</span>
-            <span class="chip">Microsoft Azure Fundamentals (AZ-900)</span>
-            <span class="chip">Google Cloud Associate Cloud Engineer (Labs)</span>
-            <span class="chip">Infosys Artificial Intelligence Primer</span>
-            <span class="chip">Advance Diploma in Java Programming (NCVTE)</span>
+
+        <!-- Certifications -->
+        <div class="glass-panel p-4 mt-4" data-animate>
+          <p class="eyebrow mb-3">Certifications</p>
+          <div class="cert-row">
+            <span class="cert-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              AWS Certified Cloud Practitioner (CLF-C02)
+            </span>
+            <span class="cert-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              AWS Solutions Architect – Associate (SAA-C03)
+            </span>
+            <span class="cert-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              Microsoft Azure Fundamentals (AZ-900)
+            </span>
+            <span class="cert-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              Google Cloud Associate Cloud Engineer (Labs)
+            </span>
+            <span class="cert-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              Infosys Artificial Intelligence Primer
+            </span>
+            <span class="cert-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>
+              Advance Diploma in Java Programming (NCVTE)
+            </span>
           </div>
         </div>
-        <div class="glass-panel p-4 mt-3" data-animate>
-          <h3 class="h6 mb-3">Key Achievements</h3>
-          <div class="stack-row">
-            <span class="chip">Guest Speaker – The Cloud Chronicles (Francis Xavier Engineering College, MCA Dept.)</span>
-            <span class="chip">GDG DevFest Birmingham 2025 – Cloud &amp; AI tracks</span>
-            <span class="chip">Serverless NLP Pipeline (Lambda, Comprehend, S3, IAM)</span>
-            <span class="chip">AWS-hosted Student Platform (S3, EC2, CloudFront)</span>
+
+        <!-- Achievements -->
+        <div class="glass-panel p-4 mt-4" data-animate>
+          <p class="eyebrow mb-3">Key Achievements</p>
+          <div class="d-flex flex-wrap gap-2">
+            <span class="ach-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Guest Speaker – The Cloud Chronicles (Francis Xavier Engineering College, MCA Dept., 36-slide delivery)
+            </span>
+            <span class="ach-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Active participant – GDG DevFest Birmingham 2025, Cloud &amp; AI tracks
+            </span>
+            <span class="ach-chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              Delivered serverless NLP pipeline (Lambda, Comprehend, S3, IAM) as independent freelance project
+            </span>
           </div>
         </div>
       </section>
 
+      <!-- ─── Education ─── -->
       <section class="section" id="education">
-        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
           <div>
             <p class="eyebrow mb-1">Education</p>
-            <h2 class="h4 mb-0">Learning journey</h2>
+            <h2 class="mb-0">Learning journey</h2>
           </div>
           <span class="pill ghost">Always iterating</span>
         </div>
-        <div class="row g-4 mt-3">
+        <div class="row g-4">
           <div class="col-lg-6" data-animate>
-            <div class="glass-panel p-4 h-100">
-              <h3 class="h5 mb-1">Nottingham Trent University</h3>
-              <p class="small text-muted mb-2">MSc Cloud &amp; Enterprise Computing · Sep 2025 – Present · Sandwich / Placement Year</p>
-              <p class="text-muted mb-0">Advanced Software Engineering, Enterprise &amp; Cloud Systems Management, Network &amp; Cloud Security, Service-Oriented Architecture, Entrepreneurial Leadership &amp; Project Management.</p>
+            <div class="glass-panel edu-card h-100">
+              <p class="edu-deg">MSc Cloud &amp; Enterprise Computing</p>
+              <h3>Nottingham Trent University</h3>
+              <p class="edu-date">Sep 2025 – Present &nbsp;·&nbsp; Sandwich / Placement Year &nbsp;·&nbsp; Nottingham, UK</p>
+              <p class="edu-mod">Advanced Software Engineering, Enterprise &amp; Cloud Systems Management, Network &amp; Cloud Security, Service-Oriented Architecture, Entrepreneurial Leadership &amp; Project Management, Major Project.</p>
             </div>
           </div>
           <div class="col-lg-6" data-animate>
-            <div class="glass-panel p-4 h-100">
-              <h3 class="h5 mb-1">R.M.D. Engineering College</h3>
-              <p class="small text-muted mb-2">B.E. Computer Science Engineering · Nov 2021 – May 2025 · Chennai, India</p>
-              <p class="text-muted mb-0">Data Structures, OOP, DBMS, Operating Systems, Computer Networks, Machine Learning, AI, Cloud Computing, IoT, Blockchain, Cryptography &amp; Network Security, UI/UX Design.</p>
+            <div class="glass-panel edu-card h-100">
+              <p class="edu-deg">B.E. Computer Science Engineering</p>
+              <h3>R.M.D. Engineering College</h3>
+              <p class="edu-date">Nov 2021 – May 2025 &nbsp;·&nbsp; Chennai, India</p>
+              <p class="edu-mod">Data Structures, OOP, DBMS, Operating Systems, Computer Networks, Machine Learning, AI, Cloud Computing, IoT, Blockchain, Cryptography &amp; Network Security, UI/UX Design.</p>
             </div>
           </div>
           <div class="col-lg-6" data-animate>
-            <div class="glass-panel p-4 h-100">
-              <h3 class="h6 mb-1">Velammal Vidyashram (Surapet)</h3>
-              <p class="small text-muted mb-0">Higher Secondary · Jun 2019 – Mar 2021</p>
+            <div class="glass-panel edu-card">
+              <h3>Velammal Vidyashram (Surapet)</h3>
+              <p class="edu-date mb-0">Higher Secondary &nbsp;·&nbsp; Jun 2019 – Mar 2021</p>
             </div>
           </div>
           <div class="col-lg-6" data-animate>
-            <div class="glass-panel p-4 h-100">
-              <h3 class="h6 mb-1">Narayana e-Techno School (Kolathur)</h3>
-              <p class="small text-muted mb-0">High School · Aug 2016 – Mar 2019</p>
+            <div class="glass-panel edu-card">
+              <h3>Narayana e-Techno School (Kolathur)</h3>
+              <p class="edu-date mb-0">High School &nbsp;·&nbsp; Aug 2016 – Mar 2019</p>
             </div>
           </div>
         </div>
       </section>
 
+      <!-- ─── Testimonials ─── -->
       <section class="section" id="testimonials">
-        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-2">
+        <div class="section-heading d-flex align-items-center justify-content-between flex-wrap gap-3 mb-4">
           <div>
             <p class="eyebrow mb-1">Testimonials</p>
-            <h2 class="h4 mb-0">People I've worked with</h2>
+            <h2 class="mb-0">People I've worked with</h2>
           </div>
-          <span class="pill ghost">Trust & delivery</span>
+          <span class="pill ghost">Trust &amp; delivery</span>
         </div>
-        <div class="row g-4 mt-3">
+        <div class="row g-4">
           <div class="col-lg-6" data-animate>
             <div class="glass-panel p-4 h-100">
               <p class="quote">"Amrith brings clarity and momentum. He translated complex AWS architecture into decisions we could actually act on."</p>
-              <p class="small text-muted mb-0">— Client, freelance cloud advisory engagement</p>
+              <p class="small mt-3 mb-0" style="color:var(--muted)">— Client, freelance cloud advisory engagement</p>
             </div>
           </div>
           <div class="col-lg-6" data-animate>
             <div class="glass-panel p-4 h-100">
-              <p class="quote">"He pairs technical rigor with thoughtful communication. Shipping with him felt fast and safe."</p>
-              <p class="small text-muted mb-0">— Team lead, freelance projects</p>
+              <p class="quote">"He pairs technical rigour with thoughtful communication. Shipping with him felt fast and safe."</p>
+              <p class="small mt-3 mb-0" style="color:var(--muted)">— Team lead, freelance projects</p>
             </div>
           </div>
         </div>
       </section>
 
-      <section class="section" id="contact">
-        <div class="glass-panel p-4 contact-card" data-animate>
-          <div class="row g-3 align-items-center">
+      <!-- ─── Contact ─── -->
+      <section class="section pb-5" id="contact">
+        <div class="glass-panel contact-card" data-animate>
+          <div class="row g-4 align-items-center">
             <div class="col-lg-8">
               <p class="eyebrow mb-2">Contact</p>
               <h2 class="h4 mb-2">Let's collaborate on cloud strategy, infrastructure, or digital transformation.</h2>
-              <p class="text-muted mb-3">Reach out for roles, advisory engagements, or freelance cloud projects.</p>
-            <div class="d-flex flex-wrap gap-2 mb-3">
-                <span class="pill ghost">+44 7818 376296</span>
-                <span class="pill ghost">amrithKishore6@gmail.com</span>
-                <span class="pill ghost">Nottingham, United Kingdom</span>
-                <a class="pill" href="https://www.linkedin.com/in/amrith-kishore-1519b9269" target="_blank" rel="noreferrer">LinkedIn</a>
+              <p class="mb-4" style="color:var(--muted)">Reach out for roles, advisory engagements, or freelance cloud projects.</p>
+              <div class="d-flex flex-wrap gap-2 mb-4">
+                <a class="contact-link" href="tel:+447818376296">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.58 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.55a16 16 0 0 0 6 6l1.61-1.61a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                  +44 7818 376296
+                </a>
+                <a class="contact-link" href="mailto:amrithKishore6@gmail.com">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                  amrithKishore6@gmail.com
+                </a>
+                <a class="contact-link" href="https://www.linkedin.com/in/amrith-kishore-1519b9269" target="_blank" rel="noreferrer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/></svg>
+                  LinkedIn
+                </a>
+                <span class="contact-link" style="cursor:default">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  Nottingham, UK
+                </span>
               </div>
               <div class="d-flex gap-3 flex-wrap">
                 <a class="btn btn-accent" href="mailto:amrithKishore6@gmail.com">Email me</a>
@@ -456,11 +766,11 @@
               </div>
             </div>
             <div class="col-lg-4">
-              <div class="glass-panel mini-card" data-animate>
-                <p class="eyebrow mb-1">Availability</p>
-                <ul class="bullet-list mb-0">
+              <div class="glass-panel avail-card" data-animate>
+                <p class="eyebrow mb-3">Availability</p>
+                <ul class="bullet-list">
                   <li>Open to cloud advisory, solutions consulting &amp; cloud PM roles.</li>
-                  <li>Freelance-friendly for AWS architecture and DevOps builds.</li>
+                  <li>Freelance-friendly for AWS architecture and DevOps projects.</li>
                   <li>Available for placement / internship opportunities.</li>
                 </ul>
               </div>
@@ -468,17 +778,13 @@
           </div>
         </div>
       </section>
+
     </main>
 
-    <footer class="py-4 text-center text-muted small">
-      <p class="mb-0">© 2026 Amrith Kishore · Crafted with HTML, CSS, JS, and Bootstrap.</p>
+    <footer class="py-4 text-center" style="color:var(--muted);font-size:.85rem">
+      <p class="mb-0">© 2026 Amrith Kishore &nbsp;·&nbsp; Cloud Consultant &amp; Solutions Advisor &nbsp;·&nbsp; Crafted with HTML, CSS &amp; Bootstrap</p>
     </footer>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-      crossorigin="anonymous"
-      defer
-    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous" defer></script>
   </body>
 </html>
