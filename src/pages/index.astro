@@ -35,27 +35,12 @@ const steps = [
   <!-- HERO -->
   <section class="hero wrap" aria-labelledby="hero-title">
     <div class="hero-top">
-      <div>
-        <p class="hero-name">{site.fullName} · {site.location}</p>
-        <h1 id="hero-title" class="hero-title">
-          <span class="line"><span>I keep cloud systems running,</span></span>
-          <span class="line"><span>and design the screens</span></span>
-          <span class="line"><span>people use them through.</span></span>
-        </h1>
-      </div>
-      <div class="stage" data-stage aria-hidden="true">
-        <div class="stage-in">
-          <div class="st-grid"></div>
-          <div class="st-ring"></div>
-          <div class="st-glow"></div>
-          <img class="st-me" src="/assets/amrith-cutout.webp" alt="" width="640" height="1131" fetchpriority="high" />
-          <span class="st-chip c1">AWS SAA</span>
-          <span class="st-chip c2">Azure</span>
-          <span class="st-chip c3">Cloudflare</span>
-          <span class="st-chip c4">Figma</span>
-          <span class="st-chip c5">Python</span>
-        </div>
-      </div>
+      <p class="hero-name">{site.fullName} · {site.location}</p>
+      <h1 id="hero-title" class="hero-title">
+        <span class="line"><span>I keep cloud systems running,</span></span>
+        <span class="line"><span>and design the screens</span></span>
+        <span class="line"><span>people use them through.</span></span>
+      </h1>
     </div>
     <div class="hero-copy">
       <p class="lead">{site.intro}</p>
@@ -253,16 +238,6 @@ const steps = [
       </div>
     </div>
   </section>
-<script>
-  // 3D tilt: the portrait stage follows the cursor (desktop only, respects reduced motion).
-  const stage = document.querySelector('[data-stage]');
-  if (stage && matchMedia('(hover: hover) and (prefers-reduced-motion: no-preference)').matches) {
-    const inner = stage.querySelector('.stage-in');
-    const move = (e) => { const r = stage.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; inner.style.transform = `rotateY(${x * 16}deg) rotateX(${-y * 12}deg)`; };
-    window.addEventListener('pointermove', (e) => { if (e.clientY < innerHeight * 1.1) move(e); }, { passive: true });
-    document.addEventListener('pointerleave', () => { inner.style.transform = ''; });
-  }
-</script>
 </Base>
 
 <script>
@@ -280,30 +255,7 @@ const steps = [
 <style>
   /* HERO */
   .hero { display: grid; grid-template-columns: 1.15fr 1fr; gap: 28px 64px; align-items: start; padding-top: 72px; padding-bottom: 80px; }
-  .hero-top { grid-column: 1 / -1; display: grid; grid-template-columns: 1.35fr 1fr; gap: 40px; align-items: center; }
-
-  /* 3D portrait stage */
-  .stage { perspective: 1100px; justify-self: end; width: min(100%, 440px); }
-  .stage-in { position: relative; aspect-ratio: 4 / 5; border-radius: 28px; background: radial-gradient(120% 90% at 50% 100%, #1d2533 0%, var(--panel) 60%); transform-style: preserve-3d; transition: transform .25s ease-out; box-shadow: 0 50px 90px -40px rgba(19,23,31,.65); overflow: visible; animation: stageIn 1s cubic-bezier(.2,.7,.1,1) both .2s; }
-  .st-grid { position: absolute; inset: 55% 0 0; border-radius: 0 0 28px 28px; background-image: linear-gradient(rgba(255,91,36,.22) 1px, transparent 1px), linear-gradient(90deg, rgba(255,91,36,.22) 1px, transparent 1px); background-size: 28px 28px; transform: translateZ(-40px) rotateX(58deg); transform-origin: bottom; mask-image: linear-gradient(to top, #000 10%, transparent 90%); }
-  .st-ring { position: absolute; left: 50%; top: 14%; width: 76%; aspect-ratio: 1; translate: -50% 0; border-radius: 50%; border: 2px solid rgba(255,91,36,.55); box-shadow: 0 0 60px rgba(255,91,36,.35), inset 0 0 40px rgba(255,91,36,.15); transform: translateZ(-20px); animation: spin 24s linear infinite; border-top-color: transparent; }
-  .st-glow { position: absolute; left: 50%; top: 22%; width: 60%; aspect-ratio: 1; translate: -50% 0; border-radius: 50%; background: radial-gradient(circle, rgba(255,91,36,.45), transparent 65%); filter: blur(18px); transform: translateZ(-30px); }
-  .st-me { position: absolute; left: 50%; bottom: 0; height: 104%; width: auto; translate: -50% 0; transform: translateZ(40px); filter: drop-shadow(0 30px 40px rgba(0,0,0,.55)); pointer-events: none; }
-  .st-chip { position: absolute; font-family: var(--mono); font-size: 12px; font-weight: 600; color: #fff; background: rgba(19,23,31,.78); border: 1px solid rgba(255,91,36,.5); padding: 7px 12px; border-radius: 999px; backdrop-filter: blur(6px); white-space: nowrap; animation: float 6s ease-in-out infinite; }
-  .st-chip.c1 { left: -8%; top: 18%; transform: translateZ(90px); }
-  .st-chip.c2 { right: -6%; top: 30%; transform: translateZ(70px); animation-delay: -1.5s; }
-  .st-chip.c3 { left: -4%; top: 56%; transform: translateZ(110px); animation-delay: -3s; }
-  .st-chip.c4 { right: -8%; top: 62%; transform: translateZ(60px); animation-delay: -4.5s; }
-  .st-chip.c5 { left: -6%; top: 80%; transform: translateZ(80px); animation-delay: -2s; }
-  @media (max-width: 700px) {
-    .st-chip.c1, .st-chip.c3, .st-chip.c5 { left: 4%; }
-    .st-chip.c2, .st-chip.c4 { right: 4%; }
-  }
-  @keyframes spin { to { rotate: 360deg; } }
-  @keyframes float { 0%, 100% { translate: 0 0; } 50% { translate: 0 -10px; } }
-  @keyframes stageIn { from { opacity: 0; transform: translateY(30px) rotateX(10deg); } to { opacity: 1; transform: none; } }
-  @media (max-width: 900px) { .hero-top { grid-template-columns: 1fr; } .stage { justify-self: center; width: min(100%, 360px); } }
-  @media (prefers-reduced-motion: reduce) { .stage-in, .st-ring, .st-chip { animation: none !important; } .stage-in { transition: none; } }
+  .hero-top { grid-column: 1 / -1; }
   .hero-name { font-weight: 600; color: var(--graphite); margin-bottom: 22px; }
   .hero-title { font-size: clamp(30px, 4.6vw, 70px); font-weight: 700; letter-spacing: -0.035em; line-height: 1.04; }
   .hero-title .line { display: block; overflow: hidden; padding-bottom: .05em; }
