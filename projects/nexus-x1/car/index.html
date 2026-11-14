@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="NEXUS X1 — Exterior design. Interactive 360° view, hotspots, and detailed exterior exploration.">
+<title>NEXUS X1 — THE CAR</title>
+<link rel="stylesheet" href="../styles/global.css">
+<link rel="stylesheet" href="../styles/nav.css">
+<link rel="stylesheet" href="../styles/cursor.css">
+<style>
+/* ── CAR PAGE ──────────────────────────────────── */
+#car-hero {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+#car-hero-canvas {
+  position: absolute;
+  inset: 0; width: 100%; height: 100%;
+}
+.car-hero-content {
+  position: relative;
+  z-index: 3;
+  padding: 0 56px 80px;
+}
+.car-hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.4) 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ── 360 VIEWER ────────────────────────────────── */
+#viewer {
+  position: relative;
+  background: var(--dark-01);
+  padding: 80px 0 0;
+}
+.viewer-wrap {
+  max-width: 1440px;
+  margin: 0 auto;
+}
+.viewer-header {
+  padding: 0 56px 48px;
+}
+#viewer-canvas-wrap {
+  position: relative;
+  height: 60vh;
+  min-height: 460px;
+  background: var(--dark-02);
+  overflow: hidden;
+}
+#viewer-canvas {
+  position: absolute;
+  inset: 0; width: 100%; height: 100%;
+}
+.viewer-controls {
+  display: flex;
+  justify-content: center;
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+  padding: 1px 0;
+}
+.view-btn {
+  flex: 1;
+  max-width: 140px;
+  padding: 14px 20px;
+  background: var(--dark-03);
+  font-family: var(--font-h);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  border: none;
+  cursor: none;
+  transition: background 0.3s, color 0.3s;
+  text-align: center;
+}
+.view-btn.active, .view-btn:hover {
+  background: var(--dark-04);
+  color: var(--cyan);
+}
+.viewer-hint {
+  text-align: center;
+  padding: 16px;
+  font-family: var(--font-m);
+  font-size: 10px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ── HOTSPOTS ──────────────────────────────────── */
+.hotspot {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  cursor: none;
+  z-index: 10;
+  transform: translate(-50%, -50%);
+}
+.hotspot-dot {
+  position: absolute;
+  inset: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: var(--cyan);
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+.hotspot-ring {
+  position: absolute;
+  inset: 0;
+  border: 1px solid rgba(0,229,255,0.5);
+  border-radius: 50%;
+  animation: rotateSlow 4s linear infinite;
+}
+.hotspot:hover .hotspot-dot { transform: translate(-50%, -50%) scale(1.5); }
+.hotspot-label {
+  position: absolute;
+  left: 36px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-m);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  white-space: nowrap;
+  background: rgba(0,0,0,0.8);
+  padding: 3px 8px;
+  opacity: 0;
+  transition: opacity 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+.hotspot:hover .hotspot-label { opacity: 1; transform: translateY(-50%) translateX(4px); }
+
+/* Info panel */
+.info-panel {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.88);
+  border: 1px solid rgba(0,229,255,0.2);
+  padding: 20px 28px;
+  min-width: 280px;
+  max-width: 400px;
+  z-index: 20;
+  backdrop-filter: blur(16px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.info-panel.show { opacity: 1; pointer-events: all; }
+.info-panel-title {
+  font-family: var(--font-h);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+  margin-bottom: 8px;
+}
+.info-panel-body {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.65;
+}
+.info-panel-close {
+  position: absolute;
+  top: 12px; right: 12px;
+  font-size: 16px;
+  color: rgba(255,255,255,0.4);
+  cursor: none;
+  line-height: 1;
+}
+
+/* ── EXTERIOR FEATURES ─────────────────────────── */
+#features {
+  padding: 120px 0;
+  background: var(--black);
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+  margin-top: 64px;
+}
+.feature-card {
+  background: var(--dark-01);
+  padding: 40px 32px;
+  position: relative;
+  overflow: hidden;
+}
+.feature-canvas {
+  position: absolute;
+  top: 0; right: 0;
+  width: 180px; height: 180px;
+  opacity: 0.6;
+  pointer-events: none;
+}
+.feature-num {
+  font-family: var(--font-m);
+  font-size: 10px;
+  color: var(--cyan);
+  letter-spacing: 0.15em;
+  margin-bottom: 20px;
+}
+.feature-title {
+  font-family: var(--font-h);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+.feature-body {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+}
+.feature-specs {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.feature-spec {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 8px;
+}
+.feature-spec-key {
+  font-family: var(--font-m);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+.feature-spec-val {
+  font-family: var(--font-h);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* ── HEADLIGHT EXPERIENCE ──────────────────────── */
+#headlights {
+  padding: 120px 0;
+  background: var(--dark-02);
+}
+.headlight-stage {
+  height: 400px;
+  position: relative;
+  overflow: hidden;
+  margin-top: 48px;
+}
+#headlight-canvas {
+  position: absolute;
+  inset: 0; width: 100%; height: 100%;
+}
+.headlight-controls {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1px;
+  z-index: 10;
+}
+.hl-btn {
+  padding: 10px 20px;
+  background: rgba(0,0,0,0.8);
+  border: 1px solid rgba(255,255,255,0.1);
+  font-family: var(--font-h);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+  cursor: none;
+  transition: all 0.3s;
+}
+.hl-btn.active, .hl-btn:hover {
+  background: rgba(0,229,255,0.1);
+  border-color: var(--cyan);
+  color: var(--cyan);
+}
+
+/* ── WHEEL SECTION ─────────────────────────────── */
+#wheel-section {
+  padding: 120px 0;
+  background: var(--dark-01);
+}
+#wheel-canvas-main {
+  width: 100%;
+  height: 500px;
+}
+.wheel-opts {
+  display: flex;
+  gap: 1px;
+  margin-top: 2px;
+  background: rgba(255,255,255,0.04);
+}
+.wheel-opt {
+  flex: 1;
+  padding: 24px;
+  background: var(--dark-02);
+  cursor: none;
+  transition: background 0.3s;
+}
+.wheel-opt:hover, .wheel-opt.active { background: rgba(0,229,255,0.05); }
+.wheel-opt-name {
+  font-family: var(--font-h);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  transition: color 0.3s;
+}
+.wheel-opt.active .wheel-opt-name { color: var(--cyan); }
+.wheel-opt-spec {
+  font-family: var(--font-m);
+  font-size: 10px;
+  color: rgba(255,255,255,0.25);
+  letter-spacing: 0.1em;
+  margin-top: 6px;
+}
+
+@media (max-width: 1024px) {
+  .feature-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .car-hero-content { padding: 0 20px 60px; }
+  .viewer-header { padding: 0 20px 32px; }
+  .feature-grid { grid-template-columns: 1fr; }
+  .wheel-opts { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-label"></div>
+<div id="page-veil"></div>
+<div id="scroll-bar"></div>
+
+<!-- Navigation -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="/projects/nexus-x1/" class="nav-logo" aria-label="NEXUS Home"><span class="logo-nexus">NEXUS</span> <span class="logo-x1">X1</span></a>
+    <ul class="nav-links">
+      <li><a href="/projects/nexus-x1/car/" class="active">The Car</a></li>
+      <li><a href="/projects/nexus-x1/performance/">Performance</a></li>
+      <li><a href="/projects/nexus-x1/engineering/">Engineering</a></li>
+      <li><a href="/projects/nexus-x1/interior/">Interior</a></li>
+      <li><a href="/projects/nexus-x1/technology/">Technology</a></li>
+      <li><a href="/projects/nexus-x1/configurator/">Configure</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/projects/nexus-x1/gallery/" class="nav-link-hide">Gallery</a>
+      <a href="/projects/nexus-x1/journal/" class="nav-link-hide">Journal</a>
+      <button class="nav-menu" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+<div class="nav-overlay">
+  <div class="nav-overlay-inner">
+    <div class="nav-overlay-links">
+      <a href="/projects/nexus-x1/car/"><span>01</span> The Car <span class="link-num">X1</span></a>
+      <a href="/projects/nexus-x1/performance/"><span>02</span> Performance <span class="link-num">DRIVE</span></a>
+      <a href="/projects/nexus-x1/engineering/"><span>03</span> Engineering <span class="link-num">BUILD</span></a>
+      <a href="/projects/nexus-x1/aerodynamics/"><span>04</span> Aerodynamics <span class="link-num">AERO</span></a>
+      <a href="/projects/nexus-x1/interior/"><span>05</span> Interior <span class="link-num">CABIN</span></a>
+      <a href="/projects/nexus-x1/technology/"><span>06</span> Technology <span class="link-num">AI</span></a>
+      <a href="/projects/nexus-x1/configurator/"><span>07</span> Configure <span class="link-num">BUILD</span></a>
+      <a href="/projects/nexus-x1/gallery/"><span>08</span> Gallery <span class="link-num">VISUAL</span></a>
+      <a href="/projects/nexus-x1/journal/"><span>09</span> Journal <span class="link-num">READ</span></a>
+    </div>
+    <div class="nav-overlay-side">
+      <div class="nav-overlay-logo">NEXUS<br>X1</div>
+      <div class="nav-overlay-meta">
+        <span>Nexus Automotive / Concept 2070</span>
+      </div>
+      <p class="nav-overlay-tagline">THE NEXT MACHINE.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════ HERO ════════════════════════════════════════ -->
+<section id="car-hero">
+  <canvas id="car-hero-canvas" aria-hidden="true"></canvas>
+  <div class="car-hero-overlay"></div>
+  <div class="hud hud-tl" aria-hidden="true">NEXUS X1 / EXTERIOR</div>
+  <div class="hud hud-tr" aria-hidden="true">FORM STUDY</div>
+  <div class="car-hero-content">
+    <span class="sec-num">// 001 — EXTERIOR</span>
+    <h1 class="t-hero reveal">FORM FOLLOWS<br>THE FUTURE.</h1>
+    <p class="t-body mt-6 reveal" style="max-width:480px;">Every surface of the NEXUS X1 is an engineering statement. Where conventional design ends, X1 begins.</p>
+    <div class="flex gap-4 mt-8 reveal">
+      <a href="#viewer" class="btn btn-primary">
+        <div class="btn-bg"></div><span class="btn-text">360° VIEW</span><span class="btn-arrow">↓</span>
+      </a>
+      <a href="/projects/nexus-x1/configurator/" class="btn">
+        <div class="btn-bg"></div><span class="btn-text">CONFIGURE</span><span class="btn-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ 360° VIEWER ════════════════════════════════ -->
+<section id="viewer">
+  <div class="viewer-wrap">
+    <div class="viewer-header">
+      <span class="sec-num">// 002 — INTERACTIVE 360°</span>
+      <h2 class="t-heading reveal">Every Angle.<br>Every Detail.</h2>
+    </div>
+    <div id="viewer-canvas-wrap" data-cursor="drag">
+      <canvas id="viewer-canvas" aria-label="Interactive 360° vehicle view"></canvas>
+
+      <!-- Hotspots -->
+      <div class="hotspot" id="hs-headlights" style="left:80%;top:42%">
+        <div class="hotspot-ring"></div>
+        <div class="hotspot-dot"></div>
+        <span class="hotspot-label">NEXUS LIGHT MATRIX</span>
+      </div>
+      <div class="hotspot" id="hs-aero" style="left:60%;top:30%">
+        <div class="hotspot-ring"></div>
+        <div class="hotspot-dot"></div>
+        <span class="hotspot-label">ACTIVE AERO</span>
+      </div>
+      <div class="hotspot" id="hs-wheel" style="left:72%;top:68%">
+        <div class="hotspot-ring"></div>
+        <div class="hotspot-dot"></div>
+        <span class="hotspot-label">AERO WHEEL</span>
+      </div>
+      <div class="hotspot" id="hs-glass" style="left:50%;top:25%">
+        <div class="hotspot-ring"></div>
+        <div class="hotspot-dot"></div>
+        <span class="hotspot-label">SMART GLASS ROOF</span>
+      </div>
+      <div class="hotspot" id="hs-rear" style="left:20%;top:45%">
+        <div class="hotspot-ring"></div>
+        <div class="hotspot-dot"></div>
+        <span class="hotspot-label">REAR WING</span>
+      </div>
+
+      <!-- Info Panel -->
+      <div class="info-panel" id="info-panel">
+        <div class="info-panel-close" id="info-close">×</div>
+        <div class="info-panel-title" id="info-title">NEXUS LIGHT MATRIX</div>
+        <div class="info-panel-body" id="info-body">Advanced adaptive lighting system with 1,024 individually controllable elements. Day, Night and Performance modes.</div>
+      </div>
+    </div>
+    <div class="viewer-controls">
+      <button class="view-btn active" data-view="front">FRONT</button>
+      <button class="view-btn" data-view="side">SIDE</button>
+      <button class="view-btn" data-view="rear">REAR</button>
+      <button class="view-btn" data-view="top">TOP</button>
+      <button class="view-btn" data-view="three-quarter">¾ VIEW</button>
+    </div>
+    <p class="viewer-hint">// DRAG TO ROTATE · SCROLL TO ZOOM · TAP HOTSPOTS</p>
+  </div>
+</section>
+
+<!-- ════ EXTERIOR FEATURES ════════════════════════════ -->
+<section id="features">
+  <div class="wrap">
+    <span class="sec-num">// 003 — DESIGN LANGUAGE</span>
+    <h2 class="t-heading reveal">Precision Engineered<br>at Every Surface.</h2>
+    <div class="feature-grid mt-8">
+
+      <div class="feature-card reveal">
+        <canvas class="feature-canvas" id="f-canvas-0" aria-hidden="true"></canvas>
+        <div class="feature-num">// 01</div>
+        <h3 class="feature-title">Headlight Matrix</h3>
+        <p class="feature-body">1,024 individually addressable light elements. Adaptive beam forming. Signature X-pattern DRL.</p>
+        <div class="feature-specs">
+          <div class="feature-spec"><span class="feature-spec-key">Elements</span><span class="feature-spec-val">1,024</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Range</span><span class="feature-spec-val">600m</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Modes</span><span class="feature-spec-val">Day / Night / Track</span></div>
+        </div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1">
+        <canvas class="feature-canvas" id="f-canvas-1" aria-hidden="true"></canvas>
+        <div class="feature-num">// 02</div>
+        <h3 class="feature-title">Aero Architecture</h3>
+        <p class="feature-body">Active front splitter, electronically controlled rear wing. Three-position aero system for Street, Sport, Track.</p>
+        <div class="feature-specs">
+          <div class="feature-spec"><span class="feature-spec-key">Drag (Cd)</span><span class="feature-spec-val">0.186</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Downforce</span><span class="feature-spec-val">980 kg @ 300 km/h</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Aero Modes</span><span class="feature-spec-val">3 Position</span></div>
+        </div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2">
+        <canvas class="feature-canvas" id="f-canvas-2" aria-hidden="true"></canvas>
+        <div class="feature-num">// 03</div>
+        <h3 class="feature-title">Smart Glass</h3>
+        <p class="feature-body">Electrochromic panoramic roof with variable opacity. Integrated solar cells and structural integration.</p>
+        <div class="feature-specs">
+          <div class="feature-spec"><span class="feature-spec-key">Area</span><span class="feature-spec-val">2.4 m²</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Opacity</span><span class="feature-spec-val">0–100%</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Solar</span><span class="feature-spec-val">Integrated</span></div>
+        </div>
+      </div>
+
+      <div class="feature-card reveal">
+        <canvas class="feature-canvas" id="f-canvas-3" aria-hidden="true"></canvas>
+        <div class="feature-num">// 04</div>
+        <h3 class="feature-title">Aero Wheels</h3>
+        <p class="feature-body">22-inch forged alloy wheels. Fully enclosed aero surface. Active brake cooling ducts. Concept specification.</p>
+        <div class="feature-specs">
+          <div class="feature-spec"><span class="feature-spec-key">Size</span><span class="feature-spec-val">22" Forged</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Weight</span><span class="feature-spec-val">7.2 kg (concept)</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Aero Gain</span><span class="feature-spec-val">12% drag reduction</span></div>
+        </div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-1">
+        <canvas class="feature-canvas" id="f-canvas-4" aria-hidden="true"></canvas>
+        <div class="feature-num">// 05</div>
+        <h3 class="feature-title">Door System</h3>
+        <p class="feature-body">Flush electronic door handles. Camera-based door detection. Soft-close mechanism. Hidden hinge architecture.</p>
+        <div class="feature-specs">
+          <div class="feature-spec"><span class="feature-spec-key">Handles</span><span class="feature-spec-val">Flush Camera</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Seal</span><span class="feature-spec-val">Active magnetic</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Close</span><span class="feature-spec-val">Auto soft-close</span></div>
+        </div>
+      </div>
+
+      <div class="feature-card reveal reveal-delay-2">
+        <canvas class="feature-canvas" id="f-canvas-5" aria-hidden="true"></canvas>
+        <div class="feature-num">// 06</div>
+        <h3 class="feature-title">Tail Light Matrix</h3>
+        <p class="feature-body">Full-width illuminated bar. Animated sequential indicators. Brake force visualisation mode.</p>
+        <div class="feature-specs">
+          <div class="feature-spec"><span class="feature-spec-key">Width</span><span class="feature-spec-val">Full span</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Elements</span><span class="feature-spec-val">512</span></div>
+          <div class="feature-spec"><span class="feature-spec-key">Modes</span><span class="feature-spec-val">Animated</span></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ════ HEADLIGHT EXPERIENCE ════════════════════════ -->
+<section id="headlights">
+  <div class="wrap">
+    <span class="sec-num">// 004 — LIGHT MATRIX</span>
+    <div class="flex justify-b items-c" style="flex-wrap:wrap; gap:24px;">
+      <h2 class="t-heading reveal">See Every Detail<br>of Darkness.</h2>
+      <div class="tech-badge reveal">SIMULATED VISUALISATION</div>
+    </div>
+    <div class="headlight-stage reveal mt-6">
+      <canvas id="headlight-canvas" aria-label="Headlight visualisation"></canvas>
+      <div class="headlight-controls">
+        <button class="hl-btn active" data-hl="day">DAY</button>
+        <button class="hl-btn" data-hl="night">NIGHT</button>
+        <button class="hl-btn" data-hl="performance">PERFORMANCE</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ WHEEL SECTION ════════════════════════════════ -->
+<section id="wheel-section">
+  <div class="wrap">
+    <span class="sec-num">// 005 — WHEEL SYSTEM</span>
+    <h2 class="t-heading reveal">Every Contact<br>Matters.</h2>
+    <p class="t-body mt-4 reveal" style="max-width:500px;">The connection between machine and road is everything. Three distinct wheel systems, each engineered for a specific operating mode.</p>
+  </div>
+  <div style="margin-top:48px;">
+    <canvas id="wheel-canvas-main" data-cursor="drag" aria-label="Interactive wheel view"></canvas>
+    <div class="wheel-opts">
+      <div class="wheel-opt active" data-wheel-style="aero">
+        <div class="wheel-opt-name">AERO</div>
+        <div class="wheel-opt-spec">22" / 7.2 kg concept / Enclosed face</div>
+      </div>
+      <div class="wheel-opt" data-wheel-style="performance">
+        <div class="wheel-opt-name">PERFORMANCE</div>
+        <div class="wheel-opt-spec">21" / 7.8 kg concept / Open spoke</div>
+      </div>
+      <div class="wheel-opt" data-wheel-style="track">
+        <div class="wheel-opt-name">TRACK</div>
+        <div class="wheel-opt-spec">20" / 6.8 kg concept / Competition</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="padding:120px 0; background:var(--dark-02); text-align:center;">
+  <div class="wrap">
+    <span class="sec-num">// NEXT</span>
+    <h2 class="t-heading reveal">Ready to<br>go deeper?</h2>
+    <div class="flex gap-4 mt-8 justify-c" style="flex-wrap:wrap;">
+      <a href="/projects/nexus-x1/performance/" class="btn btn-primary">
+        <div class="btn-bg"></div><span class="btn-text">PERFORMANCE</span><span class="btn-arrow">→</span>
+      </a>
+      <a href="/projects/nexus-x1/engineering/" class="btn">
+        <div class="btn-bg"></div><span class="btn-text">ENGINEERING</span><span class="btn-arrow">→</span>
+      </a>
+      <a href="/projects/nexus-x1/interior/" class="btn">
+        <div class="btn-bg"></div><span class="btn-text">INTERIOR</span><span class="btn-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="../js/core.js"></script>
+<script src="../js/car3d.js"></script>
+<script>
+(function() {
+const NT = window.NexusThree;
+if (!NT) return;
+const { createNexusX1, createNexusScene, createWheel, createChromeMaterial, createTireMaterial, createEmissiveMaterial } = NT;
+
+/* ── HERO ───────────────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('car-hero-canvas');
+  if (!canvas) return;
+  const s = createNexusScene(canvas, { fog: true, ground: true, particles: true });
+  if (!s) return;
+  const { renderer, scene, camera } = s;
+  const car = createNexusX1({ bodyColor: 0x0a0a0a });
+  scene.add(car);
+  camera.position.set(4, 1.4, 5.5);
+  camera.lookAt(0, 0.5, 0);
+  let t = 0;
+  let mx = 0;
+  document.addEventListener('mousemove', e => { mx = (e.clientX/window.innerWidth - 0.5); });
+  function render() {
+    requestAnimationFrame(render);
+    t += 0.006;
+    car.rotation.y = -0.4 + mx * 0.3 + Math.sin(t*0.3) * 0.05;
+    if (car.userData.wheels) car.userData.wheels.forEach(w => w.rotation.x += 0.005);
+    renderer.render(scene, camera);
+  }
+  render();
+})();
+
+/* ── 360° VIEWER ─────────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('viewer-canvas');
+  if (!canvas) return;
+  const s = createNexusScene(canvas, { fog: false, ground: true, particles: false, bgColor: 0x060606 });
+  if (!s) return;
+  const { renderer, scene, camera } = s;
+  const car = createNexusX1({ bodyColor: 0x0a0a0a });
+  scene.add(car);
+  camera.position.set(0, 1.5, 6.5);
+  camera.lookAt(0, 0.5, 0);
+
+  // Drag rotate
+  let isDragging = false, lastX = 0, rotY = 0;
+  const wrap = document.getElementById('viewer-canvas-wrap');
+  wrap.addEventListener('mousedown', e => { isDragging = true; lastX = e.clientX; });
+  document.addEventListener('mouseup', () => isDragging = false);
+  document.addEventListener('mousemove', e => {
+    if (!isDragging) return;
+    rotY += (e.clientX - lastX) * 0.005;
+    lastX = e.clientX;
+  });
+
+  // Touch
+  let lastTouch = 0;
+  wrap.addEventListener('touchstart', e => { isDragging = true; lastTouch = e.touches[0].clientX; });
+  wrap.addEventListener('touchend', () => isDragging = false);
+  wrap.addEventListener('touchmove', e => {
+    if (!isDragging) return;
+    rotY += (e.touches[0].clientX - lastTouch) * 0.005;
+    lastTouch = e.touches[0].clientX;
+  });
+
+  // View presets
+  const views = {
+    front:        { x: 0,   y: 1.5, z: 6.5, lookY: 0.5 },
+    side:         { x: 6.5, y: 1.5, z: 0,   lookY: 0.5 },
+    rear:         { x: 0,   y: 1.5, z: -6.5,lookY: 0.5 },
+    top:          { x: 0,   y: 7,   z: 0.5, lookY: 0 },
+    'three-quarter': { x: 4.5, y: 2, z: 4.5, lookY: 0.5 },
+  };
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const v = views[btn.dataset.view];
+      if (!v) return;
+      gsap.to(camera.position, { x: v.x, y: v.y, z: v.z, duration: 1.2, ease: 'power3.inOut' });
+    });
+  });
+
+  // Hotspot info
+  const infoData = {
+    'hs-headlights': { title: 'NEXUS LIGHT MATRIX', body: '1,024 individually addressable elements. Adaptive beam-forming. Signature X-pattern DRL. Three modes: Day, Night, Performance.' },
+    'hs-aero': { title: 'ACTIVE AERO SYSTEM', body: 'Three-position front and rear aero package. Street, Sport and Track configurations. Electronically controlled. Concept specification.' },
+    'hs-wheel': { title: '22" AERO WHEEL', body: 'Enclosed face aerodynamic wheel. Forged alloy concept specification. Integrated brake cooling. 7.2 kg concept weight.' },
+    'hs-glass': { title: 'SMART GLASS ROOF', body: 'Electrochromic panoramic roof. Variable 0–100% opacity. Integrated solar cells. 2.4 m² span.' },
+    'hs-rear': { title: 'ACTIVE REAR WING', body: 'Electronically deployed rear wing with dual-element blade. Three positions. 980 kg simulated downforce at 300 km/h. Concept data.' },
+  };
+  const panel = document.getElementById('info-panel');
+  const infoTitle = document.getElementById('info-title');
+  const infoBody  = document.getElementById('info-body');
+  document.querySelectorAll('.hotspot').forEach(hs => {
+    hs.addEventListener('click', () => {
+      const d = infoData[hs.id];
+      if (!d) return;
+      infoTitle.textContent = d.title;
+      infoBody.textContent = d.body;
+      panel.classList.add('show');
+    });
+  });
+  document.getElementById('info-close').addEventListener('click', () => panel.classList.remove('show'));
+
+  let t = 0;
+  function render() {
+    requestAnimationFrame(render);
+    t += 0.005;
+    car.rotation.y = rotY + (isDragging ? 0 : Math.sin(t * 0.15) * 0.02);
+    if (car.userData.wheels) car.userData.wheels.forEach(w => w.rotation.x += 0.005);
+    camera.lookAt(0, 0.5, 0);
+    renderer.render(scene, camera);
+  }
+  render();
+})();
+
+/* ── HEADLIGHT EXPERIENCE ─────────────────────── */
+(function() {
+  const canvas = document.getElementById('headlight-canvas');
+  if (!canvas) return;
+  const w = canvas.clientWidth || 800;
+  const h = canvas.clientHeight || 400;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.6;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x010101);
+  const camera = new THREE.PerspectiveCamera(35, w/h, 0.1, 50);
+  camera.position.set(0, 1, 4.5);
+  camera.lookAt(0, 0.5, 0);
+
+  const ambient = new THREE.AmbientLight(0xffffff, 0.05);
+  scene.add(ambient);
+
+  // Headlight strips
+  const hlMats = {
+    day: new THREE.MeshStandardMaterial({ color: 0xfff8e0, emissive: new THREE.Color(0xfff8e0), emissiveIntensity: 3 }),
+    night: new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: new THREE.Color(0xffffff), emissiveIntensity: 5 }),
+    performance: new THREE.MeshStandardMaterial({ color: 0x00e5ff, emissive: new THREE.Color(0x00e5ff), emissiveIntensity: 6 }),
+  };
+  let currentMat = hlMats.day;
+
+  // Create front of car
+  const bodyMat = NT.createBodyMaterial(0x0a0a0a);
+  const frontPanel = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.8, 2.2), bodyMat);
+  frontPanel.position.set(0.1, 0.55, 0);
+  scene.add(frontPanel);
+
+  // Upper body
+  const upper = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.5, 1.6), bodyMat);
+  upper.position.set(0.05, 1.05, 0);
+  scene.add(upper);
+
+  // Headlight housings
+  const hlGroup = new THREE.Group();
+  const drlGeom = new THREE.BoxGeometry(0.06, 0.025, 1.72);
+  const drl = new THREE.Mesh(drlGeom, currentMat);
+  drl.position.set(0.2, 0.75, 0);
+  hlGroup.add(drl);
+
+  [-0.58, 0.58].forEach(z => {
+    const strip = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.055, 0.65), currentMat);
+    strip.position.set(0.2, 0.62, z);
+    hlGroup.add(strip);
+  });
+
+  scene.add(hlGroup);
+
+  // Projected light cone
+  let spotLight = new THREE.SpotLight(0xfff8e0, 10, 20, Math.PI/7, 0.4);
+  spotLight.position.set(0.5, 0.7, 0);
+  spotLight.target.position.set(8, 0.4, 0);
+  scene.add(spotLight);
+  scene.add(spotLight.target);
+
+  const modes = {
+    day: { color: 0xfff8e0, intensity: 3, spotColor: 0xfff8e0, spotInt: 6 },
+    night: { color: 0xffffff, intensity: 5, spotColor: 0xffffff, spotInt: 12 },
+    performance: { color: 0x00e5ff, intensity: 6, spotColor: 0x00e5ff, spotInt: 8 },
+  };
+  let currentMode = 'day';
+
+  document.querySelectorAll('.hl-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.hl-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const m = modes[btn.dataset.hl];
+      if (!m) return;
+      currentMode = btn.dataset.hl;
+      const col = new THREE.Color(m.color);
+      hlGroup.children.forEach(c => {
+        c.material.color.set(col);
+        c.material.emissive.set(col);
+        c.material.emissiveIntensity = m.intensity;
+      });
+      spotLight.color.set(new THREE.Color(m.spotColor));
+      spotLight.intensity = m.spotInt;
+    });
+  });
+
+  // Ground for light projection
+  const groundM = new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.1, metalness: 0.9 });
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(30, 20), groundM);
+  ground.rotation.x = -Math.PI/2;
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  let t = 0;
+  function render() {
+    requestAnimationFrame(render);
+    t += 0.01;
+    // Pulse effect in performance mode
+    if (currentMode === 'performance') {
+      const pulse = 5 + Math.sin(t * 3) * 2;
+      hlGroup.children.forEach(c => { c.material.emissiveIntensity = pulse; });
+    }
+    renderer.render(scene, camera);
+  }
+  render();
+
+  window.addEventListener('resize', () => {
+    const w2 = canvas.clientWidth;
+    const h2 = canvas.clientHeight;
+    camera.aspect = w2/h2;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w2, h2);
+  });
+})();
+
+/* ── WHEEL VIEWER ─────────────────────────────── */
+(function() {
+  const canvas = document.getElementById('wheel-canvas-main');
+  if (!canvas) return;
+  const w = canvas.clientWidth || 1000;
+  const h = canvas.clientHeight || 500;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(w, h);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.8;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x060606);
+  scene.fog = new THREE.FogExp2(0x060606, 0.12);
+
+  const camera = new THREE.PerspectiveCamera(36, w/h, 0.1, 50);
+  camera.position.set(0, 0, 2.8);
+
+  const al = new THREE.AmbientLight(0xffffff, 0.08);
+  const kl = new THREE.DirectionalLight(0xffffff, 3);
+  kl.position.set(4, 5, 3);
+  const fl = new THREE.PointLight(0x00e5ff, 2, 10);
+  fl.position.set(-3, 2, -2);
+  scene.add(al, kl, fl);
+
+  // Ground line
+  const gl2 = new THREE.Mesh(new THREE.PlaneGeometry(20, 20), new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.1, metalness: 0.9 }));
+  gl2.rotation.x = -Math.PI/2;
+  gl2.position.y = -0.56;
+  scene.add(gl2);
+
+  const chromeMat = createChromeMaterial();
+  const tireMat = createTireMaterial();
+  const accentM = createEmissiveMaterial(0x00e5ff, 3);
+
+  let currentWheel = createWheel(chromeMat, tireMat, accentM, 'aero');
+  scene.add(currentWheel);
+
+  // Drag rotate
+  let dragging = false, lastX2 = 0, rot = 0;
+  canvas.addEventListener('mousedown', e => { dragging = true; lastX2 = e.clientX; });
+  document.addEventListener('mouseup', () => dragging = false);
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    rot += (e.clientX - lastX2) * 0.008;
+    lastX2 = e.clientX;
+  });
+
+  document.querySelectorAll('.wheel-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('.wheel-opt').forEach(o => o.classList.remove('active'));
+      opt.classList.add('active');
+      scene.remove(currentWheel);
+      currentWheel = createWheel(chromeMat, tireMat, accentM, opt.dataset.wheelStyle);
+      scene.add(currentWheel);
+    });
+  });
+
+  let t2 = 0;
+  function render() {
+    requestAnimationFrame(render);
+    t2 += 0.006;
+    currentWheel.rotation.y = rot + (dragging ? 0 : t2 * 0.4);
+    renderer.render(scene, camera);
+  }
+  render();
+
+  window.addEventListener('resize', () => {
+    const w2 = canvas.clientWidth;
+    const h2 = canvas.clientHeight;
+    camera.aspect = w2/h2;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w2, h2);
+  });
+})();
+})();
+</script>
+</body>
+</html>

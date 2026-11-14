@@ -26,6 +26,15 @@ const WORK_PROJECTS = [
     featured: true
   },
   {
+    title: "Equity Investor Club Platform",
+    context: "Founder · Full-stack web app",
+    stack: "Node.js · Express · SQLite",
+    summary: "Finance-education platform for my investing community, with session auth using bcrypt and peppered hashes, an admin dashboard (users, scheduled posts, comment moderation, login logs), a learning hub, SIP calculator, risk-profile quiz and PDF certificates. Containerised with Docker and set up for Render.",
+    tags: ["Auth & Security", "Admin Dashboard", "Docker"],
+    link: "https://github.com/Amrithkishore14/equity",
+    linkLabel: "View code"
+  },
+  {
     title: "Student Event Booking REST API",
     context: "University Project",
     stack: "Java · MongoDB · Docker",
@@ -66,6 +75,68 @@ const DESIGN_PROJECTS = [
       { src: "assets/design/elmar-home-mobile.jpg", alt: "Homepage on a mobile phone" }
     ],
     featured: true
+  },
+  {
+    title: "NEXUS X1: Electric Car Microsite",
+    context: "Self-initiated · 10-page site",
+    stack: "HTML · CSS · JavaScript",
+    summary: "Multi-page launch site for a concept electric performance car, with performance, engineering, interior, technology, a gallery with film, a journal and an interactive configurator, tied together by a neon-on-black visual system.",
+    tags: ["Multi-page", "Configurator", "Motion & Video"],
+    link: "projects/nexus-x1/",
+    linkLabel: "View live site",
+    image: "assets/design/projects/nexus-hero.jpg",
+    imageAlt: "NEXUS X1 homepage: The Next Machine",
+    gallery: [
+      { src: "assets/design/projects/nexus-s1.jpg", alt: "Intelligence section" },
+      { src: "assets/design/projects/nexus-s2.jpg", alt: "By the numbers" },
+      { src: "assets/design/projects/nexus-s3.jpg", alt: "Explore the car" },
+      { src: "assets/design/projects/nexus-mobile.jpg", alt: "Homepage on mobile" }
+    ]
+  },
+  {
+    title: "Vantage Risk: Consultancy Website",
+    context: "Self-initiated · 2026",
+    stack: "HTML · CSS · JavaScript",
+    summary: "Website for a fictional risk consultancy with an animated risk-radar hero, service areas from cyber to financial risk, and an interactive likelihood-and-impact heat map for exploring risk categories.",
+    tags: ["B2B", "Data Visualisation", "Interaction"],
+    link: "https://amrithkishore14.github.io/vantage-risk/",
+    linkLabel: "View live site",
+    image: "assets/design/projects/vantage-hero.jpg",
+    imageAlt: "Vantage Risk homepage: Risk shouldn't be reactive",
+    gallery: [
+      { src: "assets/design/projects/vantage-s2.jpg", alt: "Risk service areas" },
+      { src: "assets/design/projects/vantage-s3.jpg", alt: "Interactive risk heat map" },
+      { src: "assets/design/projects/vantage-mobile.jpg", alt: "Homepage on mobile" }
+    ]
+  },
+  {
+    title: "MOUNAM: Zero-Waste Fashion",
+    context: "Client project · 7 pages",
+    stack: "HTML · CSS · JavaScript",
+    summary: "Editorial portfolio site for a zero-waste fashion collection, with a Bodoni and red-accent identity, a visual story, an eight-garment collection, the zero-waste process and a designer page.",
+    tags: ["Fashion", "Editorial Type", "Client Delivery"],
+    link: "https://amrithkishore14.github.io/GOPIKA-PROJECT/",
+    linkLabel: "View live site",
+    image: "assets/design/projects/mounam-hero.jpg",
+    imageAlt: "MOUNAM homepage: Fashion With No Waste",
+    gallery: [
+      { src: "assets/design/projects/mounam-s2.jpg", alt: "Brand statement and stats" },
+      { src: "assets/design/projects/mounam-mobile.jpg", alt: "Homepage on mobile" }
+    ]
+  },
+  {
+    title: "AURA: Fashion E-commerce",
+    context: "Self-initiated · 2026",
+    stack: "HTML · CSS · JavaScript",
+    summary: "Storefront concept for a premium fashion label with a bold typographic hero, lookbook, collection grid, wishlist and basket counters, and a newsletter sign-up.",
+    tags: ["E-commerce", "Typography", "Responsive"],
+    link: "https://amrithkishore14.github.io/AURA/",
+    linkLabel: "View live site",
+    image: "assets/design/projects/aura-hero.jpg",
+    imageAlt: "AURA homepage: Wear Your Standard",
+    gallery: [
+      { src: "assets/design/projects/aura-mobile.jpg", alt: "Homepage on mobile" }
+    ]
   },
   {
     title: "Kaapi & Kothu: Restaurant Website",
