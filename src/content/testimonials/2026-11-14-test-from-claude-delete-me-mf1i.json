@@ -1,0 +1,13 @@
+{
+  "name": "TEST from Claude - delete me",
+  "role": "Test",
+  "company": "Test",
+  "relationship": "Other",
+  "about": "AURA fashion storefront",
+  "quote": "This is an automatic test to check that recommendations reach the CMS for approval. Please delete it.",
+  "linkedin": "",
+  "approved": false,
+  "featured": false,
+  "order": 50,
+  "submittedAt": "2026-11-14T11:08:17.692Z"
+}
