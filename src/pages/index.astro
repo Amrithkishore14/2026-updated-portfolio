@@ -188,7 +188,10 @@ const steps = [
               </div>
             </div>
             <ul>{x.points.map((pt) => <li>{pt}</li>)}</ul>
-            {x.link && <a class="job-link" href={x.link}>Read the case study</a>}
+            <div class="job-links">
+              {x.website && <a class="job-link" href={x.website} target="_blank" rel="noopener">Visit the website ↗</a>}
+              {x.link && <a class="job-link" href={x.link}>Read the case study</a>}
+            </div>
           </div>
         </li>
       ))}
@@ -359,6 +362,7 @@ const steps = [
   .job-org { color: var(--graphite); font-weight: 500; margin: 4px 0 10px; }
   .job ul { padding-left: 18px; color: var(--graphite); }
   .job li { margin: 4px 0; }
+  .job-links { display: flex; flex-wrap: wrap; gap: 6px 20px; }
   .job-link { display: inline-block; margin-top: 10px; font-weight: 600; text-decoration-color: var(--signal); text-underline-offset: 5px; }
 
   /* CREDENTIALS */

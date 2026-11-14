@@ -25,7 +25,8 @@
         "Led the DNS cutover to Cloudflare and set up a CMS for the client"
       ],
       "link": "/work/elmar-risk-management",
-      "domain": "elmarrisk.co.uk"
+      "domain": "elmarrisk.co.uk",
+      "website": "https://elmarrisk.co.uk"
     },
     {
       "role": "Shift Manager",
@@ -106,7 +107,8 @@
         "Founded and grew a financial-literacy community and built its web platform"
       ],
       "link": "/work/equity-investor-club",
-      "logo": "/logos/equity-investor-club.jpg"
+      "logo": "/logos/equity-investor-club.jpg",
+      "website": "https://equity-investor-club.amrithkishore6.workers.dev"
     }
   ]
 }
