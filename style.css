@@ -433,3 +433,16 @@ footer { border-top: 1px solid var(--border); }
   .contact-card { padding: 22px; }
   .hero { padding: 28px 0 16px; }
 }
+
+/* ─── Project cards (rendered from projects.js) ─── */
+.project-card.featured { border-top-color: rgba(129,140,248,0.4); }
+.project-context { color: var(--muted); }
+.project-summary { color: var(--body-text); font-size: .93rem; line-height: 1.65; }
+.project-thumb { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 12px; border: 1px solid rgba(148,175,200,0.15); }
+.meta a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ─── Respect reduced-motion preferences ─── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  [data-animate] { opacity: 1 !important; transform: none !important; }
+}
