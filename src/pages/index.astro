@@ -3,6 +3,9 @@ import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 import site from '../data/site.json';
 import experience from '../data/experience.json';
+import fs from 'node:fs';
+const logoFor = (x) => x.logo || (x.domain && fs.existsSync(`public/logos/${x.domain}.png`) ? `/logos/${x.domain}.png` : null);
+const initials = (org) => org.split(/\s+/).filter((w) => /^[A-Za-z]/.test(w)).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
 import education from '../data/education.json';
 import certifications from '../data/certifications.json';
 import awards from '../data/awards.json';
@@ -55,6 +58,7 @@ const steps = [
       <dl class="board-list">
         <div><dt>role</dt><dd>{site.currentRole}</dd></div>
         <div><dt>based</dt><dd>{site.location} · <span data-clock>--:--</span> local</dd></div>
+        <div><dt>work style</dt><dd>{site.workStyle}</dd></div>
         <div><dt>open to</dt><dd>{site.openTo}</dd></div>
         <div><dt>certified</dt><dd>AWS SAA · AWS CCP · AZ-900 · AI-900 · OCI</dd></div>
         <div><dt>shipping</dt><dd>since Jan 2023 · <span data-uptime></span></dd></div>
@@ -174,8 +178,15 @@ const steps = [
         <li class="job">
           <p class="job-when">{x.start}{x.end !== x.start ? ` – ${x.end}` : ''}</p>
           <div>
-            <h3>{x.role}</h3>
-            <p class="job-org">{x.org} · {x.place}</p>
+            <div class="job-title">
+              {logoFor(x)
+                ? <img class="job-logo" src={logoFor(x)} alt={`${x.org} logo`} width="44" height="44" loading="lazy" />
+                : <span class="job-logo job-mono" aria-hidden="true">{initials(x.org)}</span>}
+              <div>
+                <h3>{x.role}</h3>
+                <p class="job-org">{x.org} · {x.place}</p>
+              </div>
+            </div>
             <ul>{x.points.map((pt) => <li>{pt}</li>)}</ul>
             {x.link && <a class="job-link" href={x.link}>Read the case study</a>}
           </div>
@@ -215,7 +226,7 @@ const steps = [
   <section id="contact" class="contact" aria-labelledby="contact-title">
     <div class="wrap contact-in">
       <h2 id="contact-title">Hiring for 2027? Let's talk.</h2>
-      <p class="contact-sub">{site.openTo}. Based in {site.location}, happy to work hybrid.</p>
+      <p class="contact-sub">{site.openTo}. Based in {site.location} and willing to relocate anywhere. Open to on-site, hybrid or remote roles.</p>
       <a class="contact-mail" href={`mailto:${site.email}`}>{site.email}</a>
       <div class="contact-links">
         <a class="btn btn-signal" href={site.cv} download>Download CV</a>
@@ -342,6 +353,9 @@ const steps = [
   .job { display: grid; grid-template-columns: 150px 1fr; gap: 24px; padding: 28px 0; border-bottom: 1px solid var(--line); }
   .job-when { font-family: var(--mono); font-size: 14px; color: var(--muted); padding-top: 4px; }
   .job h3 { font-size: 19px; }
+  .job-title { display: flex; gap: 14px; align-items: flex-start; }
+  .job-logo { width: 44px; height: 44px; flex: none; border-radius: 10px; border: 1px solid var(--line); background: #fff; object-fit: contain; padding: 5px; }
+  .job-mono { display: grid; place-items: center; padding: 0; font-family: var(--mono); font-weight: 700; font-size: 15px; color: var(--ink); background: var(--paper); }
   .job-org { color: var(--graphite); font-weight: 500; margin: 4px 0 10px; }
   .job ul { padding-left: 18px; color: var(--graphite); }
   .job li { margin: 4px 0; }
