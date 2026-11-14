@@ -2,6 +2,7 @@
   "name": "2026-updated-portfolio",
   "main": "worker/index.js",
   "compatibility_date": "2026-10-23",
+  "ratelimits": [{ "name": "RL", "namespace_id": "1001", "simple": { "limit": 3, "period": 60 } }],
   "assets": {
     "directory": "./dist",
     "binding": "ASSETS",

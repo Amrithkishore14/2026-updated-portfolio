@@ -19,10 +19,15 @@ const b64 = (str) => btoa(String.fromCharCode(...new TextEncoder().encode(str)))
 
 async function submit(request, env) {
   const origin = request.headers.get('Origin');
-  if (origin && new URL(origin).host !== new URL(request.url).host) return json({ ok: false, error: 'Forbidden' }, 403);
+  // Only accept submissions sent by the site's own form (blocks scripts posting from elsewhere).
+  let sameSite = false;
+  try { sameSite = !!origin && new URL(origin).host === new URL(request.url).host; } catch {}
+  if (!sameSite) return json({ ok: false, error: 'Forbidden' }, 403);
   if (Number(request.headers.get('Content-Length') || 0) > 16_384) return json({ ok: false, error: 'Submission too large.' }, 413);
   if (!env.GITHUB_TOKEN) return json({ ok: false, error: 'Recommendations are not switched on yet. Please email instead.' }, 503);
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  // Global rate limit across all Cloudflare locations (binding RL in wrangler.jsonc).
+  if (env.RL) { const { success } = await env.RL.limit({ key: `rec:${ip}` }); if (!success) return json({ ok: false, error: 'Too many submissions. Please try again later.' }, 429); }
   const now = Date.now();
   const hits = (recent.get(ip) || []).filter((t) => now - t < 3600_000);
   if (hits.length >= 3) return json({ ok: false, error: 'Too many submissions from this connection. Please try again later.' }, 429);
