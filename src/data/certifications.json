@@ -1,0 +1,58 @@
+{
+  "items": [
+    {
+      "name": "AWS Certified Solutions Architect – Associate",
+      "issuer": "Amazon Web Services",
+      "code": "SAA-C03",
+      "group": "cloud"
+    },
+    {
+      "name": "AWS Certified Cloud Practitioner",
+      "issuer": "Amazon Web Services",
+      "code": "CLF-C02",
+      "group": "cloud"
+    },
+    {
+      "name": "Microsoft Azure Fundamentals",
+      "issuer": "Microsoft",
+      "code": "AZ-900",
+      "group": "cloud"
+    },
+    {
+      "name": "Microsoft Azure AI Fundamentals",
+      "issuer": "Microsoft",
+      "code": "AI-900",
+      "group": "cloud"
+    },
+    {
+      "name": "Oracle Cloud Infrastructure Foundations Associate",
+      "issuer": "Oracle",
+      "code": "",
+      "group": "cloud"
+    },
+    {
+      "name": "Google Cloud Associate Cloud Engineer (labs)",
+      "issuer": "Google Cloud",
+      "code": "",
+      "group": "cloud"
+    },
+    {
+      "name": "Infosys AI Primer",
+      "issuer": "Infosys",
+      "code": "",
+      "group": "other"
+    },
+    {
+      "name": "Introduction to IoT",
+      "issuer": "NPTEL",
+      "code": "",
+      "group": "other"
+    },
+    {
+      "name": "Advanced Diploma in Java Programming",
+      "issuer": "NCVTE",
+      "code": "",
+      "group": "other"
+    }
+  ]
+}

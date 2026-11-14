@@ -1,30 +1,19 @@
-# Amrith Kishore — Portfolio
+# Amrith Kishore — portfolio
 
 Live: https://2026-updated-portfolio.amrithkishore6.workers.dev
+Admin (CMS): https://2026-updated-portfolio.amrithkishore6.workers.dev/admin/
 
-Static site (HTML, CSS, Bootstrap 5, vanilla JS). Hosted on Cloudflare Workers (static assets). Every merge to `main` deploys automatically via Cloudflare Workers Builds; files listed in `.assetsignore` are not published.
+Built with Astro. Hosted on Cloudflare Workers (static assets). Every push to `main` builds and deploys automatically (Cloudflare Workers Builds: build `npm run build`, deploy `npx wrangler deploy`).
 
-## Structure
-| File | What it holds |
-|---|---|
-| `index.html` | Page layout and all fixed content (hero, experience, skills, education, contact) |
-| `projects.js` | **Project cards** for the *Work* and *Design & web* sections |
-| `style.css` | Theme, colours (`:root` variables), components |
-| `script.js` | Scroll reveal, counters, nav highlight |
-| `assets/` | Photos, CV PDF (`Amrith_Kishore_M_CV.pdf`), design screenshots (`assets/design/`) |
+## Editing content without code
+Open `/admin/`, choose **Sign in with token**, and paste a GitHub fine-grained token that has *Contents: Read and write* on this repository only. Edits commit straight to `main` and go live in about a minute.
 
-## Add a new project (no HTML needed)
-1. Open `projects.js`.
-2. Copy an existing `{ ... }` block into `WORK_PROJECTS` (cloud / engineering) or `DESIGN_PROJECTS` (design / websites).
-3. Fill in `title`, `context`, `stack`, `summary`, `tags`; optionally `link`, `image`, `featured: true`.
-4. For a screenshot, drop a 16:9 image in `assets/design/` and set `image: "assets/design/your-file.jpg"` plus an `imageAlt`.
-5. Commit and push to `main`.
+- **Projects** → `src/content/projects/*.md` (case studies; `featured` puts one in the big rows)
+- **Site content** → `src/data/*.json` (about, experience, education, certifications, awards)
+- Uploaded images → `public/assets/uploads/`
 
-**Summary formula:** what the problem was → what you did (tools) → result (a number if possible).
-
-## Update the CV
-Replace `assets/Amrith_Kishore_M_CV.pdf` with a file of the same name; both "Download CV" buttons pick it up.
-
-## Before pushing
-- Open `index.html` in a browser (or VS Code Live Server) and check the new card.
-- Keep claims consistent with the CV.
+## Run locally
+```
+npm install
+npm run dev
+```

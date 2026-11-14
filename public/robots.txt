@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Sitemap: https://2026-updated-portfolio.amrithkishore6.workers.dev/sitemap.xml

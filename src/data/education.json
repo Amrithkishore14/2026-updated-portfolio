@@ -1,0 +1,18 @@
+{
+  "items": [
+    {
+      "degree": "MSc Cloud & Enterprise Computing (with placement year)",
+      "org": "Nottingham Trent University",
+      "start": "Sep 2025",
+      "end": "2027",
+      "detail": "Advanced software engineering, enterprise and cloud systems, network and cloud security, service-oriented architecture, project management. Dissertation: CAIM-MC."
+    },
+    {
+      "degree": "B.E. Computer Science Engineering",
+      "org": "R.M.D. Engineering College, Chennai",
+      "start": "2021",
+      "end": "2025",
+      "detail": "Data structures, networks, operating systems, machine learning, cloud computing, cryptography, UI/UX design."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "items": [
+    {
+      "title": "High Achiever Prize",
+      "by": "NTU Department of Computer Science",
+      "year": "2026",
+      "detail": "Awarded for excellent performance in Microsoft Azure AI Fundamentals."
+    },
+    {
+      "title": "Guest speaker: The Cloud Chronicles",
+      "by": "Francis Xavier Engineering College, MCA department",
+      "year": "2025",
+      "detail": "Delivered a 36-slide talk on cloud computing to postgraduate students."
+    },
+    {
+      "title": "GDG DevFest Birmingham",
+      "by": "Google Developer Groups",
+      "year": "2025",
+      "detail": "Took part in the Cloud and AI tracks."
+    },
+    {
+      "title": "Hack the Trent",
+      "by": "Nottingham Trent University",
+      "year": "2026",
+      "detail": "Competing on 20 November with CloudGuard, an AI agent that stops surprise cloud bills."
+    }
+  ]
+}

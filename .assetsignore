@@ -1,9 +1,0 @@
-.git
-.github
-.gitignore
-.assetsignore
-dist
-README.md
-DUMMY TXT
-.DS_Store
-**/.DS_Store

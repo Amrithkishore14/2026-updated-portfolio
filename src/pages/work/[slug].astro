@@ -1,0 +1,93 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+  return all.map((p, i) => ({ params: { slug: p.id }, props: { p, next: all[(i + 1) % all.length] } }));
+}
+const { p, next } = Astro.props;
+const { Content } = await render(p);
+const d = p.data;
+const catLabel = { cloud: 'Cloud & security', web: 'Web & client work', fullstack: 'Full-stack', design: 'Design' };
+---
+<Base title={d.title} description={d.summary} image={d.cover || undefined}>
+  <article class="cs">
+    <header class="wrap cs-head">
+      <a class="back" href={d.category === 'design' ? '/#design' : '/#work'}>Back to all work</a>
+      <p class="cs-meta">{catLabel[d.category]} · {d.year}{d.concept ? ' · Concept' : ''}</p>
+      <h1>{d.title}</h1>
+      <p class="cs-sum">{d.summary}</p>
+      <div class="cs-facts">
+        <div><span>Role</span><b>{d.role}</b></div>
+        <div><span>Built with</span><b>{d.stack.join(', ')}</b></div>
+      </div>
+      <div class="cs-links">
+        {d.live && <a class="btn btn-signal" href={d.live} target="_blank" rel="noopener">{d.liveLabel}</a>}
+        {d.code && <a class="btn btn-line" href={d.code} target="_blank" rel="noopener">View the code</a>}
+      </div>
+    </header>
+
+    {d.cover && <figure class="wrap cs-cover"><img src={d.cover} alt={`${d.title}: main screen`} /></figure>}
+
+    <div class="wrap cs-body">
+      {d.outcomes.length > 0 && (
+        <aside class="cs-out" aria-label="Results">
+          <h2>Results</h2>
+          <ul>{d.outcomes.map((o) => <li>{o}</li>)}</ul>
+        </aside>
+      )}
+      <div class="cs-prose"><Content /></div>
+    </div>
+
+    {d.gallery.length > 0 && (
+      <section class="wrap cs-gallery" aria-label="More screens">
+        {d.gallery.map((g) => <a href={g} target="_blank" rel="noopener" class={g.includes('mobile') ? 'is-mobile' : ''}><img src={g} alt="" loading="lazy" /></a>)}
+      </section>
+    )}
+
+    <nav class="wrap cs-next" aria-label="Next project">
+      <span>Next project</span>
+      <a href={`/work/${next.id}`}>{next.data.title}</a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .cs-head { padding-top: 56px; padding-bottom: 48px; max-width: 980px; margin-left: max(32px, calc((100vw - var(--wrap)) / 2 + 32px)); }
+  .back { font-weight: 600; text-decoration-color: var(--signal); text-underline-offset: 5px; }
+  .cs-meta { color: var(--muted); font-weight: 500; margin: 34px 0 12px; }
+  .cs h1 { font-size: clamp(34px, 5vw, 68px); letter-spacing: -0.035em; }
+  .cs-sum { font-size: 21px; color: var(--graphite); max-width: 52ch; margin: 22px 0 30px; }
+  .cs-facts { display: grid; grid-template-columns: 1fr 2fr; gap: 24px; border-top: 1.5px solid var(--ink); padding-top: 18px; margin-bottom: 28px; }
+  .cs-facts span { display: block; color: var(--muted); font-size: 14px; margin-bottom: 4px; }
+  .cs-facts b { font-weight: 600; }
+  .cs-links { display: flex; gap: 10px; flex-wrap: wrap; }
+  .cs-cover img { border-radius: var(--radius); border: 1px solid var(--line); width: 100%; }
+  .cs-body { display: grid; grid-template-columns: 300px 1fr; gap: 64px; padding-top: 72px; padding-bottom: 40px; align-items: start; }
+  .cs-out { position: sticky; top: 104px; background: var(--ink); color: #fff; border-radius: var(--radius); padding: 24px; }
+  .cs-out h2 { font-size: 16px; margin-bottom: 10px; }
+  .cs-out ul { list-style: none; }
+  .cs-out li { padding: 12px 0; border-top: 1px solid #2B3240; font-weight: 500; }
+  .cs-body:not(:has(.cs-out)) { grid-template-columns: 1fr; }
+  .cs-prose { max-width: 68ch; }
+  .cs-prose :global(h2) { font-size: 24px; margin: 40px 0 14px; }
+  .cs-prose :global(h2:first-child) { margin-top: 0; }
+  .cs-prose :global(p) { color: var(--graphite); margin-bottom: 14px; font-size: 18px; }
+  .cs-prose :global(ul), .cs-prose :global(ol) { padding-left: 22px; color: var(--graphite); margin-bottom: 14px; font-size: 18px; }
+  .cs-prose :global(li) { margin: 8px 0; }
+  .cs-prose :global(strong) { color: var(--ink); }
+  .cs-prose :global(code) { font-family: var(--mono); font-size: .88em; background: var(--paper-2); padding: 2px 6px; border-radius: 6px; }
+  .cs-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; padding-top: 24px; padding-bottom: 40px; align-items: start; }
+  .cs-gallery a { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); display: block; }
+  .cs-gallery a.is-mobile { max-width: 260px; }
+  .cs-next { display: flex; flex-direction: column; gap: 8px; padding-top: 64px; padding-bottom: 96px; border-top: 1px solid var(--line); margin-top: 56px; }
+  .cs-next span { color: var(--muted); }
+  .cs-next a { font-family: var(--display); font-weight: 600; font-size: clamp(24px, 3.4vw, 44px); text-decoration: none; letter-spacing: -0.03em; }
+  .cs-next a:hover { color: var(--signal-ink); }
+  @media (max-width: 900px) {
+    .cs-head { margin-left: auto; }
+    .cs-body, .cs-facts { grid-template-columns: 1fr; }
+    .cs-out { position: static; }
+  }
+</style>

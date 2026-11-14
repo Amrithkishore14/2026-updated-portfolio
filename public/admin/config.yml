@@ -1,0 +1,138 @@
+# Portfolio CMS (Sveltia CMS). Every save commits to GitHub `main`,
+# and Cloudflare rebuilds the site automatically within about a minute.
+backend:
+  name: github
+  repo: Amrithkishore14/2026-updated-portfolio
+  branch: main
+  commit_messages:
+    create: "CMS: add {{collection}} “{{slug}}”"
+    update: "CMS: update {{collection}} “{{slug}}”"
+    delete: "CMS: delete {{collection}} “{{slug}}”"
+
+media_folder: public/assets/uploads
+public_folder: /assets/uploads
+site_url: https://2026-updated-portfolio.amrithkishore6.workers.dev
+display_url: https://2026-updated-portfolio.amrithkishore6.workers.dev
+
+collections:
+  - name: projects
+    label: Projects
+    label_singular: Project
+    description: Case studies shown under Work and Design. Featured projects appear as large rows on the homepage.
+    folder: src/content/projects
+    create: true
+    delete: true
+    extension: md
+    format: yaml-frontmatter
+    slug: "{{slug}}"
+    summary: "{{title}} · {{category}} · {{year}}"
+    sortable_fields: [order, title, year]
+    fields:
+      - { name: title, label: Title, widget: string }
+      - name: category
+        label: Category
+        widget: select
+        options:
+          - { label: "Cloud & security", value: cloud }
+          - { label: "Web & client work", value: web }
+          - { label: "Full-stack", value: fullstack }
+          - { label: "Design", value: design }
+      - { name: featured, label: "Feature on homepage (large row)", widget: boolean, default: false }
+      - { name: concept, label: "Concept project (shows a Concept label)", widget: boolean, default: false }
+      - { name: order, label: "Order (1 = first)", widget: number, value_type: int, default: 50 }
+      - { name: year, label: Year, widget: string }
+      - { name: role, label: "Your role", widget: string, hint: "e.g. Client project, Self-initiated, MSc dissertation" }
+      - { name: summary, label: "One-sentence summary", widget: text }
+      - { name: stack, label: "Built with", widget: list, field: { name: item, label: Tool, widget: string } }
+      - { name: outcomes, label: "Results (short, measurable)", widget: list, required: false, field: { name: item, label: Result, widget: string } }
+      - { name: live, label: "Live site URL", widget: string, required: false }
+      - { name: liveLabel, label: "Live button text", widget: string, default: "Open the live site", required: false }
+      - { name: code, label: "Code URL (GitHub)", widget: string, required: false }
+      - { name: cover, label: "Cover image (16:10)", widget: image, required: false }
+      - { name: gallery, label: "More screenshots", widget: list, required: false, field: { name: item, label: Image, widget: image } }
+      - { name: body, label: "Case study", widget: markdown }
+
+  - name: content
+    label: Site content
+    files:
+      - name: site
+        label: About me and contact
+        file: src/data/site.json
+        fields:
+          - { name: name, label: "Short name", widget: string }
+          - { name: fullName, label: "Full name", widget: string }
+          - { name: role, label: "Role line", widget: string }
+          - { name: headline, label: "Headline (for sharing)", widget: string }
+          - { name: intro, label: "Intro paragraph", widget: text }
+          - { name: location, label: Location, widget: string }
+          - { name: email, label: Email, widget: string }
+          - { name: phone, label: Phone, widget: string }
+          - { name: linkedin, label: "LinkedIn URL", widget: string }
+          - { name: github, label: "GitHub URL", widget: string }
+          - { name: cv, label: "CV (PDF)", widget: file }
+          - { name: photo, label: Photo, widget: image, required: false }
+          - { name: currentRole, label: "Current role (status board)", widget: string }
+          - { name: openTo, label: "Open to (status board and contact)", widget: string }
+          - { name: availability, label: "Availability", widget: string }
+          - name: roles
+            label: "Three strengths (under the hero)"
+            widget: list
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: points, label: Points, widget: list, field: { name: item, label: Point, widget: string } }
+      - name: experience
+        label: Experience
+        file: src/data/experience.json
+        fields:
+          - name: items
+            label: Jobs (newest first)
+            widget: list
+            summary: "{{fields.role}} · {{fields.org}}"
+            fields:
+              - { name: role, label: Role, widget: string }
+              - { name: org, label: Organisation, widget: string }
+              - { name: place, label: Place, widget: string }
+              - { name: start, label: Start, widget: string, hint: "e.g. Oct 2026" }
+              - { name: end, label: End, widget: string, hint: "e.g. Present" }
+              - { name: points, label: "What you did", widget: list, field: { name: item, label: Point, widget: string } }
+              - { name: link, label: "Case study link (optional)", widget: string, required: false }
+      - name: education
+        label: Education
+        file: src/data/education.json
+        fields:
+          - name: items
+            label: Qualifications
+            widget: list
+            summary: "{{fields.degree}}"
+            fields:
+              - { name: degree, label: Degree, widget: string }
+              - { name: org, label: Institution, widget: string }
+              - { name: start, label: Start, widget: string }
+              - { name: end, label: End, widget: string }
+              - { name: detail, label: Detail, widget: text, required: false }
+      - name: certifications
+        label: Certifications
+        file: src/data/certifications.json
+        fields:
+          - name: items
+            label: Certifications
+            widget: list
+            summary: "{{fields.name}}"
+            fields:
+              - { name: name, label: Name, widget: string }
+              - { name: issuer, label: Issuer, widget: string }
+              - { name: code, label: "Exam code", widget: string, required: false }
+              - { name: group, label: Group, widget: select, options: [ { label: Cloud, value: cloud }, { label: Other, value: other } ] }
+      - name: awards
+        label: Awards and recognition
+        file: src/data/awards.json
+        fields:
+          - name: items
+            label: Awards (the first one is highlighted)
+            widget: list
+            summary: "{{fields.title}} · {{fields.year}}"
+            fields:
+              - { name: title, label: Title, widget: string }
+              - { name: by, label: "Given by", widget: string }
+              - { name: year, label: Year, widget: string }
+              - { name: detail, label: Detail, widget: text }
