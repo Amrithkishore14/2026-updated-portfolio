@@ -66,7 +66,6 @@ collections:
           - { name: intro, label: "Intro paragraph", widget: text }
           - { name: location, label: Location, widget: string }
           - { name: email, label: Email, widget: string }
-          - { name: phone, label: Phone, widget: string }
           - { name: linkedin, label: "LinkedIn URL", widget: string }
           - { name: github, label: "GitHub URL", widget: string }
           - { name: cv, label: "CV (PDF)", widget: file }
