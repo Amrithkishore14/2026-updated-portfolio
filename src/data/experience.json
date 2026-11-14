@@ -10,7 +10,8 @@
         "Supporting cloud infrastructure across AWS and Azure in a regulated wealth management firm",
         "Monitoring, troubleshooting and documenting cloud configurations",
         "Assisting with automation and deployment using Terraform, Docker and CI/CD"
-      ]
+      ],
+      "domain": "adventumwealth.com"
     },
     {
       "role": "Lead Web Developer & Designer (summer internship)",
@@ -23,7 +24,9 @@
         "Wrote a 31-page technical proposal with seven architecture diagrams",
         "Led the DNS cutover to Cloudflare and set up a CMS for the client"
       ],
-      "link": "/work/elmar-risk-management"
+      "link": "/work/elmar-risk-management",
+      "domain": "elmarrisk.co.uk",
+      "website": "https://elmarrisk.co.uk"
     },
     {
       "role": "Shift Manager",
@@ -34,7 +37,8 @@
       "points": [
         "Lead and train shift teams of up to 10 during high-volume trading",
         "Make real-time calls on staffing, stock and service"
-      ]
+      ],
+      "domain": "wingstop.co.uk"
     },
     {
       "role": "Student Brand Ambassador",
@@ -45,7 +49,8 @@
       "points": [
         "Built a feedback system averaging 4.7/5 across 300+ responses",
         "Drove a 15% increase in student interest"
-      ]
+      ],
+      "domain": "amberstudent.com"
     },
     {
       "role": "Digital Media Operator",
@@ -56,7 +61,8 @@
       "points": [
         "Ran AV and streaming for 20+ live university events",
         "Kept equipment logs and operational runbooks"
-      ]
+      ],
+      "domain": "ntu.ac.uk"
     },
     {
       "role": "Systems & Cloud Developer (freelance)",
@@ -78,7 +84,8 @@
       "end": "Jun 2023",
       "points": [
         "Found three PLC sensor misconfigurations, improving accuracy by 7%"
-      ]
+      ],
+      "domain": "nsic.co.in"
     },
     {
       "role": "Frontend Developer Intern",
@@ -99,7 +106,9 @@
       "points": [
         "Founded and grew a financial-literacy community and built its web platform"
       ],
-      "link": "/work/equity-investor-club"
+      "link": "/work/equity-investor-club",
+      "logo": "/logos/equity-investor-club.jpg",
+      "website": "https://equity-investor-club.amrithkishore6.workers.dev"
     }
   ]
 }
