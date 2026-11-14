@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="NEXUS X1 — The Next Machine. An intelligent electric performance platform designed beyond the limits of conventional mobility.">
+<meta property="og:title" content="NEXUS AUTOMOTIVE — X1">
+<meta property="og:description" content="Engineered for 2070. Experienced today.">
+<title>NEXUS X1 — THE NEXT MACHINE</title>
+<link rel="stylesheet" href="styles/global.css">
+<link rel="stylesheet" href="styles/nav.css">
+<link rel="stylesheet" href="styles/cursor.css">
+<style>
+/* ── HOME SPECIFIC ─────────────────────────────── */
+#hero {
+  position: relative;
+  height: 100vh;
+  min-height: 640px;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+#hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0.55;
+}
+#hero-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 80%, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%),
+    linear-gradient(to bottom, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 25%, rgba(0,0,0,0) 65%, rgba(0,0,0,0.95) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+.hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding: 0 56px 80px;
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 14px 5px 5px;
+  border: 1px solid rgba(0,229,255,0.35);
+  background: rgba(0,229,255,0.05);
+  margin-bottom: 28px;
+  opacity: 0;
+  animation: fadeInUp 0.8s 0.3s var(--ease-out) forwards;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  background: var(--cyan);
+  border-radius: 50%;
+  animation: pulseDot 2s infinite;
+  box-shadow: 0 0 8px var(--cyan);
+}
+.hero-badge span {
+  font-family: var(--font-m);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+}
+.hero-title {
+  font-family: var(--font-h);
+  font-size: clamp(52px, 9vw, 140px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+  color: var(--white);
+  opacity: 0;
+  animation: fadeInUp 0.9s 0.5s var(--ease-out) forwards;
+}
+.hero-title span {
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  max-width: 520px;
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.7;
+  margin-top: 20px;
+  opacity: 0;
+  animation: fadeInUp 0.9s 0.7s var(--ease-out) forwards;
+}
+.hero-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 40px;
+  opacity: 0;
+  animation: fadeInUp 0.9s 0.9s var(--ease-out) forwards;
+}
+.hero-meta {
+  position: absolute;
+  top: 50%;
+  right: 56px;
+  transform: translateY(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  opacity: 0;
+  animation: fadeInUp 1s 1.1s var(--ease-out) forwards;
+}
+.hero-meta-item {
+  text-align: right;
+}
+.hero-meta-item .label {
+  font-family: var(--font-m);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+  display: block;
+}
+.hero-meta-item .value {
+  font-family: var(--font-h);
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.8);
+  display: block;
+  margin-top: 2px;
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeInUp 1s 1.4s var(--ease-out) forwards;
+}
+.hero-scroll-line {
+  width: 1px;
+  height: 48px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+  animation: scanLine 2s ease-in-out infinite;
+}
+.hero-scroll span {
+  font-family: var(--font-m);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* ── INTRO SECTION ─────────────────────────────── */
+#intro {
+  padding: 160px 0 120px;
+  background: linear-gradient(180deg, var(--dark-01) 0%, rgba(10,5,32,1) 100%);
+  border-top: 1px solid rgba(0,229,255,0.08);
+}
+.intro-quote {
+  font-family: var(--font-h);
+  font-size: clamp(36px, 5.5vw, 82px);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.0;
+  max-width: 900px;
+  background: linear-gradient(135deg, var(--white) 30%, var(--cyan) 70%, var(--violet) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.intro-body {
+  max-width: 480px;
+  margin-top: 32px;
+}
+.intro-line {
+  width: 1px;
+  height: 80px;
+  background: linear-gradient(to bottom, var(--violet), var(--cyan), transparent);
+  margin: 60px 0 0 3px;
+}
+
+/* ── PILLARS ───────────────────────────────────── */
+#pillars {
+  background: linear-gradient(180deg, rgba(10,5,32,1) 0%, var(--black) 100%);
+  border-bottom: 1px solid rgba(168,85,247,0.08);
+}
+.pillar-grid {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 1px;
+  background: rgba(168,85,247,0.06);
+}
+.pillar {
+  position: relative;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 40px;
+  overflow: hidden;
+  background: var(--black);
+  cursor: none;
+}
+.pillar:nth-child(1) { --pillar-color: var(--cyan); --pillar-glow: rgba(0,229,255,0.08); }
+.pillar:nth-child(2) { --pillar-color: var(--violet); --pillar-glow: rgba(168,85,247,0.08); }
+.pillar:nth-child(3) { --pillar-color: var(--orange); --pillar-glow: rgba(249,115,22,0.08); }
+.pillar-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.pillar-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.95) 30%, rgba(0,0,0,0.3) 100%);
+  z-index: 1;
+  transition: background 0.5s;
+}
+.pillar:hover .pillar-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.98) 20%, rgba(0,0,0,0.5) 100%);
+}
+.pillar-content { position: relative; z-index: 2; }
+.pillar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--pillar-glow, rgba(0,229,255,0.06));
+  opacity: 0;
+  transition: opacity 0.5s;
+  z-index: 0;
+}
+.pillar:hover::after { opacity: 1; }
+.pillar-num {
+  font-family: var(--font-m);
+  font-size: 10px;
+  color: var(--pillar-color, var(--cyan));
+  letter-spacing: 0.15em;
+  margin-bottom: 12px;
+}
+.pillar-title {
+  font-family: var(--font-h);
+  font-size: clamp(22px, 2.5vw, 36px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+  transition: color 0.3s;
+}
+.pillar:hover .pillar-title { color: var(--pillar-color, var(--cyan)); }
+.pillar-body {
+  font-size: 13px;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+  max-width: 280px;
+  transition: color 0.3s;
+}
+.pillar:hover .pillar-body { color: rgba(255,255,255,0.7); }
+.pillar-arrow {
+  margin-top: 24px;
+  font-family: var(--font-m);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  color: var(--pillar-color, var(--cyan));
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateX(-10px);
+  transition: opacity 0.3s, transform 0.3s;
+}
+.pillar:hover .pillar-arrow { opacity: 1; transform: translateX(0); }
+
+/* ── SPECS BAND ────────────────────────────────── */
+#specs {
+  background: linear-gradient(135deg, rgba(0,229,255,0.04) 0%, rgba(168,85,247,0.05) 50%, rgba(249,115,22,0.04) 100%);
+  padding: 80px 0;
+  border-top: 1px solid rgba(0,229,255,0.1);
+  border-bottom: 1px solid rgba(168,85,247,0.1);
+  overflow: hidden;
+}
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 1px;
+  background: rgba(168,85,247,0.06);
+}
+.spec-item {
+  background: var(--dark-02);
+  padding: 40px 32px;
+  position: relative;
+}
+.spec-item::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+}
+.spec-item:nth-child(1)::before { background: var(--cyan); box-shadow: 0 0 10px var(--cyan); }
+.spec-item:nth-child(2)::before { background: var(--violet); box-shadow: 0 0 10px var(--violet); }
+.spec-item:nth-child(3)::before { background: var(--orange); box-shadow: 0 0 10px var(--orange); }
+.spec-item:nth-child(4)::before { background: var(--pink); box-shadow: 0 0 10px var(--pink); }
+.spec-value {
+  font-family: var(--font-h);
+  font-size: clamp(42px, 5vw, 72px);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.spec-item:nth-child(1) .spec-value { color: var(--cyan); text-shadow: 0 0 30px rgba(0,229,255,0.3); }
+.spec-item:nth-child(2) .spec-value { color: var(--violet); text-shadow: 0 0 30px rgba(168,85,247,0.3); }
+.spec-item:nth-child(3) .spec-value { color: var(--orange); text-shadow: 0 0 30px rgba(249,115,22,0.3); }
+.spec-item:nth-child(4) .spec-value { color: var(--pink); text-shadow: 0 0 30px rgba(236,72,153,0.3); }
+.spec-unit {
+  display: block;
+  font-family: var(--font-m);
+  font-size: 11px;
+  color: var(--light-01);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+.spec-label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.35);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  font-family: var(--font-h);
+}
+
+/* ── EXPLORE ───────────────────────────────────── */
+#explore {
+  padding: 120px 0;
+  background: linear-gradient(180deg, var(--black) 0%, rgba(6,9,15,1) 100%);
+  border-top: 1px solid rgba(249,115,22,0.08);
+}
+.explore-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+  margin-top: 64px;
+}
+.explore-card {
+  position: relative;
+  min-height: 380px;
+  background: var(--dark-02);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  cursor: none;
+  transition: background 0.4s;
+}
+.explore-card:nth-child(1):hover { background: rgba(0,229,255,0.04); }
+.explore-card:nth-child(2):hover { background: rgba(168,85,247,0.04); }
+.explore-card:nth-child(3):hover { background: rgba(249,115,22,0.04); }
+.explore-card:nth-child(4):hover { background: rgba(236,72,153,0.04); }
+.explore-card-canvas {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.7;
+}
+.explore-card-content { position: relative; z-index: 1; }
+.explore-card-icon {
+  width: 40px;
+  height: 40px;
+  border: 1px solid rgba(0,229,255,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.explore-card:nth-child(1) .explore-card-icon { border-color: rgba(0,229,255,0.35); }
+.explore-card:nth-child(2) .explore-card-icon { border-color: rgba(168,85,247,0.35); }
+.explore-card:nth-child(3) .explore-card-icon { border-color: rgba(249,115,22,0.35); }
+.explore-card:nth-child(4) .explore-card-icon { border-color: rgba(236,72,153,0.35); }
+.explore-card-icon svg { width: 18px; height: 18px; stroke: var(--cyan); fill: none; }
+.explore-card:nth-child(2) .explore-card-icon svg { stroke: var(--violet); }
+.explore-card:nth-child(3) .explore-card-icon svg { stroke: var(--orange); }
+.explore-card:nth-child(4) .explore-card-icon svg { stroke: var(--pink); }
+.explore-card-title {
+  font-family: var(--font-h);
+  font-size: clamp(18px, 2.5vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin-bottom: 12px;
+}
+.explore-card-body {
+  font-size: 13px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.65;
+  max-width: 320px;
+  margin-bottom: 24px;
+}
+.explore-border {
+  position: absolute;
+  inset: 0;
+  border: 1px solid transparent;
+  transition: border-color 0.4s;
+  pointer-events: none;
+  z-index: 2;
+}
+.explore-card:nth-child(1):hover .explore-border { border-color: rgba(0,229,255,0.2); }
+.explore-card:nth-child(2):hover .explore-border { border-color: rgba(168,85,247,0.2); }
+.explore-card:nth-child(3):hover .explore-border { border-color: rgba(249,115,22,0.2); }
+.explore-card:nth-child(4):hover .explore-border { border-color: rgba(236,72,153,0.2); }
+
+/* ── FINAL ─────────────────────────────────────── */
+#final {
+  position: relative;
+  height: 100vh;
+  min-height: 600px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+#final-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  z-index: 0;
+}
+.final-content {
+  position: relative;
+  z-index: 2;
+}
+.final-label {
+  font-family: var(--font-m);
+  font-size: 10px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--violet);
+  margin-bottom: 24px;
+}
+.final-title {
+  font-family: var(--font-h);
+  font-size: clamp(36px, 6vw, 96px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  margin-bottom: 12px;
+  background: var(--grad-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.final-sub {
+  font-family: var(--font-h);
+  font-size: clamp(20px, 3vw, 48px);
+  font-weight: 300;
+  color: rgba(200,208,228,0.6);
+  margin-bottom: 48px;
+}
+.final-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 50%, rgba(0,0,0,0.7) 100%);
+  z-index: 1;
+  pointer-events: none;
+}
+
+@media (max-width: 1024px) {
+  .pillar-grid { grid-template-columns: 1fr; }
+  .specs-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  .hero-content { padding: 0 20px 60px; }
+  .hero-meta { display: none; }
+  .hero-scroll { display: none; }
+  .explore-grid { grid-template-columns: 1fr; }
+  .specs-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 480px) {
+  .specs-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+<div id="cursor-label"></div>
+
+<!-- Page veil -->
+<div id="page-veil"></div>
+
+<!-- Scroll progress -->
+<div id="scroll-bar"></div>
+
+<!-- Navigation -->
+<nav class="nav" role="navigation" aria-label="Main navigation">
+  <div class="nav-inner">
+    <a href="/projects/nexus-x1/" class="nav-logo" aria-label="NEXUS Home"><span class="logo-nexus">NEXUS</span> <span class="logo-x1">X1</span></a>
+    <ul class="nav-links" role="list">
+      <li><a href="/projects/nexus-x1/car/">The Car</a></li>
+      <li><a href="/projects/nexus-x1/performance/">Performance</a></li>
+      <li><a href="/projects/nexus-x1/engineering/">Engineering</a></li>
+      <li><a href="/projects/nexus-x1/interior/">Interior</a></li>
+      <li><a href="/projects/nexus-x1/technology/">Technology</a></li>
+      <li><a href="/projects/nexus-x1/configurator/">Configure</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="/projects/nexus-x1/gallery/" class="nav-link-hide">Gallery</a>
+      <a href="/projects/nexus-x1/journal/" class="nav-link-hide">Journal</a>
+      <button class="nav-menu" aria-label="Open menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Fullscreen Menu -->
+<div class="nav-overlay" role="dialog" aria-label="Full navigation">
+  <div class="nav-overlay-inner">
+    <div class="nav-overlay-links">
+      <a href="/projects/nexus-x1/car/"><span>01</span> The Car <span class="link-num">X1</span></a>
+      <a href="/projects/nexus-x1/performance/"><span>02</span> Performance <span class="link-num">DRIVE</span></a>
+      <a href="/projects/nexus-x1/engineering/"><span>03</span> Engineering <span class="link-num">BUILD</span></a>
+      <a href="/projects/nexus-x1/aerodynamics/"><span>04</span> Aerodynamics <span class="link-num">AERO</span></a>
+      <a href="/projects/nexus-x1/interior/"><span>05</span> Interior <span class="link-num">CABIN</span></a>
+      <a href="/projects/nexus-x1/technology/"><span>06</span> Technology <span class="link-num">AI</span></a>
+      <a href="/projects/nexus-x1/configurator/"><span>07</span> Configure <span class="link-num">BUILD</span></a>
+      <a href="/projects/nexus-x1/gallery/"><span>08</span> Gallery <span class="link-num">VISUAL</span></a>
+      <a href="/projects/nexus-x1/journal/"><span>09</span> Journal <span class="link-num">READ</span></a>
+    </div>
+    <div class="nav-overlay-side">
+      <div class="nav-overlay-logo">NEXUS<br>X1</div>
+      <div class="nav-overlay-meta">
+        <span>Nexus Automotive / Concept 2070</span>
+        <span>NEXUS X1 — Simulated Concept Vehicle</span>
+      </div>
+      <p class="nav-overlay-tagline">THE NEXT MACHINE.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ════ HERO ════════════════════════════════════════ -->
+<section id="hero" aria-label="Hero">
+  <video id="hero-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="/projects/nexus-x1/aerodynamics/short video.mp4" type="video/mp4">
+  </video>
+  <canvas id="hero-canvas" aria-hidden="true"></canvas>
+  <div class="hero-vignette" aria-hidden="true"></div>
+
+  <!-- HUD elements -->
+  <div class="hud hud-tl" aria-hidden="true">NEXUS X1 / SYS-01</div>
+  <div class="hud hud-tr" aria-hidden="true">CONCEPT 2070</div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="hero-badge-dot"></div>
+      <span>Electric Performance Platform</span>
+    </div>
+    <h1 class="hero-title">THE NEXT<br><span>MACHINE.</span></h1>
+    <p class="hero-sub">An intelligent electric performance platform designed beyond the limits of conventional mobility.</p>
+    <div class="hero-cta">
+      <a href="/projects/nexus-x1/car/" class="btn btn-primary">
+        <div class="btn-bg"></div>
+        <span class="btn-text">EXPLORE THE X1</span>
+        <span class="btn-arrow">→</span>
+      </a>
+      <a href="/projects/nexus-x1/configurator/" class="btn">
+        <div class="btn-bg"></div>
+        <span class="btn-text">CONFIGURE</span>
+        <span class="btn-arrow">→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="hero-meta" aria-hidden="true">
+    <div class="hero-meta-item">
+      <span class="label">TYPE</span>
+      <span class="value">ELECTRIC</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">STATUS</span>
+      <span class="value">CONCEPT</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">YEAR</span>
+      <span class="value">2070</span>
+    </div>
+    <div class="hero-meta-item">
+      <span class="label">AI</span>
+      <span class="value">AUTONOMOUS READY</span>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <span>SCROLL</span>
+    <div class="hero-scroll-line"></div>
+  </div>
+</section>
+
+<!-- ════ INTRO ════════════════════════════════════════ -->
+<section id="intro" aria-label="Introduction">
+  <div class="wrap">
+    <div class="flex justify-b" style="gap:80px; flex-wrap:wrap;">
+      <div style="flex:1; min-width:300px;">
+        <span class="sec-num">// 001</span>
+        <h2 class="intro-quote reveal">
+          WHAT IF<br>THE CAR<br>COULD <span style="color:var(--cyan)">THINK</span><br>AHEAD?
+        </h2>
+        <div class="intro-line reveal reveal-delay-2"></div>
+      </div>
+      <div style="flex:0 0 420px; padding-top:40px;">
+        <div class="tech-badge reveal">NEXUS INTELLIGENCE</div>
+        <p class="t-body mt-8 reveal reveal-delay-1">
+          NEXUS X1 is designed around a new relationship between human, machine and environment. Every system learns. Every journey evolves. This is not a car. This is a thinking platform.
+        </p>
+        <p class="t-body mt-4 reveal reveal-delay-2">
+          Built from an entirely new electric architecture, the X1 represents a complete reimagining of what a performance vehicle can be in an era of intelligent mobility.
+        </p>
+        <div class="mt-8 reveal reveal-delay-3">
+          <a href="/projects/nexus-x1/technology/" class="btn">
+            <div class="btn-bg"></div>
+            <span class="btn-text">DISCOVER INTELLIGENCE</span>
+            <span class="btn-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ THREE PILLARS ════════════════════════════════ -->
+<section id="pillars" aria-label="Three Pillars">
+  <div class="pillar-grid">
+    <!-- Intelligence -->
+    <article class="pillar" data-cursor="drag">
+      <canvas class="pillar-canvas" id="pillar-canvas-0" aria-hidden="true"></canvas>
+      <div class="pillar-overlay"></div>
+      <div class="pillar-content">
+        <div class="pillar-num">// 01</div>
+        <h3 class="pillar-title">INTELLIGENCE</h3>
+        <p class="pillar-body">A neural network that reads the road 2 seconds ahead. Predictive, adaptive, always learning.</p>
+        <a href="/projects/nexus-x1/technology/" class="pillar-arrow">
+          EXPLORE AI <span>→</span>
+        </a>
+      </div>
+    </article>
+    <!-- Performance -->
+    <article class="pillar" data-cursor="drag">
+      <canvas class="pillar-canvas" id="pillar-canvas-1" aria-hidden="true"></canvas>
+      <div class="pillar-overlay"></div>
+      <div class="pillar-content">
+        <div class="pillar-num">// 02</div>
+        <h3 class="pillar-title">PERFORMANCE</h3>
+        <p class="pillar-body">850 kW. 0–100 in 2.1 seconds. A concept vehicle that redefines what electric power means.</p>
+        <a href="/projects/nexus-x1/performance/" class="pillar-arrow">
+          EXPLORE PERFORMANCE <span>→</span>
+        </a>
+      </div>
+    </article>
+    <!-- Human Experience -->
+    <article class="pillar" data-cursor="drag">
+      <canvas class="pillar-canvas" id="pillar-canvas-2" aria-hidden="true"></canvas>
+      <div class="pillar-overlay"></div>
+      <div class="pillar-content">
+        <div class="pillar-num">// 03</div>
+        <h3 class="pillar-title">HUMAN EXPERIENCE</h3>
+        <p class="pillar-body">A cabin engineered around the driver. Adaptive, intelligent, and completely serene.</p>
+        <a href="/projects/nexus-x1/interior/" class="pillar-arrow">
+          EXPLORE INTERIOR <span>→</span>
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ════ SPECS ════════════════════════════════════════ -->
+<section id="specs" aria-label="Specifications">
+  <div class="wrap">
+    <div class="flex items-c justify-b mb-8" style="flex-wrap:wrap; gap:16px;">
+      <div>
+        <span class="sec-num">// CONCEPT SPECIFICATION</span>
+        <h2 class="t-heading reveal">By The Numbers.</h2>
+      </div>
+      <div class="tech-badge reveal">SIMULATED DATA</div>
+    </div>
+  </div>
+  <div class="specs-grid">
+    <div class="spec-item reveal">
+      <div class="spec-value" data-count="850" data-suffix="">850</div>
+      <span class="spec-unit">kW POWER</span>
+      <span class="spec-label">Concept Output</span>
+    </div>
+    <div class="spec-item reveal reveal-delay-1">
+      <div class="spec-value">2.1</div>
+      <span class="spec-unit">SEC 0–100 KM/H</span>
+      <span class="spec-label">Simulated Acceleration</span>
+    </div>
+    <div class="spec-item reveal reveal-delay-2">
+      <div class="spec-value" data-count="1200" data-suffix="">1,200</div>
+      <span class="spec-unit">KM RANGE</span>
+      <span class="spec-label">Estimated Concept Range</span>
+    </div>
+    <div class="spec-item reveal reveal-delay-3">
+      <div class="spec-value">800</div>
+      <span class="spec-unit">V ARCHITECTURE</span>
+      <span class="spec-label">High-Voltage Platform</span>
+    </div>
+  </div>
+</section>
+
+<!-- ════ EXPLORE SECTIONS ════════════════════════════ -->
+<section id="explore" aria-label="Explore">
+  <div class="wrap">
+    <span class="sec-num">// EXPLORE THE X1</span>
+    <div class="flex justify-b items-c" style="flex-wrap:wrap; gap:24px;">
+      <h2 class="t-heading reveal">Every System.<br>Perfected.</h2>
+      <a href="/projects/nexus-x1/car/" class="btn reveal">
+        <div class="btn-bg"></div>
+        <span class="btn-text">VIEW ALL</span>
+        <span class="btn-arrow">→</span>
+      </a>
+    </div>
+    <div class="explore-grid mt-8">
+      <a href="/projects/nexus-x1/car/" class="explore-card" data-cursor="view">
+        <canvas class="explore-card-canvas" id="exp-canvas-0" aria-hidden="true"></canvas>
+        <div class="explore-border"></div>
+        <div class="explore-card-content">
+          <div class="explore-card-icon">
+            <svg viewBox="0 0 24 24" stroke-width="1.5"><rect x="2" y="8" width="20" height="8" rx="1"/><circle cx="6" cy="16" r="2"/><circle cx="18" cy="16" r="2"/></svg>
+          </div>
+          <h3 class="explore-card-title">Exterior Design</h3>
+          <p class="explore-card-body">Form follows function at a level previously impossible. Every curve computed. Every surface engineered.</p>
+          <div class="btn btn-ghost" style="display:inline-flex;">
+            <div class="btn-bg"></div>
+            <span class="btn-text">EXPLORE EXTERIOR</span>
+            <span class="btn-arrow">→</span>
+          </div>
+        </div>
+      </a>
+      <a href="/projects/nexus-x1/engineering/" class="explore-card" data-cursor="view">
+        <canvas class="explore-card-canvas" id="exp-canvas-1" aria-hidden="true"></canvas>
+        <div class="explore-border"></div>
+        <div class="explore-card-content">
+          <div class="explore-card-icon">
+            <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83"/></svg>
+          </div>
+          <h3 class="explore-card-title">Engineering</h3>
+          <p class="explore-card-body">See the X1 disassembled. Explore every component from battery to brake, from motor to sensor.</p>
+          <div class="btn btn-ghost" style="display:inline-flex;">
+            <div class="btn-bg"></div>
+            <span class="btn-text">EXPLORE ENGINEERING</span>
+            <span class="btn-arrow">→</span>
+          </div>
+        </div>
+      </a>
+      <a href="/projects/nexus-x1/performance/" class="explore-card" data-cursor="view">
+        <canvas class="explore-card-canvas" id="exp-canvas-2" aria-hidden="true"></canvas>
+        <div class="explore-border"></div>
+        <div class="explore-card-content">
+          <div class="explore-card-icon">
+            <svg viewBox="0 0 24 24" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+          </div>
+          <h3 class="explore-card-title">Performance</h3>
+          <p class="explore-card-body">Race-track telemetry. Motor dynamics. Braking performance. Suspension geometry.</p>
+          <div class="btn btn-ghost" style="display:inline-flex;">
+            <div class="btn-bg"></div>
+            <span class="btn-text">EXPLORE PERFORMANCE</span>
+            <span class="btn-arrow">→</span>
+          </div>
+        </div>
+      </a>
+      <a href="/projects/nexus-x1/configurator/" class="explore-card" data-cursor="view">
+        <canvas class="explore-card-canvas" id="exp-canvas-3" aria-hidden="true"></canvas>
+        <div class="explore-border"></div>
+        <div class="explore-card-content">
+          <div class="explore-card-icon">
+            <svg viewBox="0 0 24 24" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4"/></svg>
+          </div>
+          <h3 class="explore-card-title">Configure Your X1</h3>
+          <p class="explore-card-body">Select exterior colour, wheels, interior trim, aerodynamic package. Build your concept specification.</p>
+          <div class="btn btn-ghost" style="display:inline-flex;">
+            <div class="btn-bg"></div>
+            <span class="btn-text">OPEN CONFIGURATOR</span>
+            <span class="btn-arrow">→</span>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ FINAL SECTION ════════════════════════════════ -->
+<section id="final" aria-label="Final">
+  <canvas id="final-canvas" aria-hidden="true"></canvas>
+  <div class="final-veil" aria-hidden="true"></div>
+  <div class="final-content">
+    <p class="final-label reveal">NEXUS AUTOMOTIVE / CONCEPT 2070</p>
+    <h2 class="final-title reveal">THE FUTURE<br>DOESN'T ARRIVE.</h2>
+    <p class="final-sub reveal">IT EVOLVES.</p>
+    <a href="/projects/nexus-x1/configurator/" class="btn btn-primary reveal reveal-delay-2">
+      <div class="btn-bg"></div>
+      <span class="btn-text">CONFIGURE YOUR X1</span>
+      <span class="btn-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<!-- Scripts -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="js/core.js"></script>
+<script src="js/car3d.js"></script>
+
+<script>
+(function() {
+const NT = window.NexusThree;
+if (!NT) { console.warn('NexusThree not loaded'); return; }
+const { createNexusX1, createNexusScene, createEmissiveMaterial } = NT;
+
+/* ── HERO SCENE ───────────────────────────────── */
+(function initHero() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+
+  const s = createNexusScene(canvas, { fog: true, ground: true, particles: true, alpha: true });
+  if (!s) return;
+
+  const { renderer, scene, camera, particleSystem } = s;
+
+  const car = createNexusX1({ bodyColor: 0x0a0a0a });
+  car.position.set(0.5, 0, 0);
+  scene.add(car);
+
+  // Camera animation
+  let targetCamX = 0, targetCamY = 0;
+  document.addEventListener('mousemove', e => {
+    targetCamX = (e.clientX / window.innerWidth - 0.5) * 0.8;
+    targetCamY = (e.clientY / window.innerHeight - 0.5) * 0.3;
+  });
+
+  let t = 0;
+  const clock = new THREE.Clock();
+  function render() {
+    requestAnimationFrame(render);
+    const dt = clock.getDelta();
+    t += dt;
+
+    // Slow idle rotation
+    car.rotation.y = Math.sin(t * 0.18) * 0.25 + 0.08;
+
+    // Camera follow mouse gently
+    camera.position.x += (targetCamX - camera.position.x) * 0.03;
+    camera.position.y += (1.6 + targetCamY * 0.5 - camera.position.y) * 0.03;
+    camera.lookAt(0.5, 0.4, 0);
+
+    // Particle drift
+    if (particleSystem) {
+      particleSystem.rotation.y = t * 0.03;
+    }
+
+    // Wheel spin (very slow idle)
+    if (car.userData.wheels) {
+      car.userData.wheels.forEach(w => {
+        w.rotation.x += 0.003;
+      });
+    }
+
+    renderer.render(scene, camera);
+  }
+  render();
+})();
+
+/* ── PILLAR MINI SCENES ───────────────────────── */
+const pillarConfigs = [
+  { color: 0x001122, obj: 'ai' },
+  { color: 0x110011, obj: 'motor' },
+  { color: 0x001100, obj: 'wheel' },
+];
+
+pillarConfigs.forEach((cfg, i) => {
+  const canvas = document.getElementById(`pillar-canvas-${i}`);
+  if (!canvas) return;
+
+  const w = canvas.clientWidth || 400;
+  const h = canvas.clientHeight || 560;
+
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  renderer.setSize(w, h);
+  renderer.setAnimationLoop(null);
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50, w/h, 0.1, 50);
+  camera.position.set(0, 0, 4);
+
+  const al = new THREE.AmbientLight(0xffffff, 0.1);
+  const pl = new THREE.PointLight(0x00e5ff, 3, 15);
+  pl.position.set(3, 2, 2);
+  scene.add(al, pl);
+
+  let mesh;
+  if (i === 0) {
+    // AI sphere with orbiting rings
+    const sphere = new THREE.Mesh(
+      new THREE.SphereGeometry(0.8, 32, 32),
+      new THREE.MeshPhysicalMaterial({ color: 0x001133, metalness: 0.9, roughness: 0.1, clearcoat: 1 })
+    );
+    scene.add(sphere);
+    for (let r = 0; r < 3; r++) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(1.1 + r * 0.2, 0.012, 8, 48),
+        createEmissiveMaterial(0x00e5ff, 1.5 - r * 0.3)
+      );
+      ring.rotation.x = (r / 3) * Math.PI;
+      ring.rotation.y = (r / 3) * Math.PI * 0.5;
+      scene.add(ring);
+    }
+    mesh = sphere;
+  } else if (i === 1) {
+    // Motor-like torus
+    const g = new THREE.Group();
+    const core = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.5, 0.5, 1.2, 20),
+      new THREE.MeshPhysicalMaterial({ color: 0x111122, metalness: 0.9, roughness: 0.1 })
+    );
+    core.rotation.z = Math.PI / 2;
+    g.add(core);
+    for (let r = 0; r < 3; r++) {
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(0.5 + r*0.12, 0.015, 8, 32),
+        createEmissiveMaterial(0x00e5ff, 2 - r * 0.4)
+      );
+      ring.rotation.y = Math.PI / 2;
+      ring.position.x = -0.3 + r * 0.3;
+      g.add(ring);
+    }
+    scene.add(g);
+    mesh = g;
+  } else {
+    // Wheel
+    const { createWheel, createChromeMaterial, createTireMaterial } = window.NexusThree;
+    const w2 = createWheel(createChromeMaterial(), createTireMaterial(), createEmissiveMaterial(0x00e5ff, 2), 'aero');
+    scene.add(w2);
+    mesh = w2;
+    camera.position.set(0, 0, 2.5);
+  }
+
+  let t = 0;
+  function render() {
+    requestAnimationFrame(render);
+    t += 0.008;
+    if (mesh) mesh.rotation.y = t;
+    renderer.render(scene, camera);
+  }
+  render();
+});
+
+/* ── FINAL SCENE ─────────────────────────────── */
+(function initFinal() {
+  const canvas = document.getElementById('final-canvas');
+  if (!canvas) return;
+
+  const s = createNexusScene(canvas, { fog: true, ground: true, particles: true, bgColor: 0x000000 });
+  if (!s) return;
+
+  const { renderer, scene, camera, particleSystem } = s;
+  camera.position.set(0, 1.2, 5.5);
+
+  const car = createNexusX1({ bodyColor: 0x0d0d0d });
+  scene.add(car);
+
+  // GSAP scroll-triggered rotation
+  let gsapControlled = false;
+  if (window.gsap && window.ScrollTrigger) {
+    gsap.registerPlugin(ScrollTrigger);
+    gsapControlled = true;
+    gsap.to(car.rotation, {
+      y: Math.PI * 2,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: '#final',
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 2,
+      }
+    });
+  }
+
+  let t = 0;
+  function render() {
+    requestAnimationFrame(render);
+    t += 0.005;
+    if (!gsapControlled) car.rotation.y += 0.004;
+    if (particleSystem) particleSystem.rotation.y = t * 0.02;
+    if (car.userData.wheels) car.userData.wheels.forEach(w => w.rotation.x += 0.006);
+    renderer.render(scene, camera);
+  }
+  render();
+})();
+
+/* ── GSAP SCROLL ANIMATIONS ───────────────────── */
+if (window.gsap) {
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Parallax intro text
+  gsap.from('.intro-quote', {
+    y: 60, opacity: 0, duration: 1.2, ease: 'power3.out',
+    scrollTrigger: { trigger: '#intro', start: 'top 80%' }
+  });
+}
+})();
+</script>
+</body>
+</html>

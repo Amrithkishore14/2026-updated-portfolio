@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="NEXUS X1 Aerodynamics — Wind tunnel, active aero, and airflow visualisation.">
+<title>NEXUS X1 — AERODYNAMICS</title>
+<link rel="stylesheet" href="../styles/global.css">
+<link rel="stylesheet" href="../styles/nav.css">
+<link rel="stylesheet" href="../styles/cursor.css">
+<style>
+#aero-hero { position:relative;height:100vh;overflow:hidden;display:flex;align-items:center; }
+#aero-hero-video { position:absolute;inset:0;width:100%;height:100%;object-fit:cover; }
+#aero-hero-canvas { position:absolute;inset:0;width:100%;height:100%;display:none; }
+.aero-hero-overlay { position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,0,0,0.9) 0%,rgba(0,0,0,0.2) 100%);z-index:2;pointer-events:none; }
+.aero-hero-content { position:relative;z-index:3;padding:0 56px;max-width:660px; }
+
+/* Wind tunnel */
+#wind-tunnel { padding:100px 0;background:var(--dark-01); }
+.tunnel-stage {
+  position:relative;height:70vh;min-height:500px;
+  background:var(--dark-03);margin-top:48px;overflow:hidden;
+}
+#tunnel-canvas { position:absolute;inset:0;width:100%;height:100%; }
+.tunnel-data {
+  position:absolute;right:24px;top:24px;z-index:5;
+  display:flex;flex-direction:column;gap:12px;
+}
+.tunnel-data-item {
+  background:rgba(0,0,0,0.8);border:1px solid rgba(0,229,255,0.15);
+  padding:10px 16px;min-width:140px;
+}
+.tunnel-data-label { font-family:var(--font-m);font-size:8px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(0,229,255,0.5);margin-bottom:4px; }
+.tunnel-data-val { font-family:var(--font-h);font-size:20px;font-weight:700;color:var(--white); }
+
+/* Active aero */
+#active-aero { padding:100px 0;background:var(--black); }
+.aero-modes {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
+  background:rgba(255,255,255,0.04);margin-top:48px;
+}
+.aero-mode {
+  background:var(--dark-01);padding:40px 32px;cursor:none;transition:background 0.3s;
+}
+.aero-mode.active,.aero-mode:hover { background:rgba(0,229,255,0.04); }
+.aero-mode-name { font-family:var(--font-h);font-size:22px;font-weight:700;margin-bottom:12px;transition:color 0.3s; }
+.aero-mode.active .aero-mode-name { color:var(--cyan); }
+.aero-mode-desc { font-size:13px;color:rgba(255,255,255,0.4);line-height:1.65;margin-bottom:24px; }
+.aero-mode-stats { display:flex;flex-direction:column;gap:8px; }
+.aero-stat { display:flex;justify-content:space-between;border-top:1px solid rgba(255,255,255,0.05);padding-top:8px; }
+.aero-stat-key { font-family:var(--font-m);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3); }
+.aero-stat-val { font-family:var(--font-h);font-size:13px;font-weight:600;color:var(--white); }
+.aero-mode-dot { width:8px;height:8px;border-radius:50%;background:rgba(0,229,255,0.2);margin-bottom:16px;transition:background 0.3s;border:1px solid rgba(0,229,255,0.3); }
+.aero-mode.active .aero-mode-dot { background:var(--cyan);box-shadow:0 0 12px var(--cyan); }
+
+/* Aero car viewer */
+#aero-car { padding:100px 0;background:var(--dark-01); }
+.aero-car-layout { display:grid;grid-template-columns:1fr 320px;gap:40px;margin-top:48px;align-items:center; }
+#aero-car-canvas { width:100%;height:500px;background:var(--dark-02); }
+.aero-car-data { display:flex;flex-direction:column;gap:20px; }
+.aero-meter { margin-bottom:4px; }
+.aero-meter-label { font-family:var(--font-m);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:8px; }
+.aero-meter-val { font-family:var(--font-h);font-size:28px;font-weight:700;margin-bottom:8px; }
+.aero-meter-bar-wrap { height:3px;background:rgba(255,255,255,0.06); }
+.aero-meter-bar { height:100%;background:var(--cyan);transition:width 0.8s var(--ease-out); }
+
+/* Cd numbers */
+#aero-stats { padding:100px 0;background:var(--black); }
+.cd-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,0.04);margin-top:48px; }
+.cd-item { background:var(--dark-01);padding:40px 32px; }
+
+@media (max-width:1024px) {
+  .aero-modes{grid-template-columns:1fr;} .aero-car-layout{grid-template-columns:1fr;} .cd-grid{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:768px) { .aero-hero-content{padding:0 20px;} .tunnel-data{display:none;} }
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div><div id="cursor-ring"></div><div id="cursor-label"></div>
+<div id="page-veil"></div><div id="scroll-bar"></div>
+
+<nav class="nav"><div class="nav-inner">
+  <a href="/projects/nexus-x1/" class="nav-logo" aria-label="NEXUS Home"><span class="logo-nexus">NEXUS</span> <span class="logo-x1">X1</span></a>
+  <ul class="nav-links">
+    <li><a href="/projects/nexus-x1/car/">The Car</a></li>
+    <li><a href="/projects/nexus-x1/performance/">Performance</a></li>
+    <li><a href="/projects/nexus-x1/engineering/">Engineering</a></li>
+    <li><a href="/projects/nexus-x1/interior/">Interior</a></li>
+    <li><a href="/projects/nexus-x1/technology/">Technology</a></li>
+    <li><a href="/projects/nexus-x1/configurator/">Configure</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/projects/nexus-x1/gallery/" class="nav-link-hide">Gallery</a>
+    <a href="/projects/nexus-x1/journal/" class="nav-link-hide">Journal</a>
+    <button class="nav-menu" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</div></nav>
+<div class="nav-overlay"><div class="nav-overlay-inner">
+  <div class="nav-overlay-links">
+    <a href="/projects/nexus-x1/car/"><span>01</span> The Car <span class="link-num">X1</span></a>
+    <a href="/projects/nexus-x1/performance/"><span>02</span> Performance <span class="link-num">DRIVE</span></a>
+    <a href="/projects/nexus-x1/engineering/"><span>03</span> Engineering <span class="link-num">BUILD</span></a>
+    <a href="/projects/nexus-x1/aerodynamics/"><span>04</span> Aerodynamics <span class="link-num">AERO</span></a>
+    <a href="/projects/nexus-x1/interior/"><span>05</span> Interior <span class="link-num">CABIN</span></a>
+    <a href="/projects/nexus-x1/technology/"><span>06</span> Technology <span class="link-num">AI</span></a>
+    <a href="/projects/nexus-x1/configurator/"><span>07</span> Configure <span class="link-num">BUILD</span></a>
+    <a href="/projects/nexus-x1/gallery/"><span>08</span> Gallery <span class="link-num">VISUAL</span></a>
+    <a href="/projects/nexus-x1/journal/"><span>09</span> Journal <span class="link-num">READ</span></a>
+  </div>
+  <div class="nav-overlay-side">
+    <div class="nav-overlay-logo">NEXUS<br>X1</div>
+    <div class="nav-overlay-meta"><span>Nexus Automotive / Concept 2070</span></div>
+    <p class="nav-overlay-tagline">THE NEXT MACHINE.</p>
+  </div>
+</div></div>
+
+<!-- ════ HERO ════════════════════════════════════════ -->
+<section id="aero-hero">
+  <video id="aero-hero-video" autoplay muted loop playsinline aria-hidden="true">
+    <source src="story of car long video.mp4" type="video/mp4">
+  </video>
+  <canvas id="aero-hero-canvas" aria-hidden="true"></canvas>
+  <div class="aero-hero-overlay"></div>
+  <div class="hud hud-tl" aria-hidden="true">AERODYNAMICS / SYS-04</div>
+  <div class="hud hud-br" aria-hidden="true">Cd 0.186 (CONCEPT)</div>
+  <div class="aero-hero-content">
+    <span class="sec-num">// 004 — AERODYNAMICS</span>
+    <h1 class="t-hero reveal">AIR IS PART<br>OF THE<br><span style="color:var(--cyan)">MACHINE.</span></h1>
+    <p class="t-body mt-6 reveal" style="max-width:440px;">At 300 km/h the X1 generates 980 kg of simulated downforce. The air doesn't fight the car — it works with it.</p>
+    <div class="flex gap-4 mt-8 reveal">
+      <a href="#wind-tunnel" class="btn btn-primary">
+        <div class="btn-bg"></div><span class="btn-text">WIND TUNNEL</span><span class="btn-arrow">↓</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ════ WIND TUNNEL ═══════════════════════════════════ -->
+<section id="wind-tunnel">
+  <div class="wrap">
+    <span class="sec-num">// SIMULATED WIND TUNNEL</span>
+    <h2 class="t-heading reveal">Airflow Around<br>Every Surface.</h2>
+    <p class="t-body mt-4 reveal">Particle visualisation of simulated aerodynamic flow. Not a real wind tunnel test.</p>
+  </div>
+  <div class="tunnel-stage reveal">
+    <canvas id="tunnel-canvas" aria-label="Wind tunnel airflow simulation"></canvas>
+    <div class="tunnel-data" aria-label="Aerodynamic data">
+      <div class="tunnel-data-item">
+        <div class="tunnel-data-label">AIR SPEED</div>
+        <div class="tunnel-data-val"><span data-tele="speed">300</span> km/h</div>
+      </div>
+      <div class="tunnel-data-item">
+        <div class="tunnel-data-label">Cd (CONCEPT)</div>
+        <div class="tunnel-data-val">0.186</div>
+      </div>
+      <div class="tunnel-data-item">
+        <div class="tunnel-data-label">DOWNFORCE (SIM)</div>
+        <div class="tunnel-data-val">980 kg</div>
+      </div>
+      <div class="tunnel-data-item">
+        <div class="tunnel-data-label">FRONT / REAR</div>
+        <div class="tunnel-data-val">38/62%</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ ACTIVE AERO ══════════════════════════════════ -->
+<section id="active-aero">
+  <div class="wrap">
+    <span class="sec-num">// ACTIVE AERO SYSTEM</span>
+    <div class="flex justify-b items-c" style="flex-wrap:wrap;gap:16px;">
+      <h2 class="t-heading reveal">Three Positions.<br>One Objective.</h2>
+      <div class="tech-badge reveal">SIMULATED DATA</div>
+    </div>
+    <div class="aero-modes reveal">
+      <div class="aero-mode active" data-aero="street">
+        <div class="aero-mode-dot"></div>
+        <div class="aero-mode-name">STREET</div>
+        <div class="aero-mode-desc">Minimum drag configuration. Wing retracted, splitter flush. Optimised for range and highway efficiency.</div>
+        <div class="aero-mode-stats">
+          <div class="aero-stat"><span class="aero-stat-key">Downforce</span><span class="aero-stat-val">120 kg (sim)</span></div>
+          <div class="aero-stat"><span class="aero-stat-key">Drag (Cd)</span><span class="aero-stat-val">0.186</span></div>
+          <div class="aero-stat"><span class="aero-stat-key">Wing angle</span><span class="aero-stat-val">0°</span></div>
+        </div>
+      </div>
+      <div class="aero-mode" data-aero="sport">
+        <div class="aero-mode-dot"></div>
+        <div class="aero-mode-name">SPORT</div>
+        <div class="aero-mode-desc">Balanced configuration. Partial wing deployment. Increased downforce for spirited driving without excessive drag.</div>
+        <div class="aero-mode-stats">
+          <div class="aero-stat"><span class="aero-stat-key">Downforce</span><span class="aero-stat-val">480 kg (sim)</span></div>
+          <div class="aero-stat"><span class="aero-stat-key">Drag (Cd)</span><span class="aero-stat-val">0.224</span></div>
+          <div class="aero-stat"><span class="aero-stat-key">Wing angle</span><span class="aero-stat-val">12°</span></div>
+        </div>
+      </div>
+      <div class="aero-mode" data-aero="track">
+        <div class="aero-mode-dot"></div>
+        <div class="aero-mode-name">TRACK</div>
+        <div class="aero-mode-desc">Maximum downforce. Full wing, maximum splitter attack, rear diffuser extended. Concept specification at 300 km/h.</div>
+        <div class="aero-mode-stats">
+          <div class="aero-stat"><span class="aero-stat-key">Downforce</span><span class="aero-stat-val">980 kg (sim)</span></div>
+          <div class="aero-stat"><span class="aero-stat-key">Drag (Cd)</span><span class="aero-stat-val">0.38</span></div>
+          <div class="aero-stat"><span class="aero-stat-key">Wing angle</span><span class="aero-stat-val">28°</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ AERO CAR VIEWER ══════════════════════════════ -->
+<section id="aero-car">
+  <div class="wrap">
+    <span class="sec-num">// INTERACTIVE AERO VISUALISATION</span>
+    <h2 class="t-heading reveal">See the<br>Forces at Work.</h2>
+    <div class="aero-car-layout">
+      <canvas id="aero-car-canvas" data-cursor="drag" aria-label="Aerodynamics car view with airflow"></canvas>
+      <div class="aero-car-data reveal">
+        <div class="tech-badge">SIMULATED DATA</div>
+        <div class="aero-meter mt-6">
+          <div class="aero-meter-label">DOWNFORCE (CONCEPT)</div>
+          <div class="aero-meter-val" id="df-val">120 <span style="font-size:0.5em;color:var(--cyan);">kg</span></div>
+          <div class="aero-meter-bar-wrap"><div class="aero-meter-bar" id="df-bar" style="width:12%"></div></div>
+        </div>
+        <div class="aero-meter">
+          <div class="aero-meter-label">DRAG COEFFICIENT</div>
+          <div class="aero-meter-val" id="cd-val">0.186</div>
+          <div class="aero-meter-bar-wrap"><div class="aero-meter-bar" id="cd-bar" style="width:49%"></div></div>
+        </div>
+        <div class="aero-meter">
+          <div class="aero-meter-label">WING ANGLE</div>
+          <div class="aero-meter-val" id="wa-val">0<span style="font-size:0.5em;color:var(--cyan);">°</span></div>
+          <div class="aero-meter-bar-wrap"><div class="aero-meter-bar" id="wa-bar" style="width:0%"></div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:1px;margin-top:24px;">
+          <button class="aero-mode-btn active" data-mode-btn="street" style="padding:12px 16px;background:rgba(0,229,255,0.1);border:1px solid rgba(0,229,255,0.3);font-family:var(--font-h);font-size:10px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);cursor:none;transition:all 0.3s;text-align:left;">STREET MODE</button>
+          <button class="aero-mode-btn" data-mode-btn="sport" style="padding:12px 16px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);font-family:var(--font-h);font-size:10px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);cursor:none;transition:all 0.3s;text-align:left;">SPORT MODE</button>
+          <button class="aero-mode-btn" data-mode-btn="track" style="padding:12px 16px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.08);font-family:var(--font-h);font-size:10px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);cursor:none;transition:all 0.3s;text-align:left;">TRACK MODE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════ STATS ════════════════════════════════════════ -->
+<section id="aero-stats">
+  <div class="wrap">
+    <span class="sec-num">// SIMULATED AERODYNAMIC DATA</span>
+    <h2 class="t-heading reveal">The Numbers<br>Don't Lie.</h2>
+    <div class="cd-grid mt-8">
+      <div class="cd-item reveal">
+        <div class="data-value">0.186</div>
+        <div class="data-unit">Cd CONCEPT STREET</div>
+      </div>
+      <div class="cd-item reveal reveal-delay-1">
+        <div class="data-value">980</div>
+        <div class="data-unit">kg DOWNFORCE @ 300km/h (SIM)</div>
+      </div>
+      <div class="cd-item reveal reveal-delay-2">
+        <div class="data-value">38/62</div>
+        <div class="data-unit">FRONT/REAR BALANCE (SIM)</div>
+      </div>
+      <div class="cd-item reveal reveal-delay-3">
+        <div class="data-value">2.4</div>
+        <div class="data-unit">m² FRONTAL AREA (CONCEPT)</div>
+      </div>
+    </div>
+    <p style="font-family:var(--font-m);font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;margin-top:24px;">ALL AERODYNAMIC DATA IS SIMULATED FOR CONCEPT DEMONSTRATION. NOT A REAL WIND TUNNEL TEST.</p>
+  </div>
+</section>
+
+<section style="padding:100px 0;background:var(--dark-02);text-align:center;">
+  <div class="wrap">
+    <h2 class="t-heading reveal">Enter the Quiet.</h2>
+    <div class="flex gap-4 mt-8 justify-c">
+      <a href="/projects/nexus-x1/interior/" class="btn btn-primary">
+        <div class="btn-bg"></div><span class="btn-text">INTERIOR</span><span class="btn-arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="../js/core.js"></script>
+<script src="../js/car3d.js"></script>
+<script>
+(function() {
+const NT = window.NexusThree;
+if (!NT) return;
+
+/* ── HERO ── */
+(function() {
+  const canvas = document.getElementById('aero-hero-canvas');
+  if (!canvas) return;
+  const s = NT.createNexusScene(canvas, {fog:true,ground:true,particles:true});
+  if (!s) return;
+  const { renderer, scene, camera } = s;
+  const car = NT.createNexusX1({ bodyColor: 0x050510 });
+  scene.add(car);
+  camera.position.set(3, 1.5, 7);
+  camera.lookAt(0, 0.5, 0);
+  let t=0;
+  function render() {
+    requestAnimationFrame(render);
+    t+=0.005;
+    car.rotation.y = 0.3 + Math.sin(t*0.15)*0.12;
+    if(car.userData.wheels) car.userData.wheels.forEach(w=>w.rotation.x+=0.015);
+    renderer.render(scene, camera);
+  }
+  render();
+})();
+
+/* ── WIND TUNNEL ── */
+(function() {
+  const canvas = document.getElementById('tunnel-canvas');
+  if (!canvas) return;
+  const w=canvas.clientWidth||1200, h=canvas.clientHeight||600;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  renderer.setSize(w,h);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.7;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x020408);
+  scene.fog = new THREE.FogExp2(0x020408, 0.04);
+  const camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 80);
+  camera.position.set(0, 1.5, 8);
+  camera.lookAt(0, 0.3, 0);
+  scene.add(new THREE.AmbientLight(0x002244, 0.3));
+  const kl = new THREE.DirectionalLight(0x2244ff, 1.5); kl.position.set(5,6,4); scene.add(kl);
+  const fl = new THREE.PointLight(0x00e5ff, 2, 20); fl.position.set(-5,3,-3); scene.add(fl);
+
+  // Ground
+  const gnd = new THREE.Mesh(new THREE.PlaneGeometry(40,40), new THREE.MeshStandardMaterial({ color:0x020408, roughness:0.1, metalness:0.9 }));
+  gnd.rotation.x = -Math.PI/2; gnd.position.y = -0.01; scene.add(gnd);
+
+  const car = NT.createNexusX1({ bodyColor: 0x0a0a0a });
+  scene.add(car);
+
+  // Airflow particles
+  const flowCount = 400;
+  const fGeo = new THREE.BufferGeometry();
+  const fPos = new Float32Array(flowCount*3);
+  const fSpd = new Float32Array(flowCount);
+  for (let i=0; i<flowCount; i++) {
+    fPos[i*3]   = -15 + Math.random()*30;
+    fPos[i*3+1] = Math.random()*2.5 - 0.3;
+    fPos[i*3+2] = (Math.random()-0.5)*6;
+    fSpd[i] = 0.04 + Math.random()*0.06;
+  }
+  fGeo.setAttribute('position', new THREE.BufferAttribute(fPos,3));
+  const flow = new THREE.Points(fGeo, new THREE.PointsMaterial({ color:0x00a0ff, size:0.04, transparent:true, opacity:0.5 }));
+  scene.add(flow);
+
+  // Ground flow lines
+  for (let i=0; i<20; i++) {
+    const z = (i/20-0.5)*8;
+    const pts = [];
+    for (let x=-12; x<=12; x+=0.5) {
+      const y = 0.02 + Math.abs(Math.sin(x*0.3+z*0.5))*0.04;
+      pts.push(new THREE.Vector3(x, y, z));
+    }
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(pts);
+    const line = new THREE.Line(lineGeo, new THREE.LineBasicMaterial({ color:0x001133, opacity:0.3, transparent:true }));
+    scene.add(line);
+  }
+
+  let t=0;
+  function render() {
+    requestAnimationFrame(render);
+    t+=0.01;
+    // Animate airflow particles
+    const pos = fGeo.attributes.position.array;
+    for (let i=0; i<flowCount; i++) {
+      pos[i*3] += fSpd[i];
+      if (pos[i*3] > 15) pos[i*3] = -15;
+      // deflect around car body
+      const carX = pos[i*3];
+      const carZ = pos[i*3+2];
+      if (Math.abs(carX) < 2.5 && Math.abs(carZ) < 1.2) {
+        pos[i*3+1] += 0.008;
+        if (pos[i*3+1] > 2.5) { pos[i*3+1] = -0.1; pos[i*3] = -14 + Math.random(); }
+      }
+    }
+    fGeo.attributes.position.needsUpdate = true;
+    car.rotation.y = Math.sin(t*0.05)*0.04;
+    renderer.render(scene, camera);
+  }
+  render();
+  window.addEventListener('resize',()=>{ const w2=canvas.clientWidth,h2=canvas.clientHeight; camera.aspect=w2/h2;camera.updateProjectionMatrix();renderer.setSize(w2,h2); });
+})();
+
+/* ── AERO CAR ── */
+(function() {
+  const canvas = document.getElementById('aero-car-canvas');
+  if (!canvas) return;
+  const w=canvas.clientWidth||800, h=canvas.clientHeight||500;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias:true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  renderer.setSize(w,h);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.8;
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x060606);
+  const camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 40);
+  camera.position.set(0, 1.5, 8);
+  camera.lookAt(0, 0.5, 0);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+  const kl = new THREE.DirectionalLight(0xffffff, 2); kl.position.set(5,6,3); scene.add(kl);
+  const fl = new THREE.PointLight(0x00e5ff, 2, 15); fl.position.set(-4,2,-2); scene.add(fl);
+  const gnd = new THREE.Mesh(new THREE.PlaneGeometry(30,30), new THREE.MeshStandardMaterial({color:0x050505,roughness:0.1,metalness:0.9}));
+  gnd.rotation.x=-Math.PI/2; gnd.position.y=-0.01; scene.add(gnd);
+
+  const car = NT.createNexusX1({ bodyColor: 0x0a0a0a });
+  scene.add(car);
+
+  // Wing object (separate for animation)
+  let wingAngle = 0;
+
+  const aeroData = {
+    street: { df:120, cd:0.186, wa:0,  dfPct:12, cdPct:49, waPct:0 },
+    sport:  { df:480, cd:0.224, wa:12, dfPct:49, cdPct:59, waPct:43 },
+    track:  { df:980, cd:0.38,  wa:28, dfPct:100,cdPct:100,waPct:100 },
+  };
+
+  function setAeroMode(mode) {
+    const d = aeroData[mode];
+    if (!d) return;
+    document.getElementById('df-val').innerHTML = `${d.df} <span style="font-size:0.5em;color:var(--cyan);">kg</span>`;
+    document.getElementById('cd-val').textContent = d.cd;
+    document.getElementById('wa-val').innerHTML = `${d.wa}<span style="font-size:0.5em;color:var(--cyan);">°</span>`;
+    document.getElementById('df-bar').style.width = d.dfPct + '%';
+    document.getElementById('cd-bar').style.width = d.cdPct + '%';
+    document.getElementById('wa-bar').style.width = d.waPct + '%';
+    wingAngle = (d.wa/28) * 0.5;
+    document.querySelectorAll('.aero-mode-btn').forEach(btn => {
+      const isActive = btn.dataset.modeBtn === mode;
+      btn.style.background = isActive ? 'rgba(0,229,255,0.1)' : 'rgba(0,0,0,0.3)';
+      btn.style.borderColor = isActive ? 'rgba(0,229,255,0.3)' : 'rgba(255,255,255,0.08)';
+      btn.style.color = isActive ? 'var(--cyan)' : 'rgba(255,255,255,0.4)';
+    });
+    // Also update aero mode cards
+    document.querySelectorAll('.aero-mode').forEach(el => {
+      el.classList.toggle('active', el.dataset.aero === mode);
+    });
+  }
+
+  document.querySelectorAll('.aero-mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => setAeroMode(btn.dataset.modeBtn));
+  });
+  document.querySelectorAll('.aero-mode').forEach(el => {
+    el.addEventListener('click', () => setAeroMode(el.dataset.aero));
+  });
+
+  let isDrag=false, lastX=0, rot=0;
+  canvas.addEventListener('mousedown',e=>{isDrag=true;lastX=e.clientX;});
+  document.addEventListener('mouseup',()=>isDrag=false);
+  document.addEventListener('mousemove',e=>{ if(isDrag){rot+=(e.clientX-lastX)*0.008;lastX=e.clientX;} });
+
+  let t=0;
+  function render() {
+    requestAnimationFrame(render);
+    t+=0.006;
+    car.rotation.y = rot + (isDrag?0:Math.sin(t*0.15)*0.2);
+    if(car.userData.wheels) car.userData.wheels.forEach(w=>w.rotation.x+=0.005);
+    renderer.render(scene, camera);
+  }
+  render();
+  window.addEventListener('resize',()=>{ const w2=canvas.clientWidth,h2=canvas.clientHeight; camera.aspect=w2/h2;camera.updateProjectionMatrix();renderer.setSize(w2,h2); });
+})();
+})();
+</script>
+</body>
+</html>

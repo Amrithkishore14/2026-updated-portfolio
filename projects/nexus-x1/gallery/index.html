@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="NEXUS X1 Gallery — Cinematic photography, editorial imagery and video.">
+<title>NEXUS X1 — GALLERY</title>
+<link rel="stylesheet" href="../styles/global.css">
+<link rel="stylesheet" href="../styles/nav.css">
+<link rel="stylesheet" href="../styles/cursor.css">
+<style>
+#gal-hero { position:relative;height:60vh;min-height:400px;overflow:hidden;display:flex;align-items:flex-end; }
+#gal-hero-canvas { position:absolute;inset:0;width:100%;height:100%; }
+.gal-hero-overlay { position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,0.95) 0%,rgba(0,0,0,0.2) 100%);z-index:2;pointer-events:none; }
+.gal-hero-content { position:relative;z-index:3;padding:0 56px 60px; }
+
+/* Gallery grid */
+#gallery-grid { padding:80px 0;background:var(--dark-01); }
+.gallery-masonry {
+  columns: 3;
+  column-gap: 1px;
+  padding: 0;
+}
+.gallery-item {
+  break-inside: avoid;
+  margin-bottom: 1px;
+  position: relative;
+  overflow: hidden;
+  background: var(--dark-02);
+  cursor: none;
+}
+.gallery-item canvas, .gallery-item video, .gallery-item img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+}
+.gallery-item:hover canvas,
+.gallery-item:hover .gi-bg {
+  transform: scale(1.03);
+}
+.gi-bg {
+  width: 100%;
+  display: block;
+  transition: transform 0.6s var(--ease-out);
+  position: relative;
+}
+.gi-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  transition: background 0.4s;
+  z-index: 2;
+  pointer-events: none;
+}
+.gallery-item:hover .gi-overlay { background: rgba(0,0,0,0.3); }
+.gi-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+  z-index: 3;
+  transform: translateY(100%);
+  transition: transform 0.4s var(--ease-out);
+  pointer-events: none;
+}
+.gallery-item:hover .gi-label { transform: translateY(0); }
+.gi-label-cat {
+  font-family: var(--font-m);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--cyan);
+  margin-bottom: 4px;
+}
+.gi-label-title {
+  font-family: var(--font-h);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+}
+
+/* Large canvas items */
+.gi-tall { aspect-ratio: 2/3; }
+.gi-wide { aspect-ratio: 16/9; }
+.gi-square { aspect-ratio: 1; }
+.gi-short { aspect-ratio: 4/3; }
+
+/* Lightbox */
+#lightbox {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.96);
+  z-index: 9990;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s;
+}
+#lightbox.open { opacity:1; pointer-events:all; }
+.lb-canvas-wrap {
+  position: relative;
+  max-width: 85vw;
+  max-height: 85vh;
+}
+#lb-canvas { display: block; max-width: 85vw; max-height: 85vh; }
+.lb-close {
+  position: absolute;
+  top: -48px; right: 0;
+  font-size: 24px;
+  color: rgba(255,255,255,0.5);
+  cursor: none;
+  transition: color 0.2s;
+}
+.lb-close:hover { color: var(--white); }
+.lb-prev,.lb-next {
+  position: absolute;
+  top: 50%; transform: translateY(-50%);
+  font-size: 24px; color: rgba(255,255,255,0.5);
+  cursor: none; padding: 16px;
+  transition: color 0.2s;
+}
+.lb-prev { left: -56px; }
+.lb-next { right: -56px; }
+.lb-prev:hover,.lb-next:hover { color: var(--white); }
+.lb-info {
+  position: absolute;
+  bottom: -48px; left: 0;
+  font-family: var(--font-m);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.3);
+}
+
+/* Video section */
+#videos { padding:80px 0;background:var(--black); }
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(2,1fr);
+  gap: 1px;
+  background: rgba(255,255,255,0.04);
+  margin-top:48px;
+}
+.video-item {
+  position: relative;
+  background: var(--dark-02);
+  overflow: hidden;
+  cursor: none;
+}
+.video-canvas-bg {
+  width: 100%;
+  aspect-ratio: 16/9;
+  display: block;
+}
+.video-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.5);
+  transition: background 0.3s;
+}
+.video-item:hover .video-overlay { background: rgba(0,0,0,0.3); }
+.video-play-btn {
+  width: 56px; height: 56px;
+  border: 1px solid rgba(255,255,255,0.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s;
+}
+.video-item:hover .video-play-btn { border-color: var(--cyan); color: var(--cyan); transform: scale(1.1); }
+.video-info {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 20px;
+  background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, transparent 100%);
+}
+.video-cat { font-family:var(--font-m);font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:var(--cyan);margin-bottom:4px; }
+.video-title { font-family:var(--font-h);font-size:16px;font-weight:600; }
+
+@media (max-width:1024px) {
+  .gallery-masonry { columns:2; }
+  .video-grid { grid-template-columns:1fr; }
+}
+@media (max-width:768px) {
+  .gallery-masonry { columns:1; }
+  .gal-hero-content { padding:0 20px 40px; }
+  .lb-prev { left:-40px; }
+  .lb-next { right:-40px; }
+}
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div><div id="cursor-ring"></div><div id="cursor-label"></div>
+<div id="page-veil"></div><div id="scroll-bar"></div>
+
+<nav class="nav"><div class="nav-inner">
+  <a href="/projects/nexus-x1/" class="nav-logo" aria-label="NEXUS Home"><span class="logo-nexus">NEXUS</span> <span class="logo-x1">X1</span></a>
+  <ul class="nav-links">
+    <li><a href="/projects/nexus-x1/car/">The Car</a></li>
+    <li><a href="/projects/nexus-x1/performance/">Performance</a></li>
+    <li><a href="/projects/nexus-x1/engineering/">Engineering</a></li>
+    <li><a href="/projects/nexus-x1/interior/">Interior</a></li>
+    <li><a href="/projects/nexus-x1/technology/">Technology</a></li>
+    <li><a href="/projects/nexus-x1/configurator/">Configure</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/projects/nexus-x1/gallery/" class="nav-link-hide active">Gallery</a>
+    <a href="/projects/nexus-x1/journal/" class="nav-link-hide">Journal</a>
+    <button class="nav-menu" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</div></nav>
+<div class="nav-overlay"><div class="nav-overlay-inner">
+  <div class="nav-overlay-links">
+    <a href="/projects/nexus-x1/car/"><span>01</span> The Car <span class="link-num">X1</span></a>
+    <a href="/projects/nexus-x1/performance/"><span>02</span> Performance <span class="link-num">DRIVE</span></a>
+    <a href="/projects/nexus-x1/engineering/"><span>03</span> Engineering <span class="link-num">BUILD</span></a>
+    <a href="/projects/nexus-x1/aerodynamics/"><span>04</span> Aerodynamics <span class="link-num">AERO</span></a>
+    <a href="/projects/nexus-x1/interior/"><span>05</span> Interior <span class="link-num">CABIN</span></a>
+    <a href="/projects/nexus-x1/technology/"><span>06</span> Technology <span class="link-num">AI</span></a>
+    <a href="/projects/nexus-x1/configurator/"><span>07</span> Configure <span class="link-num">BUILD</span></a>
+    <a href="/projects/nexus-x1/gallery/"><span>08</span> Gallery <span class="link-num">VISUAL</span></a>
+    <a href="/projects/nexus-x1/journal/"><span>09</span> Journal <span class="link-num">READ</span></a>
+  </div>
+  <div class="nav-overlay-side">
+    <div class="nav-overlay-logo">NEXUS<br>X1</div>
+    <div class="nav-overlay-meta"><span>Nexus Automotive / Concept 2070</span></div>
+    <p class="nav-overlay-tagline">THE NEXT MACHINE.</p>
+  </div>
+</div></div>
+
+<!-- HERO -->
+<section id="gal-hero">
+  <canvas id="gal-hero-canvas" aria-hidden="true"></canvas>
+  <div class="gal-hero-overlay"></div>
+  <div class="hud hud-tl" aria-hidden="true">GALLERY / SYS-08</div>
+  <div class="gal-hero-content">
+    <span class="sec-num">// 008 — VISUAL ARCHIVE</span>
+    <h1 class="t-hero reveal">The X1<br>in Frame.</h1>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery-grid">
+  <div class="wrap" style="padding-bottom:32px;">
+    <span class="sec-num">// EDITORIAL GALLERY</span>
+    <div class="flex justify-b items-c">
+      <h2 class="t-heading reveal">Every Angle,<br>Every Detail.</h2>
+      <div class="tech-badge reveal">CONCEPT RENDERS</div>
+    </div>
+  </div>
+  <div class="gallery-masonry" role="list">
+
+    <div class="gallery-item gi-wide reveal" data-view="inspect" data-gal-idx="0">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-a/1200/675" alt="NEXUS X1 front three-quarter" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// EXTERIOR</div>
+        <div class="gi-label-title">Front Three-Quarter</div>
+      </div>
+    </div>
+
+    <div class="gallery-item gi-tall reveal" data-gal-idx="1">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-b/600/900" alt="NEXUS X1 front headlight detail" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// DETAIL</div>
+        <div class="gi-label-title">Light Matrix Detail</div>
+      </div>
+    </div>
+
+    <div class="gallery-item gi-short reveal" data-gal-idx="2">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-c/800/600" alt="NEXUS X1 wheel detail" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// WHEEL</div>
+        <div class="gi-label-title">Aero Wheel</div>
+      </div>
+    </div>
+
+    <div class="gallery-item gi-square reveal" data-gal-idx="3">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-d/800/800" alt="NEXUS X1 side profile" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// EXTERIOR</div>
+        <div class="gi-label-title">Side Profile</div>
+      </div>
+    </div>
+
+    <div class="gallery-item gi-tall reveal" data-gal-idx="4">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-e/600/900" alt="NEXUS X1 motor engineering" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// ENGINEERING</div>
+        <div class="gi-label-title">Electric Motor</div>
+      </div>
+    </div>
+
+    <div class="gallery-item gi-wide reveal" data-gal-idx="5">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-f/1200/675" alt="NEXUS X1 rear view" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// EXTERIOR</div>
+        <div class="gi-label-title">Rear Architecture</div>
+      </div>
+    </div>
+
+    <div class="gallery-item gi-short reveal" data-gal-idx="6">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-g/800/600" alt="NEXUS X1 brake assembly" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// ENGINEERING</div>
+        <div class="gi-label-title">Brake Assembly</div>
+      </div>
+    </div>
+
+    <div class="gallery-item gi-wide reveal" data-gal-idx="7">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-h/1200/675" alt="NEXUS X1 battery pack" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// TECHNOLOGY</div>
+        <div class="gi-label-title">800V Battery Core</div>
+      </div>
+    </div>
+
+    <div class="gallery-item gi-square reveal" data-gal-idx="8">
+      <img class="gi-bg" src="https://picsum.photos/seed/nx1-i/800/800" alt="NEXUS X1 steering wheel" loading="lazy">
+      <div class="gi-overlay"></div>
+      <div class="gi-label">
+        <div class="gi-label-cat">// INTERIOR</div>
+        <div class="gi-label-title">Steering Interface</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- VIDEO GALLERY -->
+<section id="videos">
+  <div class="wrap">
+    <span class="sec-num">// VIDEO ARCHIVE</span>
+    <h2 class="t-heading reveal">In Motion.</h2>
+    <div class="video-grid reveal mt-6">
+      <div class="video-item" data-cursor="view">
+        <video class="video-canvas-bg" autoplay muted loop playsinline aria-label="Performance scene">
+          <source src="/projects/nexus-x1/aerodynamics/short video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="video-play-btn">▶</div>
+        </div>
+        <div class="video-info">
+          <div class="video-cat">// PERFORMANCE</div>
+          <div class="video-title">Track Experience</div>
+        </div>
+      </div>
+      <div class="video-item" data-cursor="view">
+        <video class="video-canvas-bg" autoplay muted loop playsinline aria-label="Night drive scene">
+          <source src="/projects/nexus-x1/aerodynamics/story of car long video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="video-play-btn">▶</div>
+        </div>
+        <div class="video-info">
+          <div class="video-cat">// ATMOSPHERE</div>
+          <div class="video-title">Night Drive</div>
+        </div>
+      </div>
+      <div class="video-item" data-cursor="view">
+        <video class="video-canvas-bg" autoplay muted loop playsinline aria-label="Wind tunnel scene">
+          <source src="/projects/nexus-x1/aerodynamics/short video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="video-play-btn">▶</div>
+        </div>
+        <div class="video-info">
+          <div class="video-cat">// AERODYNAMICS</div>
+          <div class="video-title">Wind Tunnel</div>
+        </div>
+      </div>
+      <div class="video-item" data-cursor="view">
+        <video class="video-canvas-bg" autoplay muted loop playsinline aria-label="Interior scene">
+          <source src="/projects/nexus-x1/aerodynamics/story of car long video.mp4" type="video/mp4">
+        </video>
+        <div class="video-overlay">
+          <div class="video-play-btn">▶</div>
+        </div>
+        <div class="video-info">
+          <div class="video-cat">// INTERIOR</div>
+          <div class="video-title">Cabin Details</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-family:var(--font-m);font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;margin-top:24px;padding:0 56px;">// ALL IMAGERY AND VIDEO SCENES ARE PROCEDURALLY RENDERED CONCEPT VISUALISATIONS — NOT REAL PHOTOGRAPHY</p>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+  <div class="lb-canvas-wrap">
+    <button class="lb-close" id="lb-close" aria-label="Close">×</button>
+    <img id="lb-img" src="" alt="NEXUS X1 Concept" style="max-width:80vw;max-height:80vh;object-fit:contain;display:block;margin:auto;">
+    <button class="lb-prev" id="lb-prev" aria-label="Previous">←</button>
+    <button class="lb-next" id="lb-next" aria-label="Next">→</button>
+    <div class="lb-info" id="lb-info">// NEXUS X1 CONCEPT</div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="../js/core.js"></script>
+<script src="../js/car3d.js"></script>
+<script>
+(function() {
+const NT = window.NexusThree;
+if (!NT) return;
+
+// Helper: create mini scene for gallery cards
+function miniScene(canvas, setupFn, bgColor = 0x060606) {
+  if (!canvas) return;
+  const w = canvas.clientWidth || 400;
+  const h = canvas.clientHeight || 300;
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+  renderer.setSize(w, h);
+  renderer.outputColorSpace = THREE.SRGBColorSpace;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.85;
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(bgColor);
+  scene.fog = new THREE.FogExp2(bgColor, 0.1);
+  const camera = new THREE.PerspectiveCamera(40, w/h, 0.1, 30);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.08));
+  const kl = new THREE.DirectionalLight(0xffffff, 2); kl.position.set(4,5,3); scene.add(kl);
+  const fl = new THREE.PointLight(0x00e5ff, 2, 12); fl.position.set(-3,2,-2); scene.add(fl);
+  setupFn(scene, camera);
+  let t=0;
+  function render() { requestAnimationFrame(render); t+=0.008; if (scene.userData.update) scene.userData.update(0.008); renderer.render(scene, camera); }
+  render();
+  const obs = new ResizeObserver(() => {
+    const w2=canvas.clientWidth,h2=canvas.clientHeight;
+    if(!w2||!h2) return;
+    camera.aspect=w2/h2;camera.updateProjectionMatrix();renderer.setSize(w2,h2);
+  });
+  obs.observe(canvas);
+  return { renderer, scene, camera };
+}
+
+/* ── HERO ── */
+miniScene(document.getElementById('gal-hero-canvas'), (scene, cam) => {
+  cam.position.set(0, 1.5, 6.5);
+  cam.lookAt(0, 0.4, 0);
+  const car = NT.createNexusX1({ bodyColor: 0x080808 });
+  scene.add(car);
+  const gnd = new THREE.Mesh(new THREE.PlaneGeometry(30,30), new THREE.MeshStandardMaterial({color:0x040404,roughness:0.1,metalness:0.9}));
+  gnd.rotation.x=-Math.PI/2; scene.add(gnd);
+  let t=0;
+  const origRender = null;
+  scene.userData.update = dt => { t+=dt; car.rotation.y+=0.003; if(car.userData.wheels)car.userData.wheels.forEach(w=>w.rotation.x+=0.003); };
+}, 0x030303);
+
+/* Gallery items */
+const galSetups = [
+  // 0: Front 3/4 car
+  (scene, cam) => {
+    cam.position.set(3.5, 1.8, 5.5); cam.lookAt(0, 0.5, 0);
+    const car = NT.createNexusX1({bodyColor:0x0a0a0a}); scene.add(car);
+    const gnd = new THREE.Mesh(new THREE.PlaneGeometry(20,20), new THREE.MeshStandardMaterial({color:0x040404,roughness:0.1,metalness:0.9}));
+    gnd.rotation.x=-Math.PI/2; scene.add(gnd);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.005;car.rotation.y=Math.sin(t*0.2)*0.1+0.3;if(car.userData.wheels)car.userData.wheels.forEach(w=>w.rotation.x+=0.005);}; loop();
+  },
+  // 1: Headlight detail
+  (scene, cam) => {
+    cam.position.set(0.4, 0.5, 1.5); cam.lookAt(0, 0.5, 0);
+    const bodyMat = NT.createBodyMaterial(0x080808);
+    const body = new THREE.Mesh(new THREE.BoxGeometry(0.2,0.9,2.3), bodyMat); body.position.set(0.1,0.5,0); scene.add(body);
+    const hl = new THREE.Mesh(new THREE.BoxGeometry(0.1,0.045,0.7), NT.createEmissiveMaterial(0x00e5ff,4)); hl.position.set(0.22,0.56,0.6); scene.add(hl);
+    const hl2=hl.clone(); hl2.position.z=-0.6; scene.add(hl2);
+    const drl = new THREE.Mesh(new THREE.BoxGeometry(0.06,0.02,1.72), NT.createEmissiveMaterial(0x00e5ff,3)); drl.position.set(0.23,0.6,0); scene.add(drl);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.01;hl.material.emissiveIntensity=3.5+Math.sin(t)*1;hl2.material.emissiveIntensity=3.5+Math.sin(t+1)*1;}; loop();
+  },
+  // 2: Wheel
+  (scene, cam) => {
+    cam.position.set(0, 0, 2.5);
+    const w = NT.createWheel(NT.createChromeMaterial(), NT.createTireMaterial(), NT.createEmissiveMaterial(0x00e5ff,2.5), 'aero');
+    scene.add(w);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.01;w.rotation.y=t*0.5;}; loop();
+  },
+  // 3: Side profile
+  (scene, cam) => {
+    cam.position.set(7.5, 1.5, 0); cam.lookAt(0, 0.5, 0);
+    const car = NT.createNexusX1({bodyColor:0x0a0a0a}); scene.add(car);
+    const gnd = new THREE.Mesh(new THREE.PlaneGeometry(20,20), new THREE.MeshStandardMaterial({color:0x040404,roughness:0.1,metalness:0.9}));
+    gnd.rotation.x=-Math.PI/2; scene.add(gnd);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.003;if(car.userData.wheels)car.userData.wheels.forEach(w=>w.rotation.x+=0.005);}; loop();
+  },
+  // 4: Motor
+  (scene, cam) => {
+    cam.position.set(0, 0.3, 3);
+    const m = NT.createMotorGeometry(); m.scale.set(1.2,1.2,1.2); scene.add(m);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.008;m.rotation.y=t*0.4;}; loop();
+  },
+  // 5: Rear
+  (scene, cam) => {
+    cam.position.set(0, 1.6, -7); cam.lookAt(0, 0.5, 0);
+    const car = NT.createNexusX1({bodyColor:0x0a0a0a}); scene.add(car);
+    const gnd = new THREE.Mesh(new THREE.PlaneGeometry(20,20), new THREE.MeshStandardMaterial({color:0x040404,roughness:0.1,metalness:0.9}));
+    gnd.rotation.x=-Math.PI/2; scene.add(gnd);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.003;if(car.userData.wheels)car.userData.wheels.forEach(w=>w.rotation.x+=0.005);}; loop();
+  },
+  // 6: Brake
+  (scene, cam) => {
+    cam.position.set(0, 0, 2.2);
+    const b = NT.createBrakeGeometry(); b.scale.set(1.2,1.2,1.2); scene.add(b);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.008;b.rotation.y=t*0.3;b.rotation.x=Math.sin(t*0.2)*0.1;}; loop();
+  },
+  // 7: Battery
+  (scene, cam) => {
+    cam.position.set(0, 1.2, 4.5); cam.lookAt(0, 0, 0);
+    const battery = NT.createBatteryGeometry(); battery.scale.set(0.7,0.7,0.7); scene.add(battery);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.006;battery.rotation.y=t*0.25;}; loop();
+  },
+  // 8: Steering
+  (scene, cam) => {
+    cam.position.set(0, 0, 2.5);
+    const sw = NT.createSteeringWheelGeometry(); sw.scale.set(0.8,0.8,0.8); scene.add(sw);
+    let t=0; const loop=()=>{requestAnimationFrame(loop);t+=0.01;sw.rotation.y=t*0.15;sw.rotation.z=Math.sin(t*0.5)*0.1;}; loop();
+  },
+];
+
+galSetups.forEach((setup, i) => {
+  const canvas = document.getElementById(`gal-${i}`);
+  if (!canvas) return;
+  const w=canvas.clientWidth||400, h=canvas.clientHeight||300;
+  const renderer = new THREE.WebGLRenderer({canvas,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  renderer.setSize(w,h);
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=0.85;
+  const scene2=new THREE.Scene();
+  scene2.background=new THREE.Color(0x050505);
+  scene2.fog=new THREE.FogExp2(0x050505,0.08);
+  const cam=new THREE.PerspectiveCamera(40,w/h,0.1,40);
+  scene2.add(new THREE.AmbientLight(0xffffff,0.08));
+  const k=new THREE.DirectionalLight(0xffffff,2.5);k.position.set(4,5,3);scene2.add(k);
+  const f=new THREE.PointLight(0x00e5ff,2,12);f.position.set(-3,2,-2);scene2.add(f);
+  setup(scene2, cam);
+  function animRender() { requestAnimationFrame(animRender); renderer.render(scene2,cam); }
+  animRender();
+  const obs=new ResizeObserver(()=>{ const w2=canvas.clientWidth,h2=canvas.clientHeight;if(!w2||!h2)return;cam.aspect=w2/h2;cam.updateProjectionMatrix();renderer.setSize(w2,h2); });
+  obs.observe(canvas);
+});
+
+/* Video thumbnail scenes */
+const vidColors = [0x050505, 0x000002, 0x020408, 0x050510];
+const vidBgColors = [0x050505, 0x000000, 0x020408, 0x050510];
+[0,1,2,3].forEach(i => {
+  const canvas = document.getElementById(`vid-${i}`);
+  if (!canvas) return;
+  const w=canvas.clientWidth||600, h=canvas.clientHeight||340;
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+  renderer.setSize(w,h);
+  renderer.outputColorSpace=THREE.SRGBColorSpace;
+  renderer.toneMapping=THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure=0.6;
+  const scene2=new THREE.Scene();
+  scene2.background=new THREE.Color(vidBgColors[i]);
+  scene2.fog=new THREE.FogExp2(vidBgColors[i],0.06);
+  const cam=new THREE.PerspectiveCamera(45,w/h,0.1,40);
+  scene2.add(new THREE.AmbientLight(0xffffff,0.05));
+  const k2=new THREE.DirectionalLight(0xffffff,1.5);k2.position.set(4,5,3);scene2.add(k2);
+  const f2=new THREE.PointLight(0x00e5ff,1.5,12);f2.position.set(-3,2,-2);scene2.add(f2);
+
+  const car=NT.createNexusX1({bodyColor:0x0a0a0a});
+  car.position.set(0,0,0);
+  const gnd=new THREE.Mesh(new THREE.PlaneGeometry(30,30),new THREE.MeshStandardMaterial({color:0x030303,roughness:0.1,metalness:0.9}));
+  gnd.rotation.x=-Math.PI/2; scene2.add(gnd);
+  scene2.add(car);
+
+  if (i===0) { cam.position.set(-3,1.2,6); cam.lookAt(0,0.5,0); }
+  else if (i===1) { cam.position.set(4,1,4); cam.lookAt(0,0.5,0); }
+  else if (i===2) { cam.position.set(0,1.5,8); cam.lookAt(0,0.3,0); }
+  else { cam.position.set(1,1.8,3); cam.lookAt(0,1,0); }
+
+  let t=0;
+  function animRender() {
+    requestAnimationFrame(animRender);
+    t+=0.007;
+    car.rotation.y = (i===1?2.2:i===2?3.14:0) + Math.sin(t*0.2)*0.05;
+    if(car.userData.wheels)car.userData.wheels.forEach(w=>w.rotation.x+=0.012);
+    renderer.render(scene2,cam);
+  }
+  animRender();
+  const obs=new ResizeObserver(()=>{const w2=canvas.clientWidth,h2=canvas.clientHeight;if(!w2||!h2)return;cam.aspect=w2/h2;cam.updateProjectionMatrix();renderer.setSize(w2,h2);});
+  obs.observe(canvas);
+});
+
+// Lightbox
+let lbIdx = 0;
+const labels = ['Front Three-Quarter','Light Matrix Detail','Aero Wheel','Side Profile','Electric Motor','Rear Architecture','Brake Assembly','800V Battery Core','Steering Interface'];
+const galImages = [
+  'https://picsum.photos/seed/nx1-a/1200/675',
+  'https://picsum.photos/seed/nx1-b/600/900',
+  'https://picsum.photos/seed/nx1-c/800/600',
+  'https://picsum.photos/seed/nx1-d/800/800',
+  'https://picsum.photos/seed/nx1-e/600/900',
+  'https://picsum.photos/seed/nx1-f/1200/675',
+  'https://picsum.photos/seed/nx1-g/800/600',
+  'https://picsum.photos/seed/nx1-h/1200/675',
+  'https://picsum.photos/seed/nx1-i/800/800',
+];
+const lightbox = document.getElementById('lightbox');
+const lbImg = document.getElementById('lb-img');
+const lbInfo = document.getElementById('lb-info');
+
+function updateLightbox() {
+  if (lbImg) lbImg.src = galImages[lbIdx] || '';
+  if (lbInfo) lbInfo.textContent = `// NEXUS X1 — ${labels[lbIdx]?.toUpperCase()||'CONCEPT'}`;
+}
+document.querySelectorAll('.gallery-item').forEach((item, i) => {
+  item.addEventListener('click', () => { lbIdx=i; lightbox.classList.add('open'); document.body.style.overflow='hidden'; updateLightbox(); });
+});
+document.getElementById('lb-close')?.addEventListener('click', () => { lightbox.classList.remove('open'); document.body.style.overflow=''; });
+document.getElementById('lb-prev')?.addEventListener('click', () => { lbIdx=(lbIdx-1+galImages.length)%galImages.length; updateLightbox(); });
+document.getElementById('lb-next')?.addEventListener('click', () => { lbIdx=(lbIdx+1)%galImages.length; updateLightbox(); });
+
+// Keyboard nav
+document.addEventListener('keydown', e => {
+  if (!lightbox.classList.contains('open')) return;
+  if (e.key === 'Escape') { lightbox.classList.remove('open'); document.body.style.overflow=''; }
+  if (e.key === 'ArrowRight') lbIdx=(lbIdx+1)%galSetups.length;
+  if (e.key === 'ArrowLeft') lbIdx=(lbIdx-1+galSetups.length)%galSetups.length;
+});
+})();
+</script>
+</body>
+</html>

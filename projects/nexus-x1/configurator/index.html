@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="NEXUS X1 Configurator — Choose exterior colour, wheels, interior and aero package.">
+<title>NEXUS X1 — CONFIGURE</title>
+<link rel="stylesheet" href="../styles/global.css">
+<link rel="stylesheet" href="../styles/nav.css">
+<link rel="stylesheet" href="../styles/cursor.css">
+<style>
+body { overflow: hidden; }
+@media (max-width:768px) { body { overflow: auto; } }
+
+#config-wrap {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  height: 100vh;
+  overflow: hidden;
+}
+#config-canvas-area {
+  position: relative;
+  background: var(--dark-02);
+  overflow: hidden;
+}
+#config-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+}
+.config-canvas-label {
+  position: absolute;
+  top: calc(var(--nav-h) + 20px);
+  left: 24px;
+  z-index: 5;
+}
+.config-view-btns {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 1px;
+  z-index: 5;
+}
+.cv-btn {
+  padding: 8px 16px;
+  background: rgba(0,0,0,0.75);
+  border: 1px solid rgba(255,255,255,0.08);
+  font-family: var(--font-m);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  cursor: none;
+  transition: all 0.3s;
+}
+.cv-btn.active,.cv-btn:hover { border-color:rgba(0,229,255,0.4);color:var(--cyan); }
+.config-drag-hint {
+  position: absolute;
+  bottom: 68px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-m);
+  font-size: 9px;
+  color: rgba(255,255,255,0.2);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+/* Panel */
+#config-panel {
+  background: var(--dark-01);
+  border-left: 1px solid rgba(255,255,255,0.04);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--nav-h);
+}
+#config-panel::-webkit-scrollbar { width: 2px; }
+#config-panel::-webkit-scrollbar-thumb { background: var(--cyan-dim); }
+
+.config-section {
+  padding: 28px 28px 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.config-section-title {
+  font-family: var(--font-m);
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(0,229,255,0.5);
+  margin-bottom: 16px;
+}
+
+/* Colour swatches */
+.colour-swatches {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+}
+.colour-swatch {
+  aspect-ratio: 1;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: none;
+  transition: transform 0.2s, border-color 0.2s;
+  position: relative;
+}
+.colour-swatch.active { border-color: var(--cyan); transform: scale(1.15); }
+.colour-swatch:hover { transform: scale(1.1); }
+.colour-swatch-label {
+  display: none;
+  position: absolute;
+  bottom: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-m);
+  font-size: 8px;
+  color: rgba(255,255,255,0.4);
+  white-space: nowrap;
+}
+.colour-swatch.active .colour-swatch-label { display: block; }
+
+.config-chosen {
+  font-family: var(--font-h);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-top: 24px;
+  letter-spacing: 0.05em;
+}
+
+/* Option buttons */
+.opt-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.opt-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+  font-family: var(--font-h);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  cursor: none;
+  transition: all 0.3s;
+  text-align: left;
+}
+.opt-btn.active { background: rgba(0,229,255,0.06); border-color: rgba(0,229,255,0.2); color: var(--white); }
+.opt-btn:hover { color: var(--white); border-color: rgba(255,255,255,0.1); }
+.opt-btn-check { width: 14px; height: 14px; border: 1px solid rgba(0,229,255,0.3); border-radius: 50%; transition: all 0.3s; }
+.opt-btn.active .opt-btn-check { background: var(--cyan); border-color: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+
+/* Summary */
+.config-summary {
+  padding: 28px;
+  margin-top: auto;
+  background: var(--dark-02);
+  border-top: 1px solid rgba(255,255,255,0.04);
+}
+.summary-title { font-family:var(--font-h);font-size:22px;font-weight:700;margin-bottom:16px; }
+.summary-rows { display:flex;flex-direction:column;gap:8px;margin-bottom:20px; }
+.summary-row {
+  display:flex;justify-content:space-between;align-items:center;
+  border-top:1px solid rgba(255,255,255,0.05);padding-top:8px;
+}
+.sr-label { font-family:var(--font-m);font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.3); }
+.sr-val { font-family:var(--font-h);font-size:12px;font-weight:600;color:var(--white); }
+.config-price {
+  font-family:var(--font-h);font-size:32px;font-weight:700;letter-spacing:-0.03em;
+  color:var(--white);margin-bottom:20px;
+}
+.config-price span { font-size:14px;color:var(--cyan);letter-spacing:0.05em; }
+
+@media (max-width:1024px) {
+  body { overflow:auto; }
+  #config-wrap { grid-template-columns:1fr;height:auto; }
+  #config-canvas-area { height:60vh; }
+  #config-panel { overflow:visible;padding-top:0; }
+}
+</style>
+</head>
+<body>
+<div id="cursor-dot"></div><div id="cursor-ring"></div><div id="cursor-label"></div>
+<div id="page-veil"></div>
+
+<nav class="nav scrolled"><div class="nav-inner">
+  <a href="/projects/nexus-x1/" class="nav-logo" aria-label="NEXUS Home"><span class="logo-nexus">NEXUS</span> <span class="logo-x1">X1</span></a>
+  <ul class="nav-links">
+    <li><a href="/projects/nexus-x1/car/">The Car</a></li>
+    <li><a href="/projects/nexus-x1/performance/">Performance</a></li>
+    <li><a href="/projects/nexus-x1/engineering/">Engineering</a></li>
+    <li><a href="/projects/nexus-x1/interior/">Interior</a></li>
+    <li><a href="/projects/nexus-x1/technology/">Technology</a></li>
+    <li><a href="/projects/nexus-x1/configurator/" class="active">Configure</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/projects/nexus-x1/gallery/" class="nav-link-hide">Gallery</a>
+    <a href="/projects/nexus-x1/journal/" class="nav-link-hide">Journal</a>
+    <button class="nav-menu" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+</div></nav>
+<div class="nav-overlay"><div class="nav-overlay-inner">
+  <div class="nav-overlay-links">
+    <a href="/projects/nexus-x1/car/"><span>01</span> The Car <span class="link-num">X1</span></a>
+    <a href="/projects/nexus-x1/performance/"><span>02</span> Performance <span class="link-num">DRIVE</span></a>
+    <a href="/projects/nexus-x1/engineering/"><span>03</span> Engineering <span class="link-num">BUILD</span></a>
+    <a href="/projects/nexus-x1/aerodynamics/"><span>04</span> Aerodynamics <span class="link-num">AERO</span></a>
+    <a href="/projects/nexus-x1/interior/"><span>05</span> Interior <span class="link-num">CABIN</span></a>
+    <a href="/projects/nexus-x1/technology/"><span>06</span> Technology <span class="link-num">AI</span></a>
+    <a href="/projects/nexus-x1/configurator/"><span>07</span> Configure <span class="link-num">BUILD</span></a>
+    <a href="/projects/nexus-x1/gallery/"><span>08</span> Gallery <span class="link-num">VISUAL</span></a>
+    <a href="/projects/nexus-x1/journal/"><span>09</span> Journal <span class="link-num">READ</span></a>
+  </div>
+  <div class="nav-overlay-side">
+    <div class="nav-overlay-logo">NEXUS<br>X1</div>
+    <div class="nav-overlay-meta"><span>Nexus Automotive / Concept 2070</span></div>
+    <p class="nav-overlay-tagline">THE NEXT MACHINE.</p>
+  </div>
+</div></div>
+
+<div id="config-wrap">
+  <!-- Canvas area -->
+  <div id="config-canvas-area">
+    <canvas id="config-canvas" data-cursor="drag" aria-label="Interactive vehicle configurator"></canvas>
+    <div class="config-canvas-label">
+      <span class="sec-num">// X1 CONFIGURATOR</span>
+      <div class="tech-badge mt-2">CONCEPT VISUALISATION</div>
+    </div>
+    <div class="hud" style="position:absolute;bottom:96px;right:24px;z-index:5;" aria-hidden="true">DRAG TO ROTATE</div>
+    <p class="config-drag-hint">// DRAG TO ROTATE</p>
+    <div class="config-view-btns">
+      <button class="cv-btn active" data-cv="three-quarter">¾ VIEW</button>
+      <button class="cv-btn" data-cv="front">FRONT</button>
+      <button class="cv-btn" data-cv="side">SIDE</button>
+      <button class="cv-btn" data-cv="rear">REAR</button>
+    </div>
+  </div>
+
+  <!-- Config panel -->
+  <div id="config-panel">
+
+    <!-- Exterior colour -->
+    <div class="config-section">
+      <div class="config-section-title">// 01 EXTERIOR COLOUR</div>
+      <div class="colour-swatches" role="group" aria-label="Exterior colour">
+        <button class="colour-swatch active" data-colour="OBSIDIAN" data-hex="0x070707" style="background:#070707;border:2px solid #333;" aria-label="Obsidian">
+          <span class="colour-swatch-label">OBSIDIAN</span>
+        </button>
+        <button class="colour-swatch" data-colour="TITANIUM" data-hex="0x5a5a5a" style="background:#5a5a5a;" aria-label="Titanium">
+          <span class="colour-swatch-label">TITANIUM</span>
+        </button>
+        <button class="colour-swatch" data-colour="ARCTIC" data-hex="0xefefef" style="background:#efefef;" aria-label="Arctic">
+          <span class="colour-swatch-label">ARCTIC</span>
+        </button>
+        <button class="colour-swatch" data-colour="GRAPHITE" data-hex="0x1c1c1c" style="background:#1c1c1c;border:2px solid #333;" aria-label="Graphite">
+          <span class="colour-swatch-label">GRAPHITE</span>
+        </button>
+        <button class="colour-swatch" data-colour="MIDNIGHT" data-hex="0x06060f" style="background:linear-gradient(135deg,#06060f,#12122e);" aria-label="Midnight">
+          <span class="colour-swatch-label">MIDNIGHT</span>
+        </button>
+      </div>
+      <div class="config-chosen" id="chosen-colour">OBSIDIAN</div>
+    </div>
+
+    <!-- Wheels -->
+    <div class="config-section">
+      <div class="config-section-title">// 02 WHEEL DESIGN</div>
+      <div class="opt-grid" role="group" aria-label="Wheel design">
+        <button class="opt-btn active" data-wheel="aero" data-wheel-style="aero">
+          <span>AERO — 22" Enclosed</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-wheel="performance" data-wheel-style="performance">
+          <span>PERFORMANCE — 21" Open Spoke</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-wheel="track" data-wheel-style="track">
+          <span>TRACK — 20" Competition</span>
+          <div class="opt-btn-check"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Interior -->
+    <div class="config-section">
+      <div class="config-section-title">// 03 INTERIOR TRIM</div>
+      <div class="opt-grid" role="group" aria-label="Interior trim">
+        <button class="opt-btn active" data-interior="onyx">
+          <span>ONYX — Full Black</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-interior="stone">
+          <span>STONE — Natural Light</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-interior="carbon">
+          <span>CARBON — Dark Sport</span>
+          <div class="opt-btn-check"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Ambient Lighting -->
+    <div class="config-section">
+      <div class="config-section-title">// 04 AMBIENT LIGHTING</div>
+      <div class="opt-grid" role="group" aria-label="Ambient lighting">
+        <button class="opt-btn active" data-light="calm">
+          <span>CALM — Ocean Blue</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-light="focus">
+          <span>FOCUS — Pure White</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-light="drive">
+          <span>DRIVE — Electric Cyan</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-light="night">
+          <span>NIGHT — Ember Red</span>
+          <div class="opt-btn-check"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Aero -->
+    <div class="config-section">
+      <div class="config-section-title">// 05 AERO PACKAGE</div>
+      <div class="opt-grid" role="group" aria-label="Aero package">
+        <button class="opt-btn active" data-aero="street">
+          <span>STREET — Cd 0.186</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-aero="sport">
+          <span>SPORT — 480kg Downforce (sim)</span>
+          <div class="opt-btn-check"></div>
+        </button>
+        <button class="opt-btn" data-aero="track">
+          <span>TRACK — 980kg Downforce (sim)</span>
+          <div class="opt-btn-check"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="config-summary">
+      <div class="summary-title">NEXUS X1</div>
+      <div class="summary-rows">
+        <div class="summary-row">
+          <span class="sr-label">EXTERIOR</span>
+          <span class="sr-val" id="sum-colour">OBSIDIAN</span>
+        </div>
+        <div class="summary-row">
+          <span class="sr-label">WHEELS</span>
+          <span class="sr-val" id="sum-wheel">AERO</span>
+        </div>
+        <div class="summary-row">
+          <span class="sr-label">INTERIOR</span>
+          <span class="sr-val" id="sum-interior">ONYX</span>
+        </div>
+        <div class="summary-row">
+          <span class="sr-label">LIGHTING</span>
+          <span class="sr-val" id="sum-light">CALM</span>
+        </div>
+        <div class="summary-row">
+          <span class="sr-label">AERO</span>
+          <span class="sr-val" id="sum-aero">STREET</span>
+        </div>
+      </div>
+      <div class="config-price">
+        £<span id="config-price-val">285,000</span>
+        <span>CONCEPT VALUE</span>
+      </div>
+      <p style="font-family:var(--font-m);font-size:8px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;margin-bottom:16px;">NOT A REAL VEHICLE OR PRICE — CONCEPT DEMONSTRATION ONLY</p>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button class="btn btn-primary" id="save-config" style="width:100%;justify-content:center;">
+          <div class="btn-bg"></div><span class="btn-text">SAVE CONFIGURATION</span>
+        </button>
+        <button class="btn" id="request-exp" style="width:100%;justify-content:center;">
+          <div class="btn-bg"></div><span class="btn-text">REQUEST EXPERIENCE</span>
+        </button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Save/Request notification -->
+<div id="config-notification" style="position:fixed;bottom:32px;left:50%;transform:translateX(-50%);background:var(--dark-03);border:1px solid rgba(0,229,255,0.3);padding:14px 28px;font-family:var(--font-h);font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--cyan);z-index:9999;opacity:0;pointer-events:none;transition:opacity 0.4s;"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.4/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+<script src="../js/core.js"></script>
+<script src="../js/car3d.js"></script>
+<script>
+(function() {
+const NT = window.NexusThree;
+if (!NT) return;
+
+const canvas = document.getElementById('config-canvas');
+if (!canvas) return;
+
+const w = canvas.clientWidth || 800;
+const h = canvas.clientHeight || 700;
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+renderer.setSize(w, h);
+renderer.outputColorSpace = THREE.SRGBColorSpace;
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.85;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x080808);
+scene.fog = new THREE.FogExp2(0x080808, 0.05);
+
+const camera = new THREE.PerspectiveCamera(38, w/h, 0.1, 60);
+camera.position.set(3.5, 1.8, 5.5);
+camera.lookAt(0, 0.5, 0);
+
+// Lighting
+scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+const kl = new THREE.DirectionalLight(0xffffff, 2.5); kl.position.set(6,8,4); kl.castShadow=true; scene.add(kl);
+const fl = new THREE.PointLight(0x00e5ff, 2, 18); fl.position.set(-5,3,-2); scene.add(fl);
+const rl = new THREE.DirectionalLight(0x4466ff, 1.5); rl.position.set(-5,3,0); scene.add(rl);
+let ambientLight = new THREE.PointLight(0x4488ff, 1, 12); ambientLight.position.set(0,2,0); scene.add(ambientLight);
+
+// Ground
+const gnd = new THREE.Mesh(new THREE.PlaneGeometry(40,40), new THREE.MeshStandardMaterial({color:0x040404,roughness:0.15,metalness:0.9}));
+gnd.rotation.x=-Math.PI/2; gnd.receiveShadow=true; scene.add(gnd);
+// Grid lines
+for (let i=-4;i<=4;i+=2) {
+  const l = new THREE.Mesh(new THREE.PlaneGeometry(0.01,20), NT.createEmissiveMaterial(0x00e5ff,0.3));
+  l.rotation.x=-Math.PI/2; l.position.set(i,0.001,0); scene.add(l);
+}
+
+// Car
+let currentCar = NT.createNexusX1({ bodyColor: 0x070707, wheelStyle: 'aero' });
+scene.add(currentCar);
+
+// Current config state
+let config = {
+  colour: 0x070707,
+  wheel: 'aero',
+  interior: 'onyx',
+  light: 'calm',
+  aero: 'street',
+};
+
+const lightColors = { calm:0x4488ff, focus:0xffffff, drive:0x00e5ff, night:0x440011 };
+const prices = { street:0, sport:8000, track:14000, aero:0, performance:3000, track2:6000, onyx:0, stone:5000, carbon:8000, calm:0, focus:1000, drive:1000, night:1000 };
+const basePrice = 285000;
+
+function rebuildCar() {
+  scene.remove(currentCar);
+  currentCar = NT.createNexusX1({ bodyColor: config.colour, wheelStyle: config.wheel });
+  scene.add(currentCar);
+  // Update ambient
+  ambientLight.color.set(new THREE.Color(lightColors[config.light]));
+}
+
+function updatePrice() {
+  const total = basePrice + (prices[config.aero]||0) + (prices[config.wheel]||0) + (prices[config.interior]||0) + (prices[config.light]||0);
+  document.getElementById('config-price-val').textContent = total.toLocaleString();
+}
+
+// Colour swatches
+document.querySelectorAll('.colour-swatch').forEach(sw => {
+  sw.addEventListener('click', () => {
+    document.querySelectorAll('.colour-swatch').forEach(s=>s.classList.remove('active'));
+    sw.classList.add('active');
+    const hex = parseInt(sw.dataset.hex);
+    config.colour = hex;
+    const name = sw.dataset.colour;
+    document.getElementById('chosen-colour').textContent = name;
+    document.getElementById('sum-colour').textContent = name;
+    rebuildCar();
+    updatePrice();
+  });
+});
+
+// Option buttons
+function setupOpts(selector, updateFn) {
+  document.querySelectorAll(selector).forEach(btn => {
+    btn.addEventListener('click', () => {
+      const group = btn.closest('.opt-grid').querySelectorAll('.opt-btn');
+      group.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      updateFn(btn);
+    });
+  });
+}
+
+setupOpts('[data-wheel]', btn => {
+  config.wheel = btn.dataset.wheelStyle;
+  document.getElementById('sum-wheel').textContent = btn.dataset.wheel.toUpperCase();
+  rebuildCar();
+  updatePrice();
+});
+
+setupOpts('[data-interior]', btn => {
+  config.interior = btn.dataset.interior;
+  document.getElementById('sum-interior').textContent = btn.dataset.interior.toUpperCase();
+  updatePrice();
+});
+
+setupOpts('[data-light]', btn => {
+  config.light = btn.dataset.light;
+  document.getElementById('sum-light').textContent = btn.dataset.light.toUpperCase();
+  ambientLight.color.set(new THREE.Color(lightColors[config.light]));
+  updatePrice();
+});
+
+setupOpts('[data-aero]', btn => {
+  config.aero = btn.dataset.aero;
+  document.getElementById('sum-aero').textContent = btn.dataset.aero.toUpperCase();
+  updatePrice();
+});
+
+// View buttons
+const views = {
+  'three-quarter': { px:3.5,py:1.8,pz:5.5, lx:0,ly:0.5,lz:0 },
+  front: { px:0,py:1.5,pz:7, lx:0,ly:0.5,lz:0 },
+  side:  { px:7,py:1.5,pz:0, lx:0,ly:0.5,lz:0 },
+  rear:  { px:0,py:1.5,pz:-7,lx:0,ly:0.5,lz:0 },
+};
+document.querySelectorAll('.cv-btn').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    document.querySelectorAll('.cv-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    const v = views[btn.dataset.cv];
+    if (!v) return;
+    if (window.gsap) gsap.to(camera.position,{ x:v.px,y:v.py,z:v.pz,duration:1.2,ease:'power3.inOut' });
+  });
+});
+
+// Drag
+let isDrag=false,lastX=0,rot=0;
+canvas.addEventListener('mousedown',e=>{isDrag=true;lastX=e.clientX;});
+document.addEventListener('mouseup',()=>isDrag=false);
+document.addEventListener('mousemove',e=>{ if(isDrag){rot+=(e.clientX-lastX)*0.007;lastX=e.clientX;} });
+canvas.addEventListener('touchstart',e=>{isDrag=true;lastX=e.touches[0].clientX;});
+document.addEventListener('touchend',()=>isDrag=false);
+document.addEventListener('touchmove',e=>{ if(isDrag){rot+=(e.touches[0].clientX-lastX)*0.007;lastX=e.touches[0].clientX;} });
+
+// Notifications
+function showNotif(msg) {
+  const el = document.getElementById('config-notification');
+  if (!el) return;
+  el.textContent = msg;
+  el.style.opacity='1';
+  setTimeout(()=>el.style.opacity='0', 3000);
+}
+document.getElementById('save-config')?.addEventListener('click',()=>showNotif('CONFIGURATION SAVED'));
+document.getElementById('request-exp')?.addEventListener('click',()=>showNotif('EXPERIENCE REQUEST RECEIVED'));
+
+let t=0;
+function render() {
+  requestAnimationFrame(render);
+  t+=0.006;
+  if (currentCar) {
+    currentCar.rotation.y = rot + (isDrag?0:Math.sin(t*0.15)*0.18);
+    if (currentCar.userData.wheels) currentCar.userData.wheels.forEach(w=>w.rotation.x+=0.006);
+  }
+  camera.lookAt(0, 0.5, 0);
+  renderer.render(scene, camera);
+}
+render();
+
+window.addEventListener('resize',()=>{
+  const w2=canvas.clientWidth,h2=canvas.clientHeight;
+  camera.aspect=w2/h2;camera.updateProjectionMatrix();renderer.setSize(w2,h2);
+});
+})();
+</script>
+</body>
+</html>
