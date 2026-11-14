@@ -1,0 +1,113 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+import experience from '../data/experience.json';
+import site from '../data/site.json';
+
+const projects = (await getCollection('projects')).filter((p) => !p.data.concept).sort((a, b) => a.data.order - b.data.order);
+const options = [...new Set([...experience.items.map((x) => x.org), ...projects.map((p) => p.data.title)])];
+---
+<Base title="Leave a recommendation" description={`Worked with ${site.name}? Leave a short recommendation.`}>
+  <section class="wrap rec-page">
+    <div class="intro">
+      <a class="back" href="/">Back to the portfolio</a>
+      <h1>Worked with me? I'd love a recommendation.</h1>
+      <p class="lead">A few honest sentences about what it was like to work with me help employers more than anything I can write myself. I read every one, and it appears on the site once I've approved it.</p>
+      <ul class="tips">
+        <li>What did I work on with you?</li>
+        <li>What did I do well, or what changed because of it?</li>
+        <li>Would you work with me again?</li>
+      </ul>
+    </div>
+
+    <form class="form" id="rec-form" novalidate>
+      <div class="row two">
+        <label>Your name<input name="name" required maxlength="80" autocomplete="name" /></label>
+        <label>Your job title<input name="role" maxlength="100" autocomplete="organization-title" placeholder="e.g. Founder & Principal Consultant" /></label>
+      </div>
+      <div class="row two">
+        <label>Company or organisation<input name="company" maxlength="100" autocomplete="organization" /></label>
+        <label>How do you know me?
+          <select name="relationship" required>
+            <option>Client</option><option>Manager</option><option>Colleague</option><option>Lecturer</option><option>Mentor</option><option>Other</option>
+          </select>
+        </label>
+      </div>
+      <label>Which work is this about?
+        <select name="about">
+          <option value="">General</option>
+          {options.map((o) => <option>{o}</option>)}
+        </select>
+      </label>
+      <label>Your recommendation
+        <textarea name="quote" required minlength="30" maxlength="1200" rows="7"></textarea>
+        <span class="count" aria-live="polite"><span data-count>0</span> / 1200</span>
+      </label>
+      <label>LinkedIn profile (optional, so readers can see who you are)<input name="linkedin" type="url" maxlength="200" placeholder="https://www.linkedin.com/in/…" /></label>
+      <label class="hp" aria-hidden="true">Website<input name="website" tabindex="-1" autocomplete="off" /></label>
+      <label class="check"><input type="checkbox" name="consent" required /> I agree to my name, job title, company and words being shown on this portfolio.</label>
+      <button class="btn btn-signal" type="submit">Send recommendation</button>
+      <p class="status" role="status" data-status></p>
+    </form>
+  </section>
+</Base>
+
+<script>
+  const form = document.getElementById('rec-form') as HTMLFormElement;
+  const status = form.querySelector('[data-status]') as HTMLElement;
+  const ta = form.querySelector('textarea') as HTMLTextAreaElement;
+  const count = form.querySelector('[data-count]') as HTMLElement;
+  ta.addEventListener('input', () => { count.textContent = String(ta.value.length); });
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.className = 'status';
+    if (!form.reportValidity()) return;
+    const btn = form.querySelector('button[type=submit]') as HTMLButtonElement;
+    btn.disabled = true; btn.textContent = 'Sending…';
+    try {
+      const res = await fetch('/api/recommendations', { method: 'POST', body: new FormData(form) });
+      const data = await res.json().catch(() => ({ ok: false, error: 'Something went wrong. Please try again.' }));
+      if (data.ok) {
+        form.innerHTML = '<div class="sent"><h2>Thank you, it\'s on its way.</h2><p>I review every recommendation before it appears on the site, usually within a day or two.</p><a class="btn btn-ink" href="/">Back to the portfolio</a></div>';
+        return;
+      }
+      status.textContent = data.error || 'Something went wrong. Please try again.';
+      status.classList.add('error');
+    } catch {
+      status.textContent = 'Could not send. Check your connection and try again.';
+      status.classList.add('error');
+    }
+    btn.disabled = false; btn.textContent = 'Send recommendation';
+  });
+</script>
+
+<style>
+  .rec-page { display: grid; grid-template-columns: 1fr 1.15fr; gap: 72px; padding-top: 56px; padding-bottom: 120px; align-items: start; }
+  .back { font-weight: 600; text-decoration-color: var(--signal); text-underline-offset: 5px; }
+  .intro h1 { font-size: clamp(32px, 4vw, 54px); letter-spacing: -0.035em; margin: 32px 0 20px; }
+  .intro { position: sticky; top: 104px; }
+  .tips { margin-top: 26px; list-style: none; border-top: 1.5px solid var(--ink); }
+  .tips li { padding: 12px 0; border-bottom: 1px solid var(--line); color: var(--graphite); }
+  .form { background: #fff; border: 1px solid var(--line); border-radius: 22px; padding: 32px; display: flex; flex-direction: column; gap: 18px; }
+  .row.two { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  label { display: flex; flex-direction: column; gap: 7px; font-weight: 600; font-size: 15px; position: relative; }
+  input, select, textarea { font: inherit; font-weight: 400; font-size: 16px; padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 12px; background: var(--paper); color: var(--ink); width: 100%; }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--ink); background: #fff; }
+  textarea { resize: vertical; min-height: 160px; }
+  .count { align-self: flex-end; font-weight: 400; font-size: 13px; color: var(--muted); }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .check { flex-direction: row; align-items: flex-start; gap: 10px; font-weight: 400; color: var(--graphite); }
+  .check input { width: 18px; height: 18px; margin-top: 3px; flex: none; accent-color: var(--signal); }
+  .form .btn { align-self: flex-start; }
+  .status { min-height: 1.4em; }
+  .status.error { color: #B42318; font-weight: 600; }
+  :global(.sent) { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+  :global(.sent h2) { font-size: 28px; }
+  :global(.sent p) { color: var(--graphite); }
+  @media (max-width: 900px) {
+    .rec-page { grid-template-columns: 1fr; gap: 40px; }
+    .intro { position: static; }
+    .row.two { grid-template-columns: 1fr; }
+    .form { padding: 22px; }
+  }
+</style>

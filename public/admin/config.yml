@@ -136,3 +136,32 @@ collections:
               - { name: by, label: "Given by", widget: string }
               - { name: year, label: Year, widget: string }
               - { name: detail, label: Detail, widget: text }
+
+  - name: recommendations
+    label: Recommendations
+    label_singular: Recommendation
+    description: "Submitted through /recommend. Nothing shows on the site until you tick Approved and save."
+    folder: src/content/testimonials
+    extension: json
+    format: json
+    create: true
+    delete: true
+    slug: "{{year}}-{{month}}-{{day}}-{{name}}"
+    identifier_field: name
+    summary: "{{approved | ternary('✅ Approved', '⏳ Waiting for approval')}} · {{name}} · {{company}}"
+    sortable_fields: [submittedAt, name, approved]
+    view_filters:
+      - { label: "Waiting for approval", field: approved, pattern: false }
+      - { label: "Approved", field: approved, pattern: true }
+    fields:
+      - { name: approved, label: "Approved (show on the site)", widget: boolean, default: false }
+      - { name: featured, label: "Featured (highlighted, shown first)", widget: boolean, default: false }
+      - { name: order, label: "Order (lower shows first)", widget: number, value_type: int, default: 50 }
+      - { name: name, label: Name, widget: string }
+      - { name: role, label: "Job title", widget: string, required: false }
+      - { name: company, label: Company, widget: string, required: false }
+      - { name: relationship, label: Relationship, widget: select, options: [Client, Manager, Colleague, Lecturer, Mentor, Other] }
+      - { name: about, label: "About which work (must match a project title or employer to show on that page)", widget: string, required: false }
+      - { name: quote, label: Recommendation, widget: text }
+      - { name: linkedin, label: "LinkedIn URL", widget: string, required: false }
+      - { name: submittedAt, label: Submitted, widget: string, required: false }

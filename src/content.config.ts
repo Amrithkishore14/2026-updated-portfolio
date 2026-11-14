@@ -21,4 +21,20 @@ const projects = defineCollection({
     concept: z.boolean().default(false),
   }),
 });
-export const collections = { projects };
+const testimonials = defineCollection({
+  loader: glob({ pattern: '**/*.json', base: './src/content/testimonials' }),
+  schema: z.object({
+    name: z.string(),
+    role: z.string().optional().default(''),
+    company: z.string().optional().default(''),
+    relationship: z.string().optional().default('Other'),
+    about: z.string().optional().default(''),
+    quote: z.string(),
+    linkedin: z.string().optional().default(''),
+    approved: z.boolean().default(false),
+    featured: z.boolean().default(false),
+    order: z.number().default(50),
+    submittedAt: z.string().optional().default(''),
+  }),
+});
+export const collections = { projects, testimonials };

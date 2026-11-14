@@ -1,0 +1,78 @@
+---
+import { getCollection } from 'astro:content';
+interface Props { about?: string; heading?: string; showInvite?: boolean; }
+const { about, heading = 'What people say about working with me', showInvite = true } = Astro.props;
+const items = (await getCollection('testimonials'))
+  .filter((t) => t.data.approved)
+  .filter((t) => !about || t.data.about === about)
+  .sort((a, b) => Number(b.data.featured) - Number(a.data.featured) || a.data.order - b.data.order || (b.data.submittedAt > a.data.submittedAt ? 1 : -1));
+const initials = (n: string) => n.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0]?.toUpperCase()).join('');
+const LONG = 360;
+const view = items.map((t) => ({ ...t.data, long: t.data.quote.length > LONG, paras: t.data.quote.split(/\n{2,}/), cls: t.data.featured ? 'rec rec-featured' : 'rec', meta: [t.data.role, t.data.company].filter(Boolean).join(', '), rel: t.data.about ? `${t.data.relationship} · ${t.data.about}` : t.data.relationship, ini: initials(t.data.name) }));
+---
+{(view.length > 0 || showInvite) && (
+  <section class="recs" aria-labelledby="recs-title">
+    <div class="recs-head">
+      <h2 id="recs-title" class="section-title">{heading}</h2>
+      {showInvite && <a class="btn btn-line btn-sm" href="/recommend">Worked with me? Leave a recommendation</a>}
+    </div>
+    {view.length > 0 ? (
+      <ul class="recs-grid">
+        {view.map((t) => (
+          <li class={t.cls}>
+            <figure>
+              <blockquote class={t.long ? 'clamp' : undefined} data-quote>
+                {t.paras.map((p) => <p>{p}</p>)}
+              </blockquote>
+              {t.long && <button type="button" class="rec-more" data-more aria-expanded="false">Read the full recommendation</button>}
+              <figcaption>
+                <span class="rec-avatar" aria-hidden="true">{t.ini}</span>
+                <span class="rec-who">
+                  <span class="rec-name">{t.linkedin ? <a href={t.linkedin} target="_blank" rel="noopener">{t.name}</a> : t.name}</span>
+                  {t.meta && <span class="rec-role">{t.meta}</span>}
+                  <span class="rec-rel">{t.rel}</span>
+                </span>
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="recs-empty">Recommendations from clients, managers and colleagues will appear here once they're approved.</p>
+    )}
+  </section>
+)}
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-more]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const q = btn.previousElementSibling as HTMLElement;
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      q.classList.toggle('clamp', open);
+      btn.setAttribute('aria-expanded', String(!open));
+      btn.textContent = open ? 'Read the full recommendation' : 'Show less';
+    });
+  });
+</script>
+
+<style>
+  .recs-head { display: flex; justify-content: space-between; align-items: end; gap: 24px; flex-wrap: wrap; margin-bottom: 40px; }
+  .recs-grid { list-style: none; columns: 3 300px; column-gap: 22px; }
+  .rec { break-inside: avoid; margin-bottom: 22px; }
+  .rec figure { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; display: flex; flex-direction: column; gap: 18px; }
+  .rec-featured figure { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .rec blockquote { position: relative; font-size: 17px; line-height: 1.65; overflow-wrap: anywhere; }
+  .rec blockquote::before { content: "\201C"; display: block; font-family: var(--display); font-size: 54px; line-height: .6; color: var(--signal); margin-bottom: 10px; }
+  .rec blockquote p + p { margin-top: 10px; }
+  .rec blockquote.clamp { display: -webkit-box; -webkit-line-clamp: 8; -webkit-box-orient: vertical; overflow: hidden; }
+  .rec-more { align-self: flex-start; background: none; border: 0; font: inherit; font-weight: 600; color: inherit; text-decoration: underline; text-decoration-color: var(--signal); text-underline-offset: 5px; cursor: pointer; padding: 0; }
+  .rec figcaption { display: flex; gap: 14px; align-items: center; border-top: 1px solid var(--line); padding-top: 16px; }
+  .rec-featured figcaption { border-color: #2B3240; }
+  .rec-avatar { flex: none; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--signal); color: #fff; font-family: var(--display); font-weight: 600; font-size: 14px; }
+  .rec-who { display: flex; flex-direction: column; min-width: 0; }
+  .rec-name { font-weight: 600; overflow-wrap: anywhere; }
+  .rec-name a { text-decoration-color: var(--signal); text-underline-offset: 4px; }
+  .rec-role, .rec-rel { font-size: 14px; color: var(--muted); overflow-wrap: anywhere; }
+  .rec-featured .rec-role, .rec-featured .rec-rel { color: var(--panel-muted); }
+  .recs-empty { color: var(--graphite); border: 1.5px dashed var(--line); border-radius: var(--radius); padding: 28px; max-width: 60ch; }
+</style>
