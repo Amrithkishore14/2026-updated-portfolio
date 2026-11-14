@@ -12,6 +12,7 @@
      linkLabel  optional button text (default "View project")
      image      optional path, e.g. "assets/design/elmar-home.jpg"
      imageAlt   describe the image for screen readers
+     gallery    optional extra screenshots: [{ src: "assets/design/x.jpg", alt: "..." }]
      featured   true = purple top border
    ───────────────────────────────────────────────────────────── */
 
@@ -52,10 +53,18 @@ const DESIGN_PROJECTS = [
     title: "Elmar Risk Management: Website Redesign",
     context: "Client project · Jul – Nov 2026",
     stack: "Astro · Tailwind · GSAP · SVG",
-    summary: "Redesigned a Gloucester compliance consultancy's Wix site into a dark-first, 12-page responsive website with custom SVG motifs, a navy and amber brand palette and subtle motion. Ran screen-by-screen reviews with the founder, met WCAG AAA colour contrast, and launched on Cloudflare with a live DNS cutover.",
+    summary: "Redesigned a Gloucester compliance consultancy's Wix site into a modern 12-page responsive website with a navy and amber brand palette, custom SVG illustrations for each service and subtle motion. Ran screen-by-screen reviews with the founder, met WCAG AAA colour contrast, and launched on Cloudflare with a live DNS cutover.",
     tags: ["Branding & UI", "Responsive", "WCAG AAA", "Live"],
     link: "https://www.elmarrisk.co.uk",
     linkLabel: "Visit live site",
+    image: "assets/design/elmar-home.jpg",
+    imageAlt: "Elmar Risk Management homepage: navy hero with the headline Compliance expertise, without the overhead",
+    gallery: [
+      { src: "assets/design/elmar-services.jpg", alt: "Services overview page with custom SVG illustration" },
+      { src: "assets/design/elmar-about.jpg", alt: "About page introducing the founder" },
+      { src: "assets/design/elmar-gdpr.jpg", alt: "Data Protection and UK GDPR service page" },
+      { src: "assets/design/elmar-home-mobile.jpg", alt: "Homepage on a mobile phone" }
+    ],
     featured: true
   },
   {
@@ -80,7 +89,7 @@ const DESIGN_PROJECTS = [
   const card = p => `
     <div class="col-lg-6" data-animate>
       <article class="glass-panel project-card h-100${p.featured ? " featured" : ""}">
-        ${p.image ? `<img class="project-thumb mb-3" src="${esc(p.image)}" alt="${esc(p.imageAlt || p.title)}" loading="lazy" />` : ""}
+        ${p.image ? `<a href="${esc(p.image)}" target="_blank" rel="noopener"><img class="project-thumb mb-3" src="${esc(p.image)}" alt="${esc(p.imageAlt || p.title)}" loading="lazy" /></a>` : ""}
         <div class="d-flex justify-content-between align-items-start gap-2 mb-3">
           <div>
             <h3 class="mb-1">${esc(p.title)}</h3>
@@ -89,6 +98,7 @@ const DESIGN_PROJECTS = [
           ${p.stack ? `<span class="chip tag">${esc(p.stack)}</span>` : ""}
         </div>
         <p class="project-summary mb-3">${esc(p.summary)}</p>
+        ${(p.gallery || []).length ? `<div class="project-gallery mb-3">${p.gallery.map(g => `<a href="${esc(g.src)}" target="_blank" rel="noopener"><img src="${esc(g.src)}" alt="${esc(g.alt || "")}" loading="lazy" /></a>`).join("")}</div>` : ""}
         <div class="d-flex flex-wrap gap-2 align-items-center">
           ${(p.tags || []).map(t => `<span class="chip attr">${esc(t)}</span>`).join("")}
           ${p.link ? `<a class="btn btn-sm btn-outline-accent ms-auto" href="${esc(p.link)}" target="_blank" rel="noopener">${esc(p.linkLabel || "View project")} ↗</a>` : ""}

@@ -446,3 +446,7 @@ footer { border-top: 1px solid var(--border); }
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   [data-animate] { opacity: 1 !important; transform: none !important; }
 }
+.project-thumb { object-position: top; transition: transform .25s ease; }
+a:hover > .project-thumb { transform: scale(1.01); }
+.project-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.project-gallery img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; border-radius: 8px; border: 1px solid rgba(148,175,200,0.15); }
