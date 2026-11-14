@@ -1,0 +1,105 @@
+{
+  "items": [
+    {
+      "role": "Junior Cloud Engineer (placement year)",
+      "org": "Adventum Wealth",
+      "place": "Manchester · Hybrid",
+      "start": "Oct 2026",
+      "end": "Present",
+      "points": [
+        "Supporting cloud infrastructure across AWS and Azure in a regulated wealth management firm",
+        "Monitoring, troubleshooting and documenting cloud configurations",
+        "Assisting with automation and deployment using Terraform, Docker and CI/CD"
+      ]
+    },
+    {
+      "role": "Lead Web Developer & Designer (summer internship)",
+      "org": "Elmar Risk Management",
+      "place": "Gloucester · Remote",
+      "start": "Jul 2026",
+      "end": "Nov 2026",
+      "points": [
+        "Designed and built a 12-page Astro website, from Wix audit to live launch",
+        "Wrote a 31-page technical proposal with seven architecture diagrams",
+        "Led the DNS cutover to Cloudflare and set up a CMS for the client"
+      ],
+      "link": "/work/elmar-risk-management"
+    },
+    {
+      "role": "Shift Manager",
+      "org": "Wingstop",
+      "place": "Nottingham",
+      "start": "Jun 2026",
+      "end": "Present",
+      "points": [
+        "Lead and train shift teams of up to 10 during high-volume trading",
+        "Make real-time calls on staffing, stock and service"
+      ]
+    },
+    {
+      "role": "Student Brand Ambassador",
+      "org": "Amber",
+      "place": "Nottingham",
+      "start": "Jan 2026",
+      "end": "Oct 2026",
+      "points": [
+        "Built a feedback system averaging 4.7/5 across 300+ responses",
+        "Drove a 15% increase in student interest"
+      ]
+    },
+    {
+      "role": "Digital Media Operator",
+      "org": "Nottingham Trent University",
+      "place": "Nottingham",
+      "start": "Oct 2025",
+      "end": "Jun 2026",
+      "points": [
+        "Ran AV and streaming for 20+ live university events",
+        "Kept equipment logs and operational runbooks"
+      ]
+    },
+    {
+      "role": "Systems & Cloud Developer (freelance)",
+      "org": "Self-employed",
+      "place": "Chennai, India",
+      "start": "Jun 2024",
+      "end": "Feb 2026",
+      "points": [
+        "Built serverless APIs on AWS Lambda and API Gateway, cutting server costs by 25%",
+        "Automated deployments with Docker and CI/CD, cutting deployment errors by 40%",
+        "Shipped client websites on S3 and CloudFront"
+      ]
+    },
+    {
+      "role": "Industrial IoT Intern",
+      "org": "National Small Industries Corporation",
+      "place": "Chennai",
+      "start": "Jun 2023",
+      "end": "Jun 2023",
+      "points": [
+        "Found three PLC sensor misconfigurations, improving accuracy by 7%"
+      ]
+    },
+    {
+      "role": "Frontend Developer Intern",
+      "org": "Daylight Innovation",
+      "place": "Chennai",
+      "start": "Jan 2023",
+      "end": "Mar 2023",
+      "points": [
+        "Built responsive interfaces and fixed 12 critical UI bugs"
+      ]
+    },
+    {
+      "role": "Founder",
+      "org": "Equity Investor Club",
+      "place": "India / UK",
+      "start": "2023",
+      "end": "Present",
+      "points": [
+        "Founded and grew a financial-literacy community and built its web platform"
+      ],
+      "link": "/work/equity-investor-club"
+    }
+  ]
+}

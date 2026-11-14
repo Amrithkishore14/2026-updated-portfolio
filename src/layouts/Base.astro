@@ -1,0 +1,117 @@
+---
+import '@fontsource/unbounded/500.css';
+import '@fontsource/unbounded/600.css';
+import '@fontsource/unbounded/700.css';
+import '@fontsource/instrument-sans/400.css';
+import '@fontsource/instrument-sans/500.css';
+import '@fontsource/instrument-sans/600.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/600.css';
+import '../styles/global.css';
+import site from '../data/site.json';
+
+interface Props { title?: string; description?: string; image?: string; }
+const { title, description, image } = Astro.props;
+const pageTitle = title ? `${title} | ${site.name}` : `${site.name} | Cloud & infrastructure engineer and web designer, Nottingham`;
+const desc = description ?? `${site.intro}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = new URL(image ?? '/og.jpg', Astro.site);
+const isHome = Astro.url.pathname === '/';
+const nav = [
+  { href: '/#work', label: 'Work' },
+  { href: '/#design', label: 'Design' },
+  { href: '/#experience', label: 'Experience' },
+  { href: '/#credentials', label: 'Credentials' },
+  { href: '/#contact', label: 'Contact' },
+];
+const person = {
+  '@context': 'https://schema.org', '@type': 'Person', name: site.fullName, jobTitle: 'Cloud and infrastructure engineer',
+  address: { '@type': 'PostalAddress', addressLocality: 'Nottingham', addressCountry: 'GB' },
+  email: `mailto:${site.email}`, url: Astro.site?.toString(), sameAs: [site.linkedin, site.github],
+  alumniOf: ['Nottingham Trent University', 'R.M.D. Engineering College'],
+  knowsAbout: ['AWS', 'Microsoft Azure', 'Cloud operations', 'Site reliability', 'Terraform', 'Web design', 'Accessibility'],
+};
+---
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={desc} />
+  <link rel="canonical" href={canonical} />
+  <meta name="theme-color" content="#F3F4F1" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={desc} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogImage} />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="application/ld+json" set:html={JSON.stringify(person)} />
+</head>
+<body class={isHome ? 'home' : 'inner'}>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="topbar">
+    <div class="wrap topbar-in">
+      <a class="mark" href="/" aria-label={`${site.name}, home`}>
+        <span class="mark-box" aria-hidden="true">AK</span>
+        <span class="mark-name">{site.name}</span>
+      </a>
+      <nav aria-label="Main">
+        <ul class="nav-list">
+          {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+        </ul>
+      </nav>
+      <a class="btn btn-ink btn-sm" href={site.cv} download>Download CV</a>
+      <button class="menu-btn" aria-expanded="false" aria-controls="mobile-nav">Menu</button>
+    </div>
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile" hidden>
+      <ul>{nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}<li><a href={site.cv} download>Download CV</a></li></ul>
+    </nav>
+  </header>
+
+  <main id="main"><slot /></main>
+
+  <footer class="footer">
+    <div class="wrap footer-in">
+      <p>© {new Date().getFullYear()} {site.fullName} · {site.location}</p>
+      <p><a href={site.linkedin} rel="noopener" target="_blank">LinkedIn</a> · <a href={site.github} rel="noopener" target="_blank">GitHub</a> · <a href={`mailto:${site.email}`}>Email</a></p>
+    </div>
+  </footer>
+
+  <script>
+    const btn = document.querySelector<HTMLButtonElement>('.menu-btn');
+    const panel = document.getElementById('mobile-nav');
+    btn?.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      btn.textContent = open ? 'Menu' : 'Close';
+      if (panel) panel.hidden = open;
+    });
+    panel?.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => { if (panel) panel.hidden = true; btn?.setAttribute('aria-expanded', 'false'); if (btn) btn.textContent = 'Menu'; }));
+  </script>
+
+  <style>
+    .topbar { position: sticky; top: 0; z-index: 50; background: color-mix(in srgb, var(--paper) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid transparent; transition: border-color .2s; }
+    .topbar-in { display: flex; align-items: center; gap: 28px; height: 72px; }
+    .mark { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-right: auto; }
+    .mark-box { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 10px; background: var(--ink); color: #fff; font-family: var(--display); font-size: 13px; font-weight: 700; }
+    .mark-name { font-family: var(--display); font-weight: 600; font-size: 16px; }
+    .nav-list { display: flex; gap: 26px; list-style: none; }
+    .nav-list a { text-decoration: none; font-weight: 500; color: var(--graphite); }
+    .nav-list a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--signal); text-decoration-thickness: 2px; }
+    .btn-sm { padding: 10px 18px; font-size: 15px; }
+    .menu-btn { display: none; font: inherit; font-weight: 600; background: none; border: 1.5px solid var(--ink); border-radius: 999px; padding: 8px 16px; cursor: pointer; }
+    .mobile-nav { border-top: 1px solid var(--line); background: var(--paper); }
+    .mobile-nav ul { list-style: none; padding: 12px 20px 20px; }
+    .mobile-nav a { display: block; padding: 12px 0; font-family: var(--display); font-size: 20px; text-decoration: none; border-bottom: 1px solid var(--line); }
+    .footer { border-top: 1px solid var(--line); padding: 32px 0; color: var(--graphite); font-size: 15px; }
+    .footer-in { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    @media (max-width: 900px) {
+      .nav-list, .topbar-in > .btn { display: none; }
+      .menu-btn { display: inline-block; }
+    }
+  </style>
+</body>
+</html>

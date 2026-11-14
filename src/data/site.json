@@ -1,0 +1,43 @@
+{
+  "name": "Amrith Kishore",
+  "fullName": "Amrith Kishore M",
+  "role": "Cloud & infrastructure engineer who also designs",
+  "headline": "I keep cloud systems running, and design the screens people use them through.",
+  "intro": "MSc Cloud & Enterprise Computing student at Nottingham Trent University, on a placement year as a Junior Cloud Engineer. AWS and Azure certified, with a live client website and a multi-cloud security dissertation behind me.",
+  "location": "Nottingham, UK",
+  "email": "amrithkishore6@gmail.com",
+  "phone": "+44 7818 376296",
+  "linkedin": "https://www.linkedin.com/in/amrith-kishore-1519b9269",
+  "github": "https://github.com/Amrithkishore14",
+  "cv": "/assets/Amrith_Kishore_M_CV.pdf",
+  "photo": "/assets/IMG_1357_SnapseedCopy.jpg",
+  "currentRole": "Junior Cloud Engineer, Adventum Wealth",
+  "openTo": "2027 graduate roles: cloud operations, SRE, IT infrastructure, technology consulting",
+  "availability": "Open to 2027 graduate roles",
+  "roles": [
+    {
+      "title": "Cloud & infrastructure",
+      "points": [
+        "AWS Solutions Architect Associate and Azure AZ-900",
+        "Built OIDC federation across AWS and Azure for my dissertation",
+        "Comfortable with Linux, Terraform, Docker and CI/CD"
+      ]
+    },
+    {
+      "title": "Web & design",
+      "points": [
+        "Designed and launched a live 12-page client website",
+        "WCAG AAA accessibility, SEO and a client-friendly CMS",
+        "Ten design projects from fashion to fintech"
+      ]
+    },
+    {
+      "title": "Projects & clients",
+      "points": [
+        "Ran a client project from audit to launch and handover",
+        "Wrote a 31-page technical proposal, then re-scoped to budget",
+        "Lead shift teams of up to 10 in a busy restaurant"
+      ]
+    }
+  ]
+}
