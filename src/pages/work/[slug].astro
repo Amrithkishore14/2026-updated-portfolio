@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import { getCollection, render } from 'astro:content';
+import Recommendations from '../../components/Recommendations.astro';
 
 export async function getStaticPaths() {
   const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
@@ -45,6 +46,8 @@ const catLabel = { cloud: 'Cloud & security', web: 'Web & client work', fullstac
         {d.gallery.map((g) => <a href={g} target="_blank" rel="noopener" class={g.includes('mobile') ? 'is-mobile' : ''}><img src={g} alt="" loading="lazy" /></a>)}
       </section>
     )}
+
+    <div class="wrap cs-recs"><Recommendations about={d.title} heading="What the people involved said" showInvite={false} /></div>
 
     <nav class="wrap cs-next" aria-label="Next project">
       <span>Next project</span>

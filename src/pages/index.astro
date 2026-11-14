@@ -6,6 +6,7 @@ import experience from '../data/experience.json';
 import education from '../data/education.json';
 import certifications from '../data/certifications.json';
 import awards from '../data/awards.json';
+import Recommendations from '../components/Recommendations.astro';
 
 const all = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const featured = all.filter((p) => p.data.featured);
@@ -150,6 +151,11 @@ const steps = [
       ))}
     </ol>
   </section>
+
+  <!-- RECOMMENDATIONS -->
+  <div id="recommendations" class="section wrap" style="padding-top:0">
+    <Recommendations />
+  </div>
 
   <!-- EXPERIENCE -->
   <section id="experience" class="section wrap exp" aria-labelledby="exp-title">
