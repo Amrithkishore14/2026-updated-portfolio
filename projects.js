@@ -68,6 +68,57 @@ const DESIGN_PROJECTS = [
     featured: true
   },
   {
+    title: "Kaapi & Kothu: Restaurant Website",
+    context: "Concept project · AI-assisted design",
+    stack: "HTML · CSS · SVG",
+    summary: "Website concept for a fictional Chennai street-food kitchen in Nottingham. A hand-built banana-leaf illustration leads the hero, the menu changes with the time of day, and online ordering and table booking stay one tap away on mobile.",
+    tags: ["Brand Identity", "Illustration", "Responsive"],
+    link: "concepts/kaapi/",
+    linkLabel: "View live concept",
+    image: "assets/design/concepts/kaapi-hero.jpg",
+    imageAlt: "Kaapi & Kothu homepage with a banana-leaf meal illustration",
+    gallery: [
+      { src: "assets/design/concepts/kaapi-s1.jpg", alt: "Menu by time of day: tiffin, meals, kothu" },
+      { src: "assets/design/concepts/kaapi-s2.jpg", alt: "Most-ordered dishes with prices" },
+      { src: "assets/design/concepts/kaapi-s3.jpg", alt: "Filter coffee feature" },
+      { src: "assets/design/concepts/kaapi-mobile.jpg", alt: "Homepage on mobile" }
+    ]
+  },
+  {
+    title: "Kestrel: Credit-Builder Card",
+    context: "Concept project · AI-assisted design",
+    stack: "HTML · CSS",
+    summary: "Fintech landing page concept for a fictional credit card that helps students and new arrivals build UK credit. Explains a complex product through a first-year timeline, a limit picker and a plain-English cost box with the representative APR.",
+    tags: ["Fintech UI", "Information Design", "Accessible Copy"],
+    link: "concepts/kestrel/",
+    linkLabel: "View live concept",
+    image: "assets/design/concepts/kestrel-hero.jpg",
+    imageAlt: "Kestrel landing page with a tilted credit card and a rising credit score chart",
+    gallery: [
+      { src: "assets/design/concepts/kestrel-s1.jpg", alt: "First-year timeline of how credit builds" },
+      { src: "assets/design/concepts/kestrel-s2.jpg", alt: "Card features and limit picker" },
+      { src: "assets/design/concepts/kestrel-s3.jpg", alt: "Representative example of costs" },
+      { src: "assets/design/concepts/kestrel-mobile.jpg", alt: "Landing page on mobile" }
+    ]
+  },
+  {
+    title: "Hollowbrook Primary: School Website",
+    context: "Concept project · AI-assisted design",
+    stack: "HTML · CSS · SVG",
+    summary: "Website concept for a fictional primary school in a multi-academy trust. Puts what parents need most first (term dates, lunch menu, trip payments, absences), with a weekly events list, admissions deadlines and translate and larger-text options.",
+    tags: ["Education", "UX for Parents", "Accessibility"],
+    link: "concepts/hollowbrook/",
+    linkLabel: "View live concept",
+    image: "assets/design/concepts/hollowbrook-hero.jpg",
+    imageAlt: "Hollowbrook Primary homepage with an illustrated school and parent quick links",
+    gallery: [
+      { src: "assets/design/concepts/hollowbrook-s1.jpg", alt: "This week's events for parents" },
+      { src: "assets/design/concepts/hollowbrook-s2.jpg", alt: "Headteacher welcome" },
+      { src: "assets/design/concepts/hollowbrook-s3.jpg", alt: "Reception admissions deadlines" },
+      { src: "assets/design/concepts/hollowbrook-mobile.jpg", alt: "Homepage on mobile" }
+    ]
+  },
+  {
     title: "Personal Portfolio",
     context: "Self-initiated · 2026",
     stack: "HTML · CSS · Bootstrap · SVG",
