@@ -2,7 +2,7 @@
 
 Live: https://2026-updated-portfolio.amrithkishore6.workers.dev
 
-Static site (HTML, CSS, Bootstrap 5, vanilla JS). Pushing to `main` deploys automatically (GitHub Actions → Pages, see `.github/workflows/pages.yml`).
+Static site (HTML, CSS, Bootstrap 5, vanilla JS). Hosted on Cloudflare Workers (static assets). Every merge to `main` deploys automatically via Cloudflare Workers Builds; files listed in `.assetsignore` are not published.
 
 ## Structure
 | File | What it holds |
